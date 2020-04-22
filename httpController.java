@@ -20,7 +20,7 @@ public class httpController {
     private static void getHTTP() throws IOException {
         String url = "http://cs.uef.fi/tagrohn-bin/testi2.py";
         String charset = java.nio.charset.StandardCharsets.UTF_8.name();  // Or in Java 7 and later, use the constant: java.nio.charset.StandardCharsets.UTF_8.name()
-        String param1 = "Kurssi";
+        String param1 = "Asiakas";
 
         String query = String.format("query=%s",
             URLEncoder.encode(param1, charset));
@@ -30,9 +30,14 @@ public class httpController {
         InputStream response = connection.getInputStream();
 
         System.out.println(response);
+        String responseBody;
         try (Scanner scanner = new Scanner(response)) {
-            String responseBody = scanner.useDelimiter("\\A").next();
+            responseBody = scanner.useDelimiter("\\A").next();
             System.out.println(responseBody);
         }
+
+        JsonDecompiler dec = new JsonDecompiler();
+
+        dec.decompile(responseBody);
     }
 }
