@@ -8,7 +8,7 @@ import java.util.Scanner;
 import org.json.*;
 
 public class httpController {
-
+    //Testikommentti
     public static void main(String[] args) {
         try {
             getHTTP();
