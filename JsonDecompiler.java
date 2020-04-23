@@ -26,7 +26,7 @@ public class JsonDecompiler {
             }
             returnList.add(tempArray);
         }
-
+        //Testicommit
         System.out.println("Palautuslistan koko " + returnList.size());
         for (int i = 0; i < returnList.size(); i++) {
             for (int j = 0; j < returnList.get(i).length; j++) {
