@@ -27,6 +27,10 @@ public class LoginController {
         cbRole.setValue(cbList.get(0));
     }
 
+    /**
+     * Method which changes the scene to the same window
+     * @param event e
+     */
     @FXML
     public void ChangeStage(ActionEvent event) {
         role = cbRole.getValue();

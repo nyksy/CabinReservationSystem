@@ -4,8 +4,17 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+/**
+ * This is the main class of the program.
+ * It loads the Login.fxml file
+ *
+ * @author Juho Nykänen
+ * @author Taneli Gröhn
+ * @version 0.1
+ */
 public class Main extends Application {
-    //Testikommentti
+
+
     /**
      * Load the primary stage (login screen)
      * @param primaryStage stage
