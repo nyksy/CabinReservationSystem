@@ -8,16 +8,9 @@ import java.util.Scanner;
 import org.json.*;
 
 public class httpController {
-    //Testikommentti
-    public static void main(String[] args) {
-        try {
-            getHTTP();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
-    private static void getHTTP() throws IOException {
+
+    public String[][] getHTTP() throws IOException {
         String url = "http://cs.uef.fi/tagrohn-bin/testi2.py";
         String charset = java.nio.charset.StandardCharsets.UTF_8.name();  // Or in Java 7 and later, use the constant: java.nio.charset.StandardCharsets.UTF_8.name()
         String param1 = "Asiakas";
@@ -38,6 +31,6 @@ public class httpController {
 
         JsonDecompiler dec = new JsonDecompiler();
 
-        dec.decompileArray(responseBody);
+        return dec.decompileArray(responseBody);
     }
 }

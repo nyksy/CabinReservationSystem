@@ -261,7 +261,7 @@
                               <Font size="40.0" />
                            </font>
                         </Label>
-                        <TableView fx:id="tbwMonitorCustomers" layoutX="17.0" layoutY="76.0" prefHeight="724.0" prefWidth="1058.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="76.0" />
+                        <TableView fx:id="tbwCustomer" layoutX="17.0" layoutY="76.0" prefHeight="724.0" prefWidth="1058.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="76.0" />
                      </children>
                   </AnchorPane>
                   <AnchorPane fx:id="apBillControl" layoutX="10.0" layoutY="10.0" prefHeight="840.0" prefWidth="1098.0" styleClass="background" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">

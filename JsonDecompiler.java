@@ -10,28 +10,22 @@ import java.util.ArrayList;
 public class JsonDecompiler {
 
     /**
-     * Metodi json viestin purkamiseksi ja tallettamiseksi ArrayList<String[]> muotoon
-     * Ulkoinen ArrayList sisältää String[] taulukkoja, jotka kuvastavat tietokannan rivejä.
-     * Sisäinen String[] sisältää tietokannasta saadun rivin tiedot attribuutti per indeksi.
+     * Metodi json viestin purkamiseksi ja tallettamiseksi String[x][y] muotoon
      *
      * @param json JSON viesti, "Array of Arrays" - muodossa
      */
-    public ArrayList<String[]> decompileArray(String json) {
+    public String[][] decompileArray(String json) {
         JSONArray mJsonArray = new JSONArray(json);
-        ArrayList<String[]> returnList = new ArrayList<>();
-        for (int i = 0; i < mJsonArray.length(); i++) {
-            String[] tempArray = new String[mJsonArray.getJSONArray(i).length()];
-            for (int j = 0; j < mJsonArray.getJSONArray(i).length(); j++) {
-                tempArray[j] = mJsonArray.getJSONArray(i).get(j).toString();
+        String[][] returnList = new String[mJsonArray.length()][mJsonArray.getJSONArray(0).length()];
+        for (int x = 0; x < mJsonArray.length(); x++) {
+            for (int y = 0; y < mJsonArray.getJSONArray(x).length(); y++) {
+                returnList[x][y] = mJsonArray.getJSONArray(x).get(y).toString();
             }
-            returnList.add(tempArray);
         }
-        //Testicommit
-        System.out.println("Palautuslistan koko " + returnList.size());
-        for (int i = 0; i < returnList.size(); i++) {
-            for (int j = 0; j < returnList.get(i).length; j++) {
-                String[] temp = returnList.get(i);
-                System.out.println(temp[j]);
+
+        for (int x = 0; x < returnList.length; x++) {
+            for (int y = 0; y < returnList[x].length; y++) {
+                System.out.println(returnList[x][y]);
             }
         }
         return returnList;
