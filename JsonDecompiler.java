@@ -16,7 +16,7 @@ public class JsonDecompiler {
      *
      * @param json JSON viesti, "Array of Arrays" - muodossa
      */
-    public ArrayList<String[]> decompile(String json) {
+    public ArrayList<String[]> decompileArray(String json) {
         JSONArray mJsonArray = new JSONArray(json);
         ArrayList<String[]> returnList = new ArrayList<>();
         for (int i = 0; i < mJsonArray.length(); i++) {

@@ -38,6 +38,6 @@ public class httpController {
 
         JsonDecompiler dec = new JsonDecompiler();
 
-        dec.decompile(responseBody);
+        dec.decompileArray(responseBody);
     }
 }
