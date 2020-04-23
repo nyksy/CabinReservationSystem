@@ -1,5 +1,3 @@
-package main;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -33,7 +31,7 @@ public class LoginController {
     public void ChangeStage(ActionEvent event) {
         role = cbRole.getValue();
         try {
-            Parent loader = FXMLLoader.load(getClass().getResource("/main/Functions.fxml"));
+            Parent loader = FXMLLoader.load(getClass().getResource("Functions.fxml"));
             Scene scene = new Scene(loader);
 
             Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
