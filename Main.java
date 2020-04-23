@@ -5,7 +5,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class Main extends Application {
-
+    //Test
     /**
      * Load the primary stage (login screen)
      * @param primaryStage stage
