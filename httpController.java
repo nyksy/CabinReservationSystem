@@ -9,11 +9,10 @@ import org.json.*;
 
 public class httpController {
 
+    private static String url = "http://cs.uef.fi/tagrohn-bin/testi2.py";
+    private static String charset = java.nio.charset.StandardCharsets.UTF_8.name();
 
-    public String[][] getHTTP() throws IOException {
-        String url = "http://cs.uef.fi/tagrohn-bin/testi2.py";
-        String charset = java.nio.charset.StandardCharsets.UTF_8.name();  // Or in Java 7 and later, use the constant: java.nio.charset.StandardCharsets.UTF_8.name()
-        String param1 = "Asiakas";
+    public String[][] getValues(String param1) throws IOException {
 
         String query = String.format("query=%s",
             URLEncoder.encode(param1, charset));
@@ -22,11 +21,28 @@ public class httpController {
         connection.setRequestProperty("Accept-Charset", charset);
         InputStream response = connection.getInputStream();
 
-        System.out.println(response);
         String responseBody;
         try (Scanner scanner = new Scanner(response)) {
             responseBody = scanner.useDelimiter("\\A").next();
-            System.out.println(responseBody);
+        }
+
+        JsonDecompiler dec = new JsonDecompiler();
+
+
+        return dec.decompile2dArray(responseBody);
+    }
+
+    public String[] getHeaders(String param1) throws IOException {
+        String query = String.format("query=%s&header=true",
+                URLEncoder.encode(param1, charset));
+
+        URLConnection connection = new URL(url + "?" + query).openConnection();
+        connection.setRequestProperty("Accept-Charset", charset);
+        InputStream response = connection.getInputStream();
+
+        String responseBody;
+        try (Scanner scanner = new Scanner(response)) {
+            responseBody = scanner.useDelimiter("\\A").next();
         }
 
         JsonDecompiler dec = new JsonDecompiler();

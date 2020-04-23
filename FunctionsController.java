@@ -88,14 +88,19 @@ public class FunctionsController {
 
     @FXML
     public void changeTabCustomers() {
+
         httpController http = new httpController();
-        String[][] test = null;
+        String[][] values = null;
+        String[] headers = null;
+
         try {
-            test = http.getHTTP();
+            values = http.getValues("Asiakas");
+            headers = http.getHeaders("Asiakas");
+
         } catch (Exception e) {
             e.printStackTrace();
         }
-        addDataToTBW(test, tbwCustomer);
+        printMatrix(tbwCustomer, values, headers);
         apMonitorCustomers.toFront();
         //TODO get the data
     }
@@ -123,7 +128,7 @@ public class FunctionsController {
     @FXML
     private TextField tfOfficeCity;
 
-
+    /**
     @FXML
     private void addDataToTBW(String[][] array, TableView tw) {
         ObservableList<String[]> data = FXCollections.observableArrayList();
@@ -138,9 +143,37 @@ public class FunctionsController {
                     return new SimpleStringProperty((p.getValue()[colNo]));
                 }
             });
-            tc.setPrefWidth(90);
+            tc.setPrefWidth(150);
             tw.getColumns().add(tc);
+
         }
         tw.setItems(data);
+    }
+    */
+    private void printMatrix(TableView<String[]> target, String[][] source, String[] headers) {
+
+        target.getColumns().clear();
+        target.getItems().clear();
+
+        int numRows = source.length ;
+        if (numRows == 0) return ;
+
+        int numCols = source[0].length ;
+
+        for (int i = 0 ; i < numCols ; i++) {
+            TableColumn<String[], String> column = new TableColumn<>(headers[i]);
+            final int columnIndex = i ;
+            column.setCellValueFactory(cellData -> {
+                String[] row = cellData.getValue();
+                return new SimpleStringProperty(row[columnIndex]);
+            });
+            //Kolumnien leveys
+            column.setPrefWidth(150);
+            target.getColumns().add(column);
+        }
+
+        for (int i = 0 ; i < numRows ; i++) {
+            target.getItems().add(source[i]);
+        }
     }
 }

@@ -14,7 +14,7 @@ public class JsonDecompiler {
      *
      * @param json JSON viesti, "Array of Arrays" - muodossa
      */
-    public String[][] decompileArray(String json) {
+    public String[][] decompile2dArray(String json) {
         JSONArray mJsonArray = new JSONArray(json);
         String[][] returnList = new String[mJsonArray.length()][mJsonArray.getJSONArray(0).length()];
         for (int x = 0; x < mJsonArray.length(); x++) {
@@ -27,6 +27,15 @@ public class JsonDecompiler {
             for (int y = 0; y < returnList[x].length; y++) {
                 System.out.println(returnList[x][y]);
             }
+        }
+        return returnList;
+    }
+
+    public String[] decompileArray(String json) {
+        JSONArray mJsonArray = new JSONArray(json);
+        String[] returnList = new String[mJsonArray.length()];
+        for (int x = 0; x < returnList.length; x++) {
+            returnList[x] = mJsonArray.get(x).toString();
         }
         return returnList;
     }
