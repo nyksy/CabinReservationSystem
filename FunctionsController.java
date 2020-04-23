@@ -11,6 +11,14 @@ import javafx.util.Callback;
 
 import java.util.Arrays;
 
+/**
+ * Controller of the Functions.fxml
+ *
+ * @author Juho Nykänen
+ * @author Taneli Gröhn
+ *
+ * @version 0.1
+ */
 
 public class FunctionsController {
 
@@ -31,6 +39,8 @@ public class FunctionsController {
     @FXML
     private AnchorPane apCustomerControl;
     @FXML
+    private AnchorPane apAccommodationControl;
+    @FXML
     private AnchorPane apBillControl;
     @FXML
     private AnchorPane apMonitorOffices;
@@ -41,6 +51,8 @@ public class FunctionsController {
     @FXML
     private AnchorPane apMonitorCustomers;
     @FXML
+    private AnchorPane apMonitorAccommodations;
+    @FXML
     private AnchorPane apCharts;
 
     @FXML
@@ -48,6 +60,10 @@ public class FunctionsController {
         apOfficeControl.toFront();
     }
 
+    @FXML
+    public void controlAccommodations(){
+        apAccommodationControl.toFront();
+    }
     @FXML
     public void controlServices() {
         apServiceControl.toFront();
@@ -102,6 +118,10 @@ public class FunctionsController {
         }
         printMatrix(tbwCustomer, values, headers);
         apMonitorCustomers.toFront();
+    }
+    @FXML
+    public void changeTabAccommodations() {
+        apMonitorAccommodations.toFront();
         //TODO get the data
     }
 
@@ -168,7 +188,7 @@ public class FunctionsController {
                 return new SimpleStringProperty(row[columnIndex]);
             });
             //Kolumnien leveys
-            column.setPrefWidth(150);
+            column.setPrefWidth(130);
             target.getColumns().add(column);
         }
 

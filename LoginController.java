@@ -9,6 +9,13 @@ import javafx.scene.Scene;
 import javafx.scene.control.ChoiceBox;
 import javafx.stage.Stage;
 
+/**
+ * Controller of the Login.fxml
+ *
+ * @author Juho Nykänen
+ * @version 1.0
+ */
+
 public class LoginController {
 
     //Role, which assigns available tasks

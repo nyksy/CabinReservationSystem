@@ -5,11 +5,15 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 /**
- * This is the main class of the program.
- * It loads the Login.fxml file
+ * Main class of the program.
+ * Loads the Login.fxml
  *
  * @author Juho Nykänen
  * @author Taneli Gröhn
+ * @author Armas Ahlholm
+ * @author Heikki Vainio
+ * @author Ville Kärkkänen
+ *
  * @version 0.1
  */
 public class Main extends Application {
