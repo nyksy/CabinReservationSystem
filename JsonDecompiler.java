@@ -23,12 +23,6 @@ public class JsonDecompiler {
                 returnList[x][y] = mJsonArray.getJSONArray(x).get(y).toString();
             }
         }
-
-        for (int x = 0; x < returnList.length; x++) {
-            for (int y = 0; y < returnList[x].length; y++) {
-                System.out.println(returnList[x][y]);
-            }
-        }
         return returnList;
     }
 
