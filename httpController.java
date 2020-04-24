@@ -9,15 +9,17 @@ import org.json.*;
 
 public class httpController {
 
-    private static String url = "http://cs.uef.fi/tagrohn-bin/testi2.py";
+    private static String url = "http://cs.uef.fi/tagrohn-bin/cgi_db.py";
     private static String charset = java.nio.charset.StandardCharsets.UTF_8.name();
 
-    public String[][] getValues(String param1) throws IOException {
+    public String[][] getValues(String query, String table, String values) throws IOException {
 
-        String query = String.format("query=%s",
-            URLEncoder.encode(param1, charset));
+        String sql = String.format("query=%s&table=%s&values=%s",
+            URLEncoder.encode(query, charset),
+            URLEncoder.encode(table, charset),
+            URLEncoder.encode(values, charset));
 
-        URLConnection connection = new URL(url + "?" + query).openConnection();
+        URLConnection connection = new URL(url + "?" + sql).openConnection();
         connection.setRequestProperty("Accept-Charset", charset);
         InputStream response = connection.getInputStream();
 

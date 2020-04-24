@@ -234,7 +234,7 @@ public class FunctionsController {
         String[] headers = null;
 
         try {
-            values = http.getValues("Asiakas");
+            values = http.getValues("select", "Asiakas", "");
             headers = http.getHeaders("Asiakas");
 
         } catch (Exception e) {
