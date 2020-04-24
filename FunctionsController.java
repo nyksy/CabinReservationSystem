@@ -197,54 +197,32 @@ public class FunctionsController {
 
     @FXML
     public void changeTabOffices() {
+        setMonitorTableview("Toimipiste", tbwOffice);
         apMonitorOffices.toFront();
         //TODO get the data
     }
 
     @FXML
     public void changeTabServices() {
+        setMonitorTableview("Palvelu", tbwService);
         apMonitorServices.toFront();
         //TODO get the data
     }
 
     @FXML
     public void changeTabReservations() {
-        httpController http = new httpController();
-        String[][] values = null;
-        String[] headers = null;
-
-        try {
-            //TODO get the data
-            //values = http.getValues("Asiakas");
-            //headers = http.getHeaders("Asiakas");
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        printMatrix(tbwCustomer, values, headers);
-
+        setMonitorTableview("Varaus", tbwReservation);
         apMonitorReservations.toFront();
     }
 
     @FXML
     public void changeTabCustomers() {
-
-        httpController http = new httpController();
-        String[][] values = null;
-        String[] headers = null;
-
-        try {
-            values = http.getValues("select", "Asiakas", "");
-            headers = http.getHeaders("Asiakas");
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        printMatrix(tbwCustomer, values, headers);
+        setMonitorTableview("Asiakas", tbwCustomer);
         apMonitorCustomers.toFront();
     }
     @FXML
     public void changeTabAccommodations() {
+        setMonitorTableview("Huone", tbwRoom);
         apMonitorAccommodations.toFront();
         //TODO get the data
     }
@@ -268,30 +246,34 @@ public class FunctionsController {
         apOfficeControl.toFront();
     }
 
+    /**
+     * Metodi monitor osion TableView taulun tietojen asettamiselle
+     *
+     * @param table Haluttu tietokannan taulu
+     * @param tbw Kohteena oleva TableView fx:id
+     */
+    private void setMonitorTableview(String table, TableView tbw) {
+        httpController http = new httpController();
+        String[][] values = null;
+        String[] headers = null;
 
+        try {
+            values = http.getValues("select", table, "");
+            headers = http.getHeaders(table);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        printMatrix(tbw, values, headers);
+    }
 
     /**
-    @FXML
-    private void addDataToTBW(String[][] array, TableView tw) {
-        ObservableList<String[]> data = FXCollections.observableArrayList();
-        data.addAll(Arrays.asList(array));
-
-        for (int i = 0; i < array[0].length; i++) {
-            TableColumn tc = new TableColumn(array[0][i]);
-            final int colNo = i;
-            tc.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<String[], String>, ObservableValue<String>>() {
-                @Override
-                public ObservableValue<String> call(TableColumn.CellDataFeatures<String[], String> p) {
-                    return new SimpleStringProperty((p.getValue()[colNo]));
-                }
-            });
-            tc.setPrefWidth(150);
-            tw.getColumns().add(tc);
-
-        }
-        tw.setItems(data);
-    }
-    */
+     * Metodi TableView taulun täyttämiseksi 2d datamatriisilla. Runko löydetty www.StackOverFlow.com
+     *
+     * @param target Kohteena oleva TableView olio
+     * @param source 2d datamatriisi, joka sisältää halutun datan
+     * @param headers Matriisi, joka sisältää kolumnien nimet
+     */
     private void printMatrix(TableView<String[]> target, String[][] source, String[] headers) {
 
         target.getColumns().clear();
