@@ -3,10 +3,9 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.control.*;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
 import javafx.util.Callback;
 
 import java.util.Arrays;
@@ -25,8 +24,106 @@ public class FunctionsController {
     //TODO Get ROLE in the company
     String role = LoginController.role;
 
+    //OFFICE CONTROL
+    @FXML
+    private TextField tfOfficeID;
+    @FXML
+    private TextField tfOfficeName;
+    @FXML
+    private TextField tfOfficeStreet;
+    @FXML
+    private TextField tfOfficePostal;
+    @FXML
+    private TextField tfOfficeCity;
+
+    //SERVICE CONTROL
+    @FXML
+    private ChoiceBox<String> cbS_OfficeID;
+    @FXML
+    private TextField tfServiceID;
+    @FXML
+    private TextField tfServiceName;
+    @FXML
+    private TextField tfServicePrice;
+
+    //ACCOMMODATION CONTROL
+    @FXML
+    private ChoiceBox<String> cbA_officeID;
+    @FXML
+    private TextField tfRoomID;
+    @FXML
+    private TextField tfRoomDayPrice;
+    @FXML
+    private TextField tfRoomNumber;
+
+    //RESERVATION CONTROL
+    @FXML
+    private ChoiceBox<String> cbR_roomID;
+    @FXML
+    private ChoiceBox<String> cbR_customerID;
+    @FXML
+    private TextField tfReservationID;
+    @FXML
+    private DatePicker dpArriving;
+    @FXML
+    private DatePicker dpLeaving;
+
+    //CUSTOMER CONTROL
+    @FXML
+    private TextField tfCustomerID;
+    @FXML
+    private TextField tfFirstName;
+    @FXML
+    private TextField tfLastName;
+    @FXML
+    private TextField tfPhone;
+    @FXML
+    private TextField tfEmail;
+    @FXML
+    private TextField tfAddress;
+    @FXML
+    private TextField tfPostal;
+    @FXML
+    private TextField tfCity;
+
+    //BILL CONTROL
+    @FXML
+    private ChoiceBox<String> cbB_reservationID;
+    @FXML
+    private TextField tfBillID;
+    @FXML
+    private TextField tfSumTotal;
+    @FXML
+    private TextField tfPaid;
+    @FXML
+    private DatePicker dpDueDate;
+    @FXML
+    private DatePicker dpSent;
+
+    //Listoja joilla täytetään ChoiceBoxit
+    //Lista kaikista toimipisteistä
+    ObservableList<String> cbOfficeList = FXCollections.observableArrayList();
+
+    //Lista kaikista asiakkaista
+    ObservableList<String> cbCustomerList = FXCollections.observableArrayList();
+
+    //Lista kaikista huoneista
+    ObservableList<String> cbRoomList = FXCollections.observableArrayList();
+
+    //Lista kaikista varauksista
+    ObservableList<String> cbReservationList = FXCollections.observableArrayList();
+
+    //TABLEVIEWIT MONITOROINTI-tabeissa
     @FXML
     private TableView tbwCustomer;
+    @FXML
+    private TableView tbwOffice;
+    @FXML
+    private TableView tbwService;
+    @FXML
+    private TableView tbwReservation;
+    @FXML
+    private TableView tbwRoom;
 
     //FXML
     //Tabs
@@ -53,7 +150,7 @@ public class FunctionsController {
     @FXML
     private AnchorPane apMonitorAccommodations;
     @FXML
-    private AnchorPane apCharts;
+    private AnchorPane apReports;
 
     @FXML
     public void controlOffices() {
@@ -62,15 +159,26 @@ public class FunctionsController {
 
     @FXML
     public void controlAccommodations(){
+        cbA_officeID.setItems(cbOfficeList);
+        //cbA_officeID.setValue(cbOfficeList.get(0));
         apAccommodationControl.toFront();
     }
     @FXML
     public void controlServices() {
+        cbS_OfficeID.setItems(cbOfficeList);
+        //cbS_OfficeID.setValue(cbOfficeList.get(0));
+
         apServiceControl.toFront();
     }
 
     @FXML
     public void controlReservations() {
+        cbR_customerID.setItems(cbCustomerList);
+        //cbR_customerID.setValue(cbCustomerList.get(0));
+
+        cbR_roomID.setItems(cbRoomList);
+        //cbR_roomID.setValue(cbRoomList.get(0));
+
         apReservationControl.toFront();
     }
 
@@ -81,6 +189,9 @@ public class FunctionsController {
 
     @FXML
     public void controlBills() {
+        cbB_reservationID.setItems(cbReservationList);
+        //cbB_reservationID.setValue(cbReservationList.get(0));
+
         apBillControl.toFront();
     }
 
@@ -98,8 +209,21 @@ public class FunctionsController {
 
     @FXML
     public void changeTabReservations() {
+        httpController http = new httpController();
+        String[][] values = null;
+        String[] headers = null;
+
+        try {
+            //TODO get the data
+            //values = http.getValues("Asiakas");
+            //headers = http.getHeaders("Asiakas");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        printMatrix(tbwCustomer, values, headers);
+
         apMonitorReservations.toFront();
-        //TODO get the data
     }
 
     @FXML
@@ -126,27 +250,25 @@ public class FunctionsController {
     }
 
     @FXML
-    public void changeTabCharts() {
-        apCharts.toFront();
+    public void changeTabReports() {
+        apReports.toFront();
         //TODO get the data
     }
 
+    /**
+     * Metodi, joka täyttää kaikki choiceboxit ym. scenen käynnistyessä
+     */
     @FXML
     private void initialize() {
+        //TODO get data
+        cbOfficeList.addAll();
+        cbCustomerList.addAll();
+        cbRoomList.addAll();
+
         apOfficeControl.toFront();
     }
 
-    //TextFields
-    @FXML
-    private TextField tfOfficeID;
-    @FXML
-    private TextField tfOfficeName;
-    @FXML
-    private TextField tfOfficeStreet;
-    @FXML
-    private TextField tfOfficePostal;
-    @FXML
-    private TextField tfOfficeCity;
+
 
     /**
     @FXML
