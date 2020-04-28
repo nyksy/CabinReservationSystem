@@ -115,6 +115,11 @@
                               <Insets top="10.0" />
                            </VBox.margin>
                         </Button>
+                        <Button alignment="CENTER_RIGHT" layoutX="10.0" layoutY="655.0" mnemonicParsing="false" onAction="#changeTabBills" prefHeight="35.0" prefWidth="222.0" text="Bills">
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin>
+                        </Button>
                         <Button alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#changeTabReports" prefHeight="35.0" prefWidth="222.0" text="Reports">
                            <VBox.margin>
                               <Insets top="10.0" />

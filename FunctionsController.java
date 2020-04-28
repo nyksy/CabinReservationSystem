@@ -169,11 +169,15 @@ public class FunctionsController {
     @FXML
     private AnchorPane apMonitorAccommodations;
     @FXML
+    private AnchorPane apMonitorBills;
+    @FXML
     private AnchorPane apReports;
 
     //Hakukentät
     @FXML
     private TextField searchOffices;
+    @FXML
+    private TextField searchServices;
 
     @FXML
     public void controlOffices() {
@@ -181,11 +185,12 @@ public class FunctionsController {
     }
 
     @FXML
-    public void controlAccommodations(){
+    public void controlAccommodations() {
         cbA_officeID.setItems(cbOfficeList);
         //cbA_officeID.setValue(cbOfficeList.get(0));
         apAccommodationControl.toFront();
     }
+
     @FXML
     public void controlServices() {
         cbS_OfficeID.setItems(cbOfficeList);
@@ -246,7 +251,11 @@ public class FunctionsController {
         setMonitorTableview("Huone", tbwRoom);
         apMonitorAccommodations.toFront();
     }
-
+    @FXML
+    public void changeTabBills() {
+        //setMonitorTableview("Lasku", tbwBill);
+        apMonitorBills.toFront();
+    }
     @FXML
     public void changeTabReports() {
         apReports.toFront();
@@ -260,8 +269,8 @@ public class FunctionsController {
 
         //Päättää mitkä ominaisuudet ovat käytössä roolin mukaan
         if (role.equals("Customer Service")) {
-            btnOffice.setDisable(true);
-            btnOffice.setManaged(false);
+            //btnOffice.setDisable(true);
+            //btnOffice.setManaged(false);
         }
 
         //Buildataan data Choiceboxeihin
@@ -319,6 +328,9 @@ public class FunctionsController {
         }
     }
 
+    /**
+     * Metodi, jolla lisätään Huone/majoitus tietokantaan
+     */
     @FXML
     private void insertAccommodation() {
         String price = tfRoomDayPrice.getText();
@@ -335,6 +347,9 @@ public class FunctionsController {
         }
     }
 
+    /**
+     * Metodi, jolla lisätään varaus tietokantaan
+     */
     @FXML
     private void insertReservation() {
         String arriving = dpArriving.getValue().toString();
@@ -352,6 +367,9 @@ public class FunctionsController {
         }
     }
 
+    /**
+     * Metodi, jolla lisätään palvelu tietokantaan
+     */
     @FXML
     private void insertService() {
         String name = tfServiceName.getText();
@@ -368,6 +386,9 @@ public class FunctionsController {
         }
     }
 
+    /**
+     * Metodi, jolla lisätään lasku tietokantaan
+     */
     @FXML
     private void insertBill() {
         String reservationID = cbB_reservationID.getValue();
@@ -392,11 +413,130 @@ public class FunctionsController {
         }
     }
 
+    @FXML
+    private void updateOffice() {
+        String officeID = tfOfficeID.getText();
+        String name = tfOfficeName.getText();
+        String address = tfOfficeStreet.getText();
+        String pcode = tfOfficePostal.getText();
+        String pcity = tfOfficeCity.getText();
+
+        try {
+            //Luo values merkkijono ja kutsu http.setValues metodia
+            String values = String.format("Nimi=\'%s\', Katuosoite=\'%s\', Postinumero=\'%s\', Postitoimipaikka=\'%s\'",
+                    name, address, pcode, pcity);
+            System.out.println(values);
+            httpController http = new httpController();
+            http.updateValues("Toimipiste", values, officeID);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void updateCustomer() {
+        String customerID = tfCustomerID.getText();
+        String firstName = tfFirstName.getText();
+        String lastName = tfLastName.getText();
+        String pnum = tfPhone.getText();
+        String email = tfEmail.getText();
+        String address = tfAddress.getText();
+        String pcode = tfPostal.getText();
+        String city = tfCity.getText();
+        try {
+            String values = String.format("Etunimi=\"%s\", Sukunimi=\"%s\", Puhelinnumero=\"%s\", " +
+                            "Sahkoposti=\"%s\", Katuosoite=\"%s\", Postinumero=\"%s\", Postitoimipaikka=\"%s\"",
+                    firstName, lastName, pnum, email, address, pcode, city);
+            System.out.println(values);
+            httpController http = new httpController();
+            http.updateValues("Asiakas", values, customerID);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void updateAccommodation() {
+        String roomID = tfRoomID.getText();
+        String price = tfRoomDayPrice.getText();
+        String rnum = tfRoomNumber.getText();
+        String officeID = cbA_officeID.getValue();
+        try {
+            String values = String.format("Paivahinta=\"%s\", Huonenumero=\"%s\", Toimipiste_ID=\"%s\"",
+                    price, rnum, officeID);
+            System.out.println(values);
+            httpController http = new httpController();
+            http.updateValues("Huone", values, roomID);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML private void updateReservation() {
+        String reservationID = tfReservationID.getText();
+        String arriving = dpArriving.getValue().toString();
+        String leaving = dpLeaving.getValue().toString();
+        String customerID = cbR_customerID.getValue();
+        String roomID = cbR_roomID.getValue();
+        try {
+            String values = String.format("Alkupvm=\"%s\", Loppupvm=\"%s\", Asiakas_ID=\"%s\", Huone_ID=\"%s\"",
+                    arriving, leaving, customerID, roomID);
+            System.out.println(values);
+            httpController http = new httpController();
+            http.updateValues("Varaus", values, reservationID);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void updateService() {
+        String serviceID = tfServiceID.getText();
+        String name = tfServiceName.getText();
+        String price = tfServicePrice.getText();
+        String officeID = cbS_OfficeID.getValue();
+        try {
+            String values = String.format("Nimi=\"%s\", Hinta=\"%s\", Toimipiste_ID=\"%s\"",
+                    name, price, officeID);
+            System.out.println(values);
+            httpController http = new httpController();
+            http.updateValues("Palvelu", values, serviceID);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void updateBill() {
+        String billID = tfBillID.getText();
+        String reservationID = cbB_reservationID.getValue();
+        String sum = tfSumTotal.getText();
+        String due = dpDueDate.getValue().toString();
+        String sentDate = dpSent.getValue().toString();
+        String paid;
+        if (checkPaid.isSelected()) {
+            paid = "TRUE";
+        } else {
+            paid = "FALSE";
+        }
+
+        try {
+            String values = String.format("Varaus_ID=\"%s\", Loppusumma=\"%s\", Erapaiva=\"%s\", Lahetyspvm=\"%s\", " +
+                            "Maksu_suoritettu=\"%s\"",
+                    reservationID, sum, due, sentDate, paid);
+            System.out.println(values);
+            httpController http = new httpController();
+            http.updateValues("Lasku", values, billID);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * Metodi monitor osion TableView taulun tietojen asettamiselle
      *
      * @param table Haluttu tietokannan taulu
-     * @param tbw Kohteena oleva TableView fx:id
+     * @param tbw   Kohteena oleva TableView fx:id
      */
     private void setMonitorTableview(String table, TableView tbw) {
         httpController http = new httpController();
@@ -416,8 +556,8 @@ public class FunctionsController {
     /**
      * Metodi TableView taulun täyttämiseksi 2d datamatriisilla. Runko löydetty www.StackOverFlow.com
      *
-     * @param target Kohteena oleva TableView olio
-     * @param source 2d datamatriisi, joka sisältää halutun datan
+     * @param target  Kohteena oleva TableView olio
+     * @param source  2d datamatriisi, joka sisältää halutun datan
      * @param headers Matriisi, joka sisältää kolumnien nimet
      */
     private void printMatrix(TableView<String[]> target, String[][] source, String[] headers) {
@@ -425,19 +565,19 @@ public class FunctionsController {
         target.getColumns().clear();
         target.getItems().clear();
 
-        int numRows = source.length ;
-        if (numRows == 0) return ;
+        int numRows = source.length;
+        if (numRows == 0) return;
 
-        int numCols = source[0].length ;
+        int numCols = source[0].length;
 
-        for (int i = 0 ; i < numCols ; i++) {
+        for (int i = 0; i < numCols; i++) {
             TableColumn<String[], String> column = new TableColumn<>(headers[i]);
-            final int columnIndex = i ;
+            final int columnIndex = i;
             column.setCellValueFactory(cellData -> {
                 String[] row = cellData.getValue();
                 return new SimpleStringProperty(row[columnIndex]);
             });
-            
+
             //Kolumnien leveys
             column.setPrefWidth(130);
 
@@ -454,6 +594,7 @@ public class FunctionsController {
 
     /**
      * Method which changes the scene to the same window
+     *
      * @param event e
      */
     @FXML
@@ -472,6 +613,7 @@ public class FunctionsController {
             e.printStackTrace();
         }
     }
+
     /**
      * Metodi jolla saadaan täytettyä Choiceboxit datalla palvelimelta.
      *
@@ -495,21 +637,76 @@ public class FunctionsController {
 
     @FXML
     public void searchOffice() {
-        search(tbwOffice, "Toimipiste");
+        String sql = "SELECT * FROM Toimipiste WHERE Toimipiste_ID = ";
+        search(tbwOffice, "Toimipiste", sql, searchOffices);
     }
 
-    public void search(TableView tbw, String table) {
+    @FXML
+    public void searchService() {
+        String sql = "SELECT * FROM Palvelu WHERE Palvelu_ID = ";
+        search(tbwService, "Palvelu", sql, searchServices);
+    }
+
+    //TODO tästä eteenpäin
+    @FXML
+    public void searchRoom() {
+        String sql;
+        //search()
+
+    }
+
+    @FXML
+    public void searchReservation() {
+        String sql;
+        //search()
+
+    }
+
+    @FXML
+    public void searchCustomer() {
+        String sql;
+        //search()
+    }
+
+    @FXML
+    public void searchBill() {
+        String sql;
+        //search()
+    }
+
+
+    /**
+     * Metodi tietojen hakemiselle ja näyttämiselle TableView-nökymässä
+     * @param tbw Tableview johon tiedot syötetään
+     * @param table Taulukon nimi
+     * @param haku Hakusanat (sql)
+     * @param tf TextField, josta haetaan hakuarvo
+     */
+    public void search(TableView tbw, String table, String haku, TextField tf) {
         String[][] data = null;
         String[] headers = null;
         httpController hc = new httpController();
 
-        String sql = "SELECT * FROM Toimipiste WHERE Toimipiste_ID = " + searchOffices.getText();
-        try {
-            data = hc.runSQL(sql);
-            headers = hc.getHeaders(table);
-        } catch (IOException io){
-            System.out.println("Error");
+        if (!tf.getText().isEmpty()) {
+            String sql = haku + tf.getText();
+
+            try {
+                data = hc.runSQL(sql);
+                headers = hc.getHeaders(table);
+            } catch (IOException io) {
+                System.out.println("Error");
+            }
+            printMatrix(tbw, data, headers);
+
+        } else {
+            setMonitorTableview(table, tbw);
+            String sql = "SELECT * FROM Toimipiste WHERE Toimipiste_ID = " + searchOffices.getText();
+            try {
+                data = hc.runSQL(sql);
+                headers = hc.getHeaders(table);
+            } catch (IOException io) {
+                System.out.println("Error");
+            }
         }
-        printMatrix(tbw, data, headers);
     }
 }
