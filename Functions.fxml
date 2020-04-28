@@ -115,6 +115,11 @@
                               <Insets top="10.0" />
                            </VBox.margin>
                         </Button>
+                        <Button alignment="CENTER_RIGHT" layoutX="10.0" layoutY="655.0" mnemonicParsing="false" onAction="#changeTabBills" prefHeight="35.0" prefWidth="222.0" text="Bills">
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin>
+                        </Button>
                         <Button alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#changeTabReports" prefHeight="35.0" prefWidth="222.0" text="Reports">
                            <VBox.margin>
                               <Insets top="10.0" />
@@ -148,16 +153,6 @@
                         <TableView fx:id="tbwRoom" layoutX="17.0" layoutY="76.0" prefHeight="724.0" prefWidth="1058.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="76.0" />
                      </children>
                   </AnchorPane>
-                  <AnchorPane fx:id="apMonitorServices" prefHeight="800.0" prefWidth="1058.0" styleClass="background" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                     <children>
-                        <Label layoutY="28.0" text="Monitor Services">
-                           <font>
-                              <Font size="40.0" />
-                           </font>
-                        </Label>
-                        <TableView fx:id="tbwService" layoutX="17.0" layoutY="76.0" prefHeight="724.0" prefWidth="1058.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="76.0" />
-                     </children>
-                  </AnchorPane>
                   <AnchorPane fx:id="apReports" layoutX="10.0" layoutY="10.0" prefHeight="820.0" prefWidth="1078.0" styleClass="background" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
                         <Label layoutY="28.0" text="Reports">
@@ -188,81 +183,6 @@
                                  </children>
                               </AnchorPane>
                           </content>
-                        </TitledPane>
-                     </children>
-                  </AnchorPane>
-                  <AnchorPane fx:id="apOfficeControl" prefHeight="800.0" prefWidth="1058.0" styleClass="background" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                     <children>
-                        <Label layoutY="28.0" text="Office Control">
-                           <font>
-                              <Font size="40.0" />
-                           </font>
-                        </Label>
-                        <TitledPane layoutY="76.0" prefHeight="800.0" prefWidth="1058.0" styleClass="background" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="76.0">
-                           <content>
-                              <AnchorPane prefHeight="200.0" prefWidth="200.0">
-                                 <children>
-                                    <ButtonBar layoutX="513.0" layoutY="468.0" prefHeight="40.0" prefWidth="275.0" AnchorPane.bottomAnchor="188.0" AnchorPane.rightAnchor="268.0">
-                                      <buttons>
-                                          <Button mnemonicParsing="false" prefHeight="32.0" prefWidth="81.0" text="Search" />
-                                          <Button layoutX="635.0" layoutY="14.0" mnemonicParsing="false" onAction="#insertOffice" prefHeight="32.0" prefWidth="81.0" text="Add" />
-                                        <Button alignment="TOP_CENTER" mnemonicParsing="false" text="Edit" />
-                                          <Button layoutX="550.0" layoutY="14.0" mnemonicParsing="false" text="Delete" />
-                                      </buttons>
-                                    </ButtonBar>
-                                    <GridPane alignment="CENTER" layoutX="277.6" layoutY="240.6" prefHeight="223.0" prefWidth="520.0" AnchorPane.bottomAnchor="242.0" AnchorPane.leftAnchor="268.0" AnchorPane.rightAnchor="268.0" AnchorPane.topAnchor="231.0">
-                                      <columnConstraints>
-                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" minWidth="10.0" prefWidth="20.0" />
-                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                      </columnConstraints>
-                                      <rowConstraints>
-                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                      </rowConstraints>
-                                       <children>
-                                          <Label alignment="CENTER_RIGHT" prefHeight="15.0" prefWidth="400.0" text="Office ID">
-                                             <GridPane.margin>
-                                                <Insets right="10.0" />
-                                             </GridPane.margin>
-                                          </Label>
-                                          <Label alignment="CENTER_RIGHT" prefHeight="15.0" prefWidth="400.0" text="Name" GridPane.rowIndex="1">
-                                             <GridPane.margin>
-                                                <Insets right="10.0" />
-                                             </GridPane.margin>
-                                          </Label>
-                                          <Label alignment="CENTER_RIGHT" prefHeight="15.0" prefWidth="400.0" text="Street adress" GridPane.rowIndex="2">
-                                             <GridPane.margin>
-                                                <Insets right="10.0" />
-                                             </GridPane.margin>
-                                          </Label>
-                                          <Label alignment="CENTER_RIGHT" prefHeight="15.0" prefWidth="400.0" text="Postal code" GridPane.rowIndex="3">
-                                             <GridPane.margin>
-                                                <Insets right="10.0" />
-                                             </GridPane.margin>
-                                          </Label>
-                                          <TextField fx:id="tfOfficeID" prefHeight="35.0" GridPane.columnIndex="1" />
-                                          <TextField fx:id="tfOfficeName" prefHeight="35.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                          <TextField fx:id="tfOfficeStreet" prefHeight="35.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                                          <TextField fx:id="tfOfficePostal" prefHeight="35.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                                          <Label alignment="CENTER_RIGHT" layoutX="10.0" layoutY="215.0" prefHeight="15.0" prefWidth="400.0" text="City" GridPane.rowIndex="4">
-                                             <GridPane.margin>
-                                                <Insets right="10.0" />
-                                             </GridPane.margin>
-                                          </Label>
-                                          <TextField fx:id="tfOfficeCity" layoutX="350.0" layoutY="210.0" prefHeight="35.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                                       </children>
-                                    </GridPane>
-                                    <Text layoutX="14.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Use this page to add, edit and delete offices. You can also search with Office ID." wrappingWidth="431.3955078125">
-                                       <font>
-                                          <Font size="22.0" />
-                                       </font>
-                                    </Text>
-                                 </children>
-                              </AnchorPane>
-                           </content>
                         </TitledPane>
                      </children>
                   </AnchorPane>
@@ -583,18 +503,6 @@
                         </TitledPane>
                      </children>
                   </AnchorPane>
-                  <AnchorPane fx:id="apMonitorOffices" prefHeight="800.0" prefWidth="1058.0" styleClass="background" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                     <children>
-                        <Label layoutY="28.0" text="Monitor Offices">
-                           <font>
-                              <Font size="40.0" />
-                           </font>
-                        </Label>
-                        <TableView fx:id="tbwOffice" layoutX="17.0" layoutY="76.0" prefHeight="724.0" prefWidth="1058.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="76.0" />
-                        <Button layoutX="568.0" layoutY="36.0" mnemonicParsing="false" onAction="#searchOffice" text="Search" />
-                        <TextField fx:id="searchOffices" layoutX="406.0" layoutY="40.0" promptText="Search" />
-                     </children>
-                  </AnchorPane>
                   <AnchorPane fx:id="apBillControl" layoutX="10.0" layoutY="10.0" prefHeight="800.0" prefWidth="1058.0" styleClass="background" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
                         <Label layoutY="28.0" text="Bill Control">
@@ -675,6 +583,117 @@
                               </AnchorPane>
                            </content>
                         </TitledPane>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane fx:id="apMonitorServices" prefHeight="800.0" prefWidth="1058.0" styleClass="background" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <Label layoutY="28.0" text="Monitor Services">
+                           <font>
+                              <Font size="40.0" />
+                           </font>
+                        </Label>
+                        <TableView fx:id="tbwService" layoutX="17.0" layoutY="76.0" prefHeight="724.0" prefWidth="1058.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="76.0" />
+                        <TextField fx:id="searchServices" layoutX="380.0" layoutY="40.0" promptText="Search" />
+                        <Button layoutX="536.0" layoutY="37.0" mnemonicParsing="false" onAction="#searchService" text="Search" />
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane fx:id="apOfficeControl" prefHeight="800.0" prefWidth="1058.0" styleClass="background" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <Label layoutY="28.0" text="Office Control">
+                           <font>
+                              <Font size="40.0" />
+                           </font>
+                        </Label>
+                        <TitledPane layoutY="76.0" prefHeight="800.0" prefWidth="1058.0" styleClass="background" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="76.0">
+                           <content>
+                              <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                 <children>
+                                    <ButtonBar layoutX="513.0" layoutY="468.0" prefHeight="40.0" prefWidth="275.0" AnchorPane.bottomAnchor="188.0" AnchorPane.rightAnchor="268.0">
+                                      <buttons>
+                                          <Button mnemonicParsing="false" prefHeight="32.0" prefWidth="81.0" text="Search" />
+                                          <Button layoutX="635.0" layoutY="14.0" mnemonicParsing="false" onAction="#insertOffice" prefHeight="32.0" prefWidth="81.0" text="Add" />
+                                        <Button alignment="TOP_CENTER" mnemonicParsing="false" text="Edit" />
+                                          <Button layoutX="550.0" layoutY="14.0" mnemonicParsing="false" text="Delete" />
+                                      </buttons>
+                                    </ButtonBar>
+                                    <GridPane alignment="CENTER" layoutX="277.6" layoutY="240.6" prefHeight="223.0" prefWidth="520.0" AnchorPane.bottomAnchor="242.0" AnchorPane.leftAnchor="268.0" AnchorPane.rightAnchor="268.0" AnchorPane.topAnchor="231.0">
+                                      <columnConstraints>
+                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" minWidth="10.0" prefWidth="20.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                      </columnConstraints>
+                                      <rowConstraints>
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                      </rowConstraints>
+                                       <children>
+                                          <Label alignment="CENTER_RIGHT" prefHeight="15.0" prefWidth="400.0" text="Office ID">
+                                             <GridPane.margin>
+                                                <Insets right="10.0" />
+                                             </GridPane.margin>
+                                          </Label>
+                                          <Label alignment="CENTER_RIGHT" prefHeight="15.0" prefWidth="400.0" text="Name" GridPane.rowIndex="1">
+                                             <GridPane.margin>
+                                                <Insets right="10.0" />
+                                             </GridPane.margin>
+                                          </Label>
+                                          <Label alignment="CENTER_RIGHT" prefHeight="15.0" prefWidth="400.0" text="Street adress" GridPane.rowIndex="2">
+                                             <GridPane.margin>
+                                                <Insets right="10.0" />
+                                             </GridPane.margin>
+                                          </Label>
+                                          <Label alignment="CENTER_RIGHT" prefHeight="15.0" prefWidth="400.0" text="Postal code" GridPane.rowIndex="3">
+                                             <GridPane.margin>
+                                                <Insets right="10.0" />
+                                             </GridPane.margin>
+                                          </Label>
+                                          <TextField fx:id="tfOfficeID" prefHeight="35.0" GridPane.columnIndex="1" />
+                                          <TextField fx:id="tfOfficeName" prefHeight="35.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                          <TextField fx:id="tfOfficeStreet" prefHeight="35.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                          <TextField fx:id="tfOfficePostal" prefHeight="35.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                          <Label alignment="CENTER_RIGHT" layoutX="10.0" layoutY="215.0" prefHeight="15.0" prefWidth="400.0" text="City" GridPane.rowIndex="4">
+                                             <GridPane.margin>
+                                                <Insets right="10.0" />
+                                             </GridPane.margin>
+                                          </Label>
+                                          <TextField fx:id="tfOfficeCity" layoutX="350.0" layoutY="210.0" prefHeight="35.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                                       </children>
+                                    </GridPane>
+                                    <Text layoutX="14.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Use this page to add, edit and delete offices. To access edit or delete functions, you have to first search with an Office ID." wrappingWidth="1013.3955078125">
+                                       <font>
+                                          <Font size="22.0" />
+                                       </font>
+                                    </Text>
+                                 </children>
+                              </AnchorPane>
+                           </content>
+                        </TitledPane>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane fx:id="apMonitorOffices" prefHeight="800.0" prefWidth="1058.0" styleClass="background" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <Label layoutY="28.0" text="Monitor Offices">
+                           <font>
+                              <Font size="40.0" />
+                           </font>
+                        </Label>
+                        <TableView fx:id="tbwOffice" layoutX="17.0" layoutY="76.0" prefHeight="724.0" prefWidth="1058.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="76.0" />
+                        <Button layoutX="568.0" layoutY="36.0" mnemonicParsing="false" onAction="#searchOffice" text="Search" />
+                        <TextField fx:id="searchOffices" layoutX="406.0" layoutY="40.0" promptText="Search" />
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane fx:id="apMonitorBills" layoutX="10.0" layoutY="10.0" prefHeight="810.0" prefWidth="1068.0" styleClass="background" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <Label layoutY="28.0" text="Monitor Bills">
+                           <font>
+                              <Font size="40.0" />
+                           </font>
+                        </Label>
+                        <TableView fx:id="tbwBill" layoutX="17.0" layoutY="76.0" prefHeight="724.0" prefWidth="1058.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="76.0" />
+                        <Button layoutX="568.0" layoutY="36.0" mnemonicParsing="false" text="Search" />
+                        <TextField layoutX="406.0" layoutY="40.0" promptText="Search" />
                      </children>
                   </AnchorPane>
                </children>
