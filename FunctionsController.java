@@ -143,6 +143,8 @@ public class FunctionsController {
     private TableView tbwReservation;
     @FXML
     private TableView tbwRoom;
+    @FXML
+    private TableView tbwBill;
 
     //FXML
     //Tabs
@@ -253,7 +255,7 @@ public class FunctionsController {
     }
     @FXML
     public void changeTabBills() {
-        //setMonitorTableview("Lasku", tbwBill);
+        setMonitorTableview("Lasku", tbwBill);
         apMonitorBills.toFront();
     }
     @FXML
