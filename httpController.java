@@ -43,6 +43,15 @@ public class httpController {
         System.out.println(responseBody);
     }
 
+    public void updateValues(String table, String values, String identifier) throws IOException {
+        String sql = String.format("query=update&table=%s&values=%s&identifier=%s",
+                URLEncoder.encode(table, charset),
+                URLEncoder.encode(values, charset),
+                URLEncoder.encode(identifier, charset));
+        String responseBody = callCGI(sql);
+        System.out.println(responseBody);
+    }
+
     /**
      * Metodi tietokannan taulujen kolumnien nimien hakemiselle
      *

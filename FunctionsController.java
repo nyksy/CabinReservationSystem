@@ -316,6 +316,9 @@ public class FunctionsController {
         }
     }
 
+    /**
+     * Metodi, jolla lisätään Huone/majoitus tietokantaan
+     */
     @FXML
     private void insertAccommodation() {
         String price = tfRoomDayPrice.getText();
@@ -332,6 +335,9 @@ public class FunctionsController {
         }
     }
 
+    /**
+     * Metodi, jolla lisätään varaus tietokantaan
+     */
     @FXML
     private void insertReservation() {
         String arriving = dpArriving.getValue().toString();
@@ -349,6 +355,9 @@ public class FunctionsController {
         }
     }
 
+    /**
+     * Metodi, jolla lisätään palvelu tietokantaan
+     */
     @FXML
     private void insertService() {
         String name = tfServiceName.getText();
@@ -365,6 +374,9 @@ public class FunctionsController {
         }
     }
 
+    /**
+     * Metodi, jolla lisätään lasku tietokantaan
+     */
     @FXML
     private void insertBill() {
         String reservationID = cbB_reservationID.getValue();
@@ -379,6 +391,26 @@ public class FunctionsController {
             System.out.println(values);
             httpController http = new httpController();
             http.setValues("Lasku", values);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void updateOffice() {
+        String officeID = tfOfficeID.getText();
+        String name = tfOfficeName.getText();
+        String address = tfOfficeStreet.getText();
+        String pcode = tfOfficePostal.getText();
+        String pcity = tfOfficeCity.getText();
+
+        try {
+            //Luo values merkkijono ja kutsu http.setValues metodia
+            String values = String.format("Nimi=\"%s\", Katuosoite=\"%s\", Postinumer=\"%s\", Postitoimipaikka=\"%s\"",
+                    name, address, pcode, pcity);
+            System.out.println(values);
+            httpController http = new httpController();
+            http.updateValues("Toimipiste", values, officeID);
         } catch (Exception e) {
             e.printStackTrace();
         }
