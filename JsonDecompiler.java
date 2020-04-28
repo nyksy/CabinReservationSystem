@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class JsonDecompiler {
 
     /**
-     * Metodi json viestin purkamiseksi ja tallettamiseksi String[x][y] muotoon
+     * Metodi json viestin purkamiseksi ja tallettamiseksi String[x][y] muotoon. x = rivi, y = kolumni
      *
      * @param json JSON viesti, "Array of Arrays" - muodossa
      * @return 2d Array, joka sisältää JSON viestin datan String muodossa

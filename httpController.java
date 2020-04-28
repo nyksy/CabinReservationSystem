@@ -19,7 +19,7 @@ public class httpController {
     private static String charset = java.nio.charset.StandardCharsets.UTF_8.name();
 
     /**
-     * Hae tietokannasta tietoa kutsumalla cgi-rajapintaa HTTP get metodilla
+     * Hae tietokannasta tietoa kutsumalla cgi-rajapintaa callCGI metodilla
      *
      * @param query  HTTP query= parametri. Tarkentaa, mitä SQL toimintoa halutaan kutsua
      * @param table  HTTP table= parametri. Tarkentaa mistä taulusta halutaan tietoa
@@ -28,25 +28,14 @@ public class httpController {
      * kuvastaa tietokannan riviä
      * @throws IOException Virhe HTTP yhteydessä
      */
-    public String[][] getValues(String query, String table, String values) throws IOException {
+    public String[][] useDB(String query, String table, String values) throws IOException {
 
         String sql = String.format("query=%s&table=%s&values=%s",
                 URLEncoder.encode(query, charset),
                 URLEncoder.encode(table, charset),
                 URLEncoder.encode(values, charset));
-
-        //Hae HTTP yhteydellä parametrien määrittelemän kyselyn tulokset JSON muodossa
-        URLConnection connection = new URL(url + "?" + sql).openConnection();
-        connection.setRequestProperty("Accept-Charset", charset);
-        InputStream response = connection.getInputStream();
-
-        String responseBody;
-        try (Scanner scanner = new Scanner(response)) {
-            responseBody = scanner.useDelimiter("\\A").next();
-        }
-        //Luo uusi JsonDecompiler ja palauta purettu viesti
         JsonDecompiler dec = new JsonDecompiler();
-        return dec.decompile2dArray(responseBody);
+        return dec.decompile2dArray(callCGI(sql));
     }
 
     /**
@@ -60,17 +49,44 @@ public class httpController {
         String sql = String.format("query=select&table=%s&header=true",
                 URLEncoder.encode(table, charset));
 
+        //Luo uusi JsonDecompiler ja palauta purettu viesti
+        JsonDecompiler dec = new JsonDecompiler();
+        return dec.decompileArray(callCGI(sql));
+    }
+
+    /**
+     * Metodi spesifien tietokantakyselyiden juoksuttamiselle. Toimii ainoastaan SELECT kyselyillä.
+     *
+     * @param statement SQL SELECT Kysely, esim. "SELECT Asiakas_ID FROM Asiakas"
+     * @return Kyselyn tulokset String matriisina
+     * @throws IOException Yhteysvirhe
+     */
+    public String[][] runSQL(String statement) throws IOException {
+        String sql = String.format("query=any&auth=XyzzyxHUI420&sql=%s",
+                URLEncoder.encode(statement, charset));
+
+        //Luo uusi JsonDecompiler ja palauta purettu viesti
+        JsonDecompiler dec = new JsonDecompiler();
+        return dec.decompile2dArray(callCGI(sql));
+    }
+
+    /**
+     * Metodi, joka kutsuu CGI rajapintaa URL-yhteydellä. Rajapinta palauttaa kyselyn tuloksen JSON-muodossa.
+     *
+     * @param sql Valmiiksi muotoiltu kysely
+     * @return Kyselyn tulos JSON muodossa
+     * @throws IOException Yhteysvirhe
+     */
+    private String callCGI(String sql) throws IOException {
+        //Hae HTTP yhteydellä parametrien määrittelemän kyselyn tulokset JSON muodossa
         URLConnection connection = new URL(url + "?" + sql).openConnection();
         connection.setRequestProperty("Accept-Charset", charset);
         InputStream response = connection.getInputStream();
 
-        //Hae HTTP yhteydellä parametrien määrittelemän kyselyn tulokset JSON muodossa
         String responseBody;
         try (Scanner scanner = new Scanner(response)) {
             responseBody = scanner.useDelimiter("\\A").next();
         }
-        //Luo uusi JsonDecompiler ja palauta purettu viesti
-        JsonDecompiler dec = new JsonDecompiler();
-        return dec.decompileArray(responseBody);
+        return responseBody;
     }
 }

@@ -199,14 +199,12 @@ public class FunctionsController {
     public void changeTabOffices() {
         setMonitorTableview("Toimipiste", tbwOffice);
         apMonitorOffices.toFront();
-        //TODO get the data
     }
 
     @FXML
     public void changeTabServices() {
         setMonitorTableview("Palvelu", tbwService);
         apMonitorServices.toFront();
-        //TODO get the data
     }
 
     @FXML
@@ -224,7 +222,6 @@ public class FunctionsController {
     public void changeTabAccommodations() {
         setMonitorTableview("Huone", tbwRoom);
         apMonitorAccommodations.toFront();
-        //TODO get the data
     }
 
     @FXML
@@ -258,7 +255,7 @@ public class FunctionsController {
         String[] headers = null;
 
         try {
-            values = http.getValues("select", table, "");
+            values = http.useDB("select", table, "");
             headers = http.getHeaders(table);
 
         } catch (Exception e) {
