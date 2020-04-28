@@ -1549,7 +1549,7 @@ Text {
 .table-view .column-header .label{
     -fx-text-fill: text_color;
     -fx-font-family: "Open Sans";
-    -fx-font-size: 15px;  /* 12 */
+    -fx-font-size: 14px;  /* 12 */
     -fx-alignment: center-left;
 }
 
@@ -1600,7 +1600,7 @@ totally specific (always using direct child) and cover all cases, which would be
 
 .table-cell {
     -fx-font-family: "Segoe UI";
-    -fx-font-size: 1em;  /* 12 */
+    -fx-font-size: 14px;  /* 12 */
     -fx-alignment: center-left;
 
     -fx-border-width: 0;

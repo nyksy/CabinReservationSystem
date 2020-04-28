@@ -2,10 +2,17 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 
 import java.util.Arrays;
@@ -23,6 +30,12 @@ public class FunctionsController {
 
     //TODO Get ROLE in the company
     String role = LoginController.role;
+
+    //Buttons
+    @FXML
+    private Button btnOffice;
+    @FXML
+    private Button btnChangeUser;
 
     //OFFICE CONTROL
     @FXML
@@ -235,12 +248,19 @@ public class FunctionsController {
      */
     @FXML
     private void initialize() {
+
+        //Päättää mitkä ominaisuudet ovat käytössä roolin mukaan
+        if (role.equals("Customer Service")) {
+            btnOffice.setDisable(true);
+            btnOffice.setManaged(false);
+        }
+
         //TODO get data
         cbOfficeList.addAll();
         cbCustomerList.addAll();
         cbRoomList.addAll();
 
-        apOfficeControl.toFront();
+        changeTabReports();
     }
 
     /**
@@ -288,13 +308,39 @@ public class FunctionsController {
                 String[] row = cellData.getValue();
                 return new SimpleStringProperty(row[columnIndex]);
             });
+            
             //Kolumnien leveys
             column.setPrefWidth(130);
+
+            //Fixed value
+            //target.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
+
             target.getColumns().add(column);
         }
 
         for (int i = 0 ; i < numRows ; i++) {
             target.getItems().add(source[i]);
+        }
+    }
+
+    /**
+     * Method which changes the scene to the same window
+     * @param event e
+     */
+    @FXML
+    public void ChangeStageToLogin(ActionEvent event) {
+        try {
+            Parent loader = FXMLLoader.load(getClass().getResource("Login.fxml"));
+            Scene scene = new Scene(loader);
+
+            Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            window.setScene(scene);
+            window.setTitle("Login");
+            window.centerOnScreen();
+            window.show();
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
