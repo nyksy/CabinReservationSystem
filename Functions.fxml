@@ -237,7 +237,7 @@
                                           <TextField fx:id="tfOfficeCity" layoutX="350.0" layoutY="210.0" prefHeight="35.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                                        </children>
                                     </GridPane>
-                                    <Text layoutX="14.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Use this page to add, edit and delete offices. You can also search with Office ID." wrappingWidth="431.3955078125">
+                                    <Text layoutX="14.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Use this page to add, edit and delete offices. You can also search with Office ID." wrappingWidth="431.3955078125">
                                        <font>
                                           <Font size="22.0" />
                                        </font>
@@ -448,7 +448,7 @@
                                           <ChoiceBox fx:id="cbR_roomID" prefHeight="35.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                                        </children>
                                     </GridPane>
-                                    <Text layoutX="16.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Use this page to add, edit and delete reservations. You can also search with Reservation ID.">
+                                    <Text layoutX="14.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Use this page to add, edit and delete reservations. You can also search with Reservation ID.">
                                        <font>
                                           <Font size="22.0" />
                                        </font>
@@ -544,7 +544,7 @@
                                           <TextField fx:id="tfAddress" layoutX="110.0" layoutY="225.0" prefHeight="35.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                                        </children>
                                     </GridPane>
-                                    <Text layoutX="16.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Use this page to add, edit and delete customers. You can also search with Customer ID." wrappingWidth="505.3955078125">
+                                    <Text layoutX="14.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Use this page to add, edit and delete customers. You can also search with Customer ID." wrappingWidth="505.3955078125">
                                        <font>
                                           <Font size="22.0" />
                                        </font>
