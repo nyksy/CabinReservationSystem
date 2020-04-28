@@ -143,8 +143,6 @@ public class FunctionsController {
     private TableView tbwReservation;
     @FXML
     private TableView tbwRoom;
-    @FXML
-    private TableView tbwBill;
 
     //FXML
     //Tabs
@@ -171,15 +169,11 @@ public class FunctionsController {
     @FXML
     private AnchorPane apMonitorAccommodations;
     @FXML
-    private AnchorPane apMonitorBills;
-    @FXML
     private AnchorPane apReports;
 
     //Hakukentät
     @FXML
     private TextField searchOffices;
-    @FXML
-    private TextField searchServices;
 
     @FXML
     public void controlOffices() {
@@ -252,11 +246,7 @@ public class FunctionsController {
         setMonitorTableview("Huone", tbwRoom);
         apMonitorAccommodations.toFront();
     }
-    @FXML
-    public void changeTabBills() {
-        setMonitorTableview("Lasku", tbwBill);
-        apMonitorBills.toFront();
-    }
+
     @FXML
     public void changeTabReports() {
         apReports.toFront();
@@ -270,8 +260,8 @@ public class FunctionsController {
 
         //Päättää mitkä ominaisuudet ovat käytössä roolin mukaan
         if (role.equals("Customer Service")) {
-            //btnOffice.setDisable(true);
-            //btnOffice.setManaged(false);
+            btnOffice.setDisable(true);
+            btnOffice.setManaged(false);
         }
 
         //Buildataan data Choiceboxeihin
@@ -505,69 +495,21 @@ public class FunctionsController {
 
     @FXML
     public void searchOffice() {
-        String sql = "SELECT * FROM Toimipiste WHERE Toimipiste_ID = ";
-        search(tbwOffice, "Toimipiste", sql, searchOffices);
+        search(tbwOffice, "Toimipiste");
     }
 
-    @FXML
-    public void searchService() {
-        String sql = "SELECT * FROM Palvelu WHERE Palvelu_ID = ";
-        search(tbwService, "Palvelu", sql, searchServices);
-    }
-
-    //TODO tästä eteenpäin
-    @FXML
-    public void searchRoom() {
-        String sql;
-        //search()
-
-    }
-
-    @FXML
-    public void searchReservation() {
-        String sql;
-        //search()
-
-    }
-
-    @FXML
-    public void searchCustomer() {
-        String sql;
-        //search()
-    }
-
-    @FXML
-    public void searchBill() {
-        String sql;
-        //search()
-    }
-
-
-    /**
-     * Metodi tietojen hakemiselle ja näyttämiselle TableView-nökymässä
-     * @param tbw Tableview johon tiedot syötetään
-     * @param table Taulukon nimi
-     * @param haku Hakusanat (sql)
-     * @param tf TextField, josta haetaan hakuarvo
-     */
-    public void search(TableView tbw, String table, String haku, TextField tf) {
+    public void search(TableView tbw, String table) {
         String[][] data = null;
         String[] headers = null;
         httpController hc = new httpController();
 
-        if (!tf.getText().isEmpty()) {
-            String sql = haku + tf.getText();
-
-            try {
-                data = hc.runSQL(sql);
-                headers = hc.getHeaders(table);
-            } catch (IOException io) {
-                System.out.println("Error");
-            }
-            printMatrix(tbw, data, headers);
-
-        } else {
-            setMonitorTableview(table, tbw);
+        String sql = "SELECT * FROM Toimipiste WHERE Toimipiste_ID = " + searchOffices.getText();
+        try {
+            data = hc.runSQL(sql);
+            headers = hc.getHeaders(table);
+        } catch (IOException io){
+            System.out.println("Error");
         }
+        printMatrix(tbw, data, headers);
     }
 }
