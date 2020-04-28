@@ -113,7 +113,7 @@ public class FunctionsController {
     @FXML
     private TextField tfSumTotal;
     @FXML
-    private TextField tfPaid;
+    private CheckBox checkPaid;
     @FXML
     private DatePicker dpDueDate;
     @FXML
@@ -170,6 +170,10 @@ public class FunctionsController {
     private AnchorPane apMonitorAccommodations;
     @FXML
     private AnchorPane apReports;
+
+    //Hakukentät
+    @FXML
+    private TextField searchOffices;
 
     @FXML
     public void controlOffices() {
@@ -246,7 +250,6 @@ public class FunctionsController {
     @FXML
     public void changeTabReports() {
         apReports.toFront();
-        //TODO get the data
     }
 
     /**
@@ -383,7 +386,12 @@ public class FunctionsController {
         String sum = tfSumTotal.getText();
         String due = dpDueDate.getValue().toString();
         String sentDate = dpSent.getValue().toString();
-        String paid = tfPaid.getText();
+        String paid;
+        if (checkPaid.isSelected()) {
+            paid = "TRUE";
+        } else {
+            paid = "FALSE";
+        }
 
         try {
             String values = String.format("\"%s\", \"%s\", \"%s\", \"%s\", \"%s\"",
@@ -515,5 +523,25 @@ public class FunctionsController {
         } catch (IOException ie) {
             System.out.println("TempleOS is malfunctioning.");
         }
+    }
+
+    @FXML
+    public void searchOffice() {
+        search(tbwOffice, "Toimipiste");
+    }
+
+    public void search(TableView tbw, String table) {
+        String[][] data = null;
+        String[] headers = null;
+        httpController hc = new httpController();
+
+        String sql = "SELECT * FROM Toimipiste WHERE Toimipiste_ID = " + searchOffices.getText();
+        try {
+            data = hc.runSQL(sql);
+            headers = hc.getHeaders(table);
+        } catch (IOException io){
+            System.out.println("Error");
+        }
+        printMatrix(tbw, data, headers);
     }
 }
