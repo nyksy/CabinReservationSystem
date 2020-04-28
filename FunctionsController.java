@@ -1,4 +1,5 @@
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -8,43 +9,34 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 
-import java.io.IOException;
+import java.util.Arrays;
 
 /**
  * Controller of the Functions.fxml
  *
  * @author Juho Nykänen
  * @author Taneli Gröhn
+ *
  * @version 0.1
  */
 
 public class FunctionsController {
 
-    //SQL haku-Stringit
-    private final String sqlAsiakas = "SELECT Asiakas_ID FROM Asiakas";
-    private final String sqlToimipiste = "SELECT Toimipiste_ID FROM Toimipiste";
-    private final String sqlPalvelu = "SELECT Palvelu_ID FROM Palvelu";
-    private final String sqlHuone = "SELECT Huone_ID FROM Huone";
-    private final String sqlVaraus = "SELECT Varaus_id FROM Varaus";
-    private final String sqlLasku = "SELECT Lasku_ID FROM Lasku";
+    //TODO Get ROLE in the company
     String role = LoginController.role;
-    //Listoja joilla täytetään ChoiceBoxit
-    //Lista kaikista toimipisteistä
-    ObservableList<String> cbOfficeList = FXCollections.observableArrayList();
-    //Lista kaikista asiakkaista
-    ObservableList<String> cbCustomerList = FXCollections.observableArrayList();
-    //Lista kaikista huoneista
-    ObservableList<String> cbRoomList = FXCollections.observableArrayList();
-    //Lista kaikista varauksista
-    ObservableList<String> cbReservationList = FXCollections.observableArrayList();
+
     //Buttons
     @FXML
     private Button btnOffice;
     @FXML
     private Button btnChangeUser;
+
     //OFFICE CONTROL
     @FXML
     private TextField tfOfficeID;
@@ -56,6 +48,7 @@ public class FunctionsController {
     private TextField tfOfficePostal;
     @FXML
     private TextField tfOfficeCity;
+
     //SERVICE CONTROL
     @FXML
     private ChoiceBox<String> cbS_OfficeID;
@@ -65,6 +58,7 @@ public class FunctionsController {
     private TextField tfServiceName;
     @FXML
     private TextField tfServicePrice;
+
     //ACCOMMODATION CONTROL
     @FXML
     private ChoiceBox<String> cbA_officeID;
@@ -74,6 +68,7 @@ public class FunctionsController {
     private TextField tfRoomDayPrice;
     @FXML
     private TextField tfRoomNumber;
+
     //RESERVATION CONTROL
     @FXML
     private ChoiceBox<String> cbR_roomID;
@@ -85,6 +80,7 @@ public class FunctionsController {
     private DatePicker dpArriving;
     @FXML
     private DatePicker dpLeaving;
+
     //CUSTOMER CONTROL
     @FXML
     private TextField tfCustomerID;
@@ -102,6 +98,7 @@ public class FunctionsController {
     private TextField tfPostal;
     @FXML
     private TextField tfCity;
+
     //BILL CONTROL
     @FXML
     private ChoiceBox<String> cbB_reservationID;
@@ -115,6 +112,20 @@ public class FunctionsController {
     private DatePicker dpDueDate;
     @FXML
     private DatePicker dpSent;
+
+    //Listoja joilla täytetään ChoiceBoxit
+    //Lista kaikista toimipisteistä
+    ObservableList<String> cbOfficeList = FXCollections.observableArrayList();
+
+    //Lista kaikista asiakkaista
+    ObservableList<String> cbCustomerList = FXCollections.observableArrayList();
+
+    //Lista kaikista huoneista
+    ObservableList<String> cbRoomList = FXCollections.observableArrayList();
+
+    //Lista kaikista varauksista
+    ObservableList<String> cbReservationList = FXCollections.observableArrayList();
+
     //TABLEVIEWIT MONITOROINTI-tabeissa
     @FXML
     private TableView tbwCustomer;
@@ -160,12 +171,11 @@ public class FunctionsController {
     }
 
     @FXML
-    public void controlAccommodations() {
+    public void controlAccommodations(){
         cbA_officeID.setItems(cbOfficeList);
         //cbA_officeID.setValue(cbOfficeList.get(0));
         apAccommodationControl.toFront();
     }
-
     @FXML
     public void controlServices() {
         cbS_OfficeID.setItems(cbOfficeList);
@@ -221,7 +231,6 @@ public class FunctionsController {
         setMonitorTableview("Asiakas", tbwCustomer);
         apMonitorCustomers.toFront();
     }
-
     @FXML
     public void changeTabAccommodations() {
         setMonitorTableview("Huone", tbwRoom);
@@ -245,21 +254,41 @@ public class FunctionsController {
             btnOffice.setDisable(true);
             btnOffice.setManaged(false);
         }
-        //get data to choiceBoxes
-        buildData(cbR_customerID, sqlAsiakas, cbCustomerList);
-        buildData(cbA_officeID, sqlToimipiste, cbOfficeList);
-        cbS_OfficeID.setItems(cbOfficeList);
-        buildData(cbR_roomID, sqlHuone, cbRoomList);
-        buildData(cbB_reservationID, sqlVaraus, cbReservationList);
+
+        //TODO get data
+        cbOfficeList.addAll();
+        cbCustomerList.addAll();
+        cbRoomList.addAll();
 
         changeTabReports();
+    }
+
+    @FXML
+    private void insertOffice() {
+        String name = tfOfficeName.getText();
+        String address = tfOfficeStreet.getText();
+        String pcode = tfOfficePostal.getText();
+        String pcity = tfOfficeCity.getText();
+
+        try {
+            String values = String.format("\"%s\", \"%s\", \"%s\", \"%s\"",
+                    name,
+                    address,
+                    pcode,
+                    pcity);
+            System.out.println(values);
+            httpController http = new httpController();
+            http.setValues("Toimipiste", values);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
      * Metodi monitor osion TableView taulun tietojen asettamiselle
      *
      * @param table Haluttu tietokannan taulu
-     * @param tbw   Kohteena oleva TableView fx:id
+     * @param tbw Kohteena oleva TableView fx:id
      */
     private void setMonitorTableview(String table, TableView tbw) {
         httpController http = new httpController();
@@ -267,7 +296,7 @@ public class FunctionsController {
         String[] headers = null;
 
         try {
-            values = http.useDB("select", table, "");
+            values = http.getValues("select", table);
             headers = http.getHeaders(table);
 
         } catch (Exception e) {
@@ -279,8 +308,8 @@ public class FunctionsController {
     /**
      * Metodi TableView taulun täyttämiseksi 2d datamatriisilla. Runko löydetty www.StackOverFlow.com
      *
-     * @param target  Kohteena oleva TableView olio
-     * @param source  2d datamatriisi, joka sisältää halutun datan
+     * @param target Kohteena oleva TableView olio
+     * @param source 2d datamatriisi, joka sisältää halutun datan
      * @param headers Matriisi, joka sisältää kolumnien nimet
      */
     private void printMatrix(TableView<String[]> target, String[][] source, String[] headers) {
@@ -288,19 +317,19 @@ public class FunctionsController {
         target.getColumns().clear();
         target.getItems().clear();
 
-        int numRows = source.length;
-        if (numRows == 0) return;
+        int numRows = source.length ;
+        if (numRows == 0) return ;
 
-        int numCols = source[0].length;
+        int numCols = source[0].length ;
 
-        for (int i = 0; i < numCols; i++) {
+        for (int i = 0 ; i < numCols ; i++) {
             TableColumn<String[], String> column = new TableColumn<>(headers[i]);
-            final int columnIndex = i;
+            final int columnIndex = i ;
             column.setCellValueFactory(cellData -> {
                 String[] row = cellData.getValue();
                 return new SimpleStringProperty(row[columnIndex]);
             });
-
+            
             //Kolumnien leveys
             column.setPrefWidth(130);
 
@@ -310,14 +339,14 @@ public class FunctionsController {
             target.getColumns().add(column);
         }
 
-        for (String[] strings : source) {
-            target.getItems().add(strings);
+        for (int i = 0 ; i < numRows ; i++) {
+            target.getItems().add(source[i]);
         }
     }
 
     /**
-     * Metodi, joka vaihtaa scenen samaan ikkunaan. Functions -> Login
-     * @param event ActionEvent
+     * Method which changes the scene to the same window
+     * @param event e
      */
     @FXML
     public void ChangeStageToLogin(ActionEvent event) {
@@ -333,27 +362,6 @@ public class FunctionsController {
 
         } catch (Exception e) {
             e.printStackTrace();
-        }
-    }
-
-    /**
-     * Metodi jolla saadaan täytettyä Choiceboxit datalla palvelimelta.
-     *
-     * @param cb   Choicebox-attribuutti
-     * @param sql  String, joka sisältää sql-hakusanat
-     * @param list Observablelist, johon kaikki tulokset lisätään
-     */
-    public void buildData(ChoiceBox<String> cb, String sql, ObservableList<String> list) {
-        String[][] data;
-        httpController hc = new httpController();
-        try {
-            data = hc.runSQL(sql);
-            for (String[] datum : data) {
-                list.add(datum[0]);
-            }
-            cb.setItems(list);
-        } catch (IOException ie) {
-            System.out.println("TempleOS is malfunctioning.");
         }
     }
 }

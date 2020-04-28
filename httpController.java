@@ -12,7 +12,6 @@ import org.json.*;
  * Luokka HTTP - Tietokantayhteyttä varten
  */
 public class httpController {
-
     //Tietokannan cgi-rajapinnan URL
     private static String url = "http://cs.uef.fi/tagrohn-bin/cgi_db.py";
     //Koodauksessa käytettävä charset
@@ -23,19 +22,25 @@ public class httpController {
      *
      * @param query  HTTP query= parametri. Tarkentaa, mitä SQL toimintoa halutaan kutsua
      * @param table  HTTP table= parametri. Tarkentaa mistä taulusta halutaan tietoa
-     * @param values HTTP values= parametri. Tarkentaa mitä tietoa halutaan tallettaa insert metodissa.
      * @return Palauttaa 2d array:n, joka sisältää tietokantakyselyn tulokset. Arrayn yksi rivi
      * kuvastaa tietokannan riviä
      * @throws IOException Virhe HTTP yhteydessä
      */
-    public String[][] useDB(String query, String table, String values) throws IOException {
+    public String[][] getValues(String query, String table) throws IOException {
 
-        String sql = String.format("query=%s&table=%s&values=%s",
+        String sql = String.format("query=%s&table=%s",
                 URLEncoder.encode(query, charset),
-                URLEncoder.encode(table, charset),
-                URLEncoder.encode(values, charset));
+                URLEncoder.encode(table, charset));
         JsonDecompiler dec = new JsonDecompiler();
         return dec.decompile2dArray(callCGI(sql));
+    }
+
+    public void setValues(String table, String values) throws IOException {
+        String sql = String.format("query=insert&table=%s&values=%s",
+                URLEncoder.encode(table, charset),
+                URLEncoder.encode(values, charset));
+        String responseBody = callCGI(sql);
+        System.out.println(responseBody);
     }
 
     /**
