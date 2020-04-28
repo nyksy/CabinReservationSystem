@@ -81,6 +81,7 @@ public class httpController {
 
         //Luo uusi JsonDecompiler ja palauta purettu viesti
         JsonDecompiler dec = new JsonDecompiler();
+
         return dec.decompile2dArray(callCGI(sql));
     }
 
