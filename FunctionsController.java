@@ -271,22 +271,114 @@ public class FunctionsController {
         changeTabReports();
     }
 
+    /**
+     * Metodi, jolla lisätään toimipiste tietokantaan
+     */
     @FXML
     private void insertOffice() {
+        //Hae kaikkien textfieldien arvot
         String name = tfOfficeName.getText();
         String address = tfOfficeStreet.getText();
         String pcode = tfOfficePostal.getText();
         String pcity = tfOfficeCity.getText();
-
         try {
+            //Luo values merkkijono ja kutsu http.setValues metodia
             String values = String.format("\"%s\", \"%s\", \"%s\", \"%s\"",
-                    name,
-                    address,
-                    pcode,
-                    pcity);
+                    name, address, pcode, pcity);
             System.out.println(values);
             httpController http = new httpController();
             http.setValues("Toimipiste", values);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Metodi, jolla lisätään asiakas tietokantaan
+     */
+    @FXML
+    private void insertCustomer() {
+        String firstName = tfFirstName.getText();
+        String lastName = tfLastName.getText();
+        String pnum = tfPhone.getText();
+        String email = tfEmail.getText();
+        String address = tfAddress.getText();
+        String pcode = tfPostal.getText();
+        String city = tfCity.getText();
+        try {
+            String values = String.format("\"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\"",
+                    firstName, lastName, pnum, email, address, pcode, city);
+            System.out.println(values);
+            httpController http = new httpController();
+            http.setValues("Asiakas", values);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void insertAccommodation() {
+        String price = tfRoomDayPrice.getText();
+        String rnum = tfRoomNumber.getText();
+        String officeID = cbA_officeID.getValue();
+        try {
+            String values = String.format("\"%s\", \"%s\", \"%s\"",
+                    price, rnum, officeID);
+            System.out.println(values);
+            httpController http = new httpController();
+            http.setValues("Huone", values);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void insertReservation() {
+        String arriving = dpArriving.getValue().toString();
+        String leaving = dpLeaving.getValue().toString();
+        String customerID = cbR_customerID.getValue();
+        String roomID = cbR_roomID.getValue();
+        try {
+            String values = String.format("\"%s\", \"%s\", \"%s\", \"%s\"",
+                    arriving, leaving, customerID, roomID);
+            System.out.println(values);
+            httpController http = new httpController();
+            http.setValues("Varaus", values);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void insertService() {
+        String name = tfServiceName.getText();
+        String price = tfServicePrice.getText();
+        String officeID = cbS_OfficeID.getValue();
+        try {
+            String values = String.format("\"%s\", \"%s\", \"%s\"",
+                    name, price, officeID);
+            System.out.println(values);
+            httpController http = new httpController();
+            http.setValues("Palvelu", values);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void insertBill() {
+        String reservationID = cbB_reservationID.getValue();
+        String sum = tfSumTotal.getText();
+        String due = dpDueDate.getValue().toString();
+        String sentDate = dpSent.getValue().toString();
+        String paid = tfPaid.getText();
+
+        try {
+            String values = String.format("\"%s\", \"%s\", \"%s\", \"%s\", \"%s\"",
+                    reservationID, sum, due, sentDate, paid);
+            System.out.println(values);
+            httpController http = new httpController();
+            http.setValues("Lasku", values);
         } catch (Exception e) {
             e.printStackTrace();
         }

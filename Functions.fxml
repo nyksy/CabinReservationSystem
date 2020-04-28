@@ -279,7 +279,7 @@
                                     <ButtonBar layoutX="513.0" layoutY="468.0" prefHeight="40.0" prefWidth="275.0" AnchorPane.bottomAnchor="188.0" AnchorPane.rightAnchor="268.0">
                                        <buttons>
                                           <Button mnemonicParsing="false" prefHeight="32.0" prefWidth="81.0" text="Search" />
-                                          <Button layoutX="635.0" layoutY="14.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="81.0" text="Add" />
+                                          <Button layoutX="635.0" layoutY="14.0" mnemonicParsing="false" onAction="#insertCustomer" prefHeight="32.0" prefWidth="81.0" text="Add" />
                                           <Button alignment="TOP_CENTER" mnemonicParsing="false" text="Edit" />
                                           <Button layoutX="550.0" layoutY="14.0" mnemonicParsing="false" text="Delete" />
                                        </buttons>
@@ -381,6 +381,142 @@
                         <TableView fx:id="tbwOffice" layoutX="17.0" layoutY="76.0" prefHeight="724.0" prefWidth="1058.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="76.0" />
                      </children>
                   </AnchorPane>
+                  <AnchorPane fx:id="apServiceControl" layoutX="10.0" layoutY="10.0" prefHeight="810.0" prefWidth="1068.0" styleClass="background" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <Label layoutY="28.0" text="Service Control">
+                           <font>
+                              <Font size="40.0" />
+                           </font>
+                        </Label>
+                        <TitledPane layoutY="76.0" prefHeight="800.0" prefWidth="1058.0" styleClass="background" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="76.0">
+                           <content>
+                              <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                 <children>
+                                    <ButtonBar layoutX="513.0" layoutY="468.0" prefHeight="40.0" prefWidth="275.0" AnchorPane.bottomAnchor="188.0" AnchorPane.rightAnchor="268.0">
+                                       <buttons>
+                                          <Button mnemonicParsing="false" prefHeight="32.0" prefWidth="81.0" text="Search" />
+                                          <Button layoutX="635.0" layoutY="14.0" mnemonicParsing="false" onAction="#insertService" prefHeight="32.0" prefWidth="81.0" text="Add" />
+                                          <Button alignment="TOP_CENTER" mnemonicParsing="false" text="Edit" />
+                                          <Button layoutX="550.0" layoutY="14.0" mnemonicParsing="false" text="Delete" />
+                                       </buttons>
+                                    </ButtonBar>
+                                    <GridPane alignment="CENTER" layoutX="277.6" layoutY="234.6" prefHeight="229.0" prefWidth="520.0" AnchorPane.bottomAnchor="242.0" AnchorPane.leftAnchor="268.0" AnchorPane.rightAnchor="268.0" AnchorPane.topAnchor="225.0">
+                                       <columnConstraints>
+                                          <ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" minWidth="10.0" prefWidth="20.0" />
+                                          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                       </columnConstraints>
+                                       <rowConstraints>
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                       </rowConstraints>
+                                       <children>
+                                          <Label alignment="CENTER_RIGHT" prefHeight="15.0" prefWidth="400.0" text="Service ID">
+                                             <GridPane.margin>
+                                                <Insets right="10.0" />
+                                             </GridPane.margin>
+                                          </Label>
+                                          <Label alignment="CENTER_RIGHT" prefHeight="15.0" prefWidth="400.0" text="Office ID" GridPane.rowIndex="1">
+                                             <GridPane.margin>
+                                                <Insets right="10.0" />
+                                             </GridPane.margin>
+                                          </Label>
+                                          <Label alignment="CENTER_RIGHT" prefHeight="15.0" prefWidth="400.0" text="Name" GridPane.rowIndex="2">
+                                             <GridPane.margin>
+                                                <Insets right="10.0" />
+                                             </GridPane.margin>
+                                          </Label>
+                                          <Label alignment="CENTER_RIGHT" prefHeight="15.0" prefWidth="400.0" text="Price" GridPane.rowIndex="3">
+                                             <GridPane.margin>
+                                                <Insets right="10.0" />
+                                             </GridPane.margin>
+                                          </Label>
+                                          <TextField fx:id="tfServiceID" prefHeight="35.0" GridPane.columnIndex="1" />
+                                          <TextField fx:id="tfServiceName" prefHeight="35.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                          <TextField fx:id="tfServicePrice" prefHeight="35.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                          <ChoiceBox fx:id="cbS_OfficeID" prefHeight="35.0" prefWidth="181.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                       </children>
+                                    </GridPane>
+                                    <Text layoutX="14.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Use this page to add, edit and delete services. You can also search with Service ID." wrappingWidth="446.3955078125">
+                                       <font>
+                                          <Font size="22.0" />
+                                       </font>
+                                    </Text>
+                                 </children>
+                              </AnchorPane>
+                           </content>
+                        </TitledPane>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane fx:id="apAccommodationControl" layoutX="10.0" layoutY="10.0" prefHeight="820.0" prefWidth="1078.0" styleClass="background" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <Label layoutY="28.0" text="Accommodation Control">
+                           <font>
+                              <Font size="40.0" />
+                           </font>
+                        </Label>
+                        <TitledPane layoutY="76.0" prefHeight="800.0" prefWidth="1058.0" styleClass="background" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="76.0">
+                           <content>
+                              <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                 <children>
+                                    <ButtonBar layoutX="513.0" layoutY="468.0" prefHeight="40.0" prefWidth="275.0" AnchorPane.bottomAnchor="188.0" AnchorPane.rightAnchor="268.0">
+                                       <buttons>
+                                          <Button mnemonicParsing="false" prefHeight="32.0" prefWidth="81.0" text="Search" />
+                                          <Button layoutX="635.0" layoutY="14.0" mnemonicParsing="false" onAction="#insertAccommodation" prefHeight="32.0" prefWidth="81.0" text="Add" />
+                                          <Button alignment="TOP_CENTER" mnemonicParsing="false" text="Edit" />
+                                          <Button layoutX="550.0" layoutY="14.0" mnemonicParsing="false" text="Delete" />
+                                       </buttons>
+                                    </ButtonBar>
+                                    <GridPane alignment="CENTER" layoutX="277.6" layoutY="232.0" prefHeight="222.0" prefWidth="520.0" AnchorPane.bottomAnchor="242.0" AnchorPane.leftAnchor="268.0" AnchorPane.rightAnchor="268.0" AnchorPane.topAnchor="232.0">
+                                       <columnConstraints>
+                                          <ColumnConstraints hgrow="SOMETIMES" maxWidth="150.0" minWidth="10.0" prefWidth="20.0" />
+                                          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                       </columnConstraints>
+                                       <rowConstraints>
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                       </rowConstraints>
+                                       <children>
+                                          <Label alignment="CENTER_RIGHT" prefHeight="15.0" prefWidth="400.0" text="Room ID">
+                                             <GridPane.margin>
+                                                <Insets right="10.0" />
+                                             </GridPane.margin>
+                                          </Label>
+                                          <Label alignment="CENTER_RIGHT" prefHeight="15.0" prefWidth="400.0" text="Office ID" GridPane.rowIndex="1">
+                                             <GridPane.margin>
+                                                <Insets right="10.0" />
+                                             </GridPane.margin>
+                                          </Label>
+                                          <Label alignment="CENTER_RIGHT" prefHeight="15.0" prefWidth="400.0" text="Day price" GridPane.rowIndex="2">
+                                             <GridPane.margin>
+                                                <Insets right="10.0" />
+                                             </GridPane.margin>
+                                          </Label>
+                                          <Label alignment="CENTER_RIGHT" prefHeight="15.0" prefWidth="400.0" text="Number of the room" GridPane.rowIndex="3">
+                                             <GridPane.margin>
+                                                <Insets right="10.0" />
+                                             </GridPane.margin>
+                                          </Label>
+                                          <TextField fx:id="tfRoomID" prefHeight="35.0" GridPane.columnIndex="1" />
+                                          <TextField fx:id="tfRoomDayPrice" prefHeight="35.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                          <TextField fx:id="tfRoomNumber" prefHeight="35.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                          <ChoiceBox fx:id="cbA_officeID" prefHeight="35.0" prefWidth="181.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                       </children>
+                                    </GridPane>
+                                    <Text layoutX="14.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Use this page to add, edit and delete Accommodations. You can also search with Room ID.">
+                                       <font>
+                                          <Font size="22.0" />
+                                       </font>
+                                    </Text>
+                                 </children>
+                              </AnchorPane>
+                           </content>
+                        </TitledPane>
+                     </children>
+                  </AnchorPane>
                   <AnchorPane fx:id="apReservationControl" layoutX="10.0" layoutY="10.0" prefHeight="820.0" prefWidth="1078.0" styleClass="background" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
                         <Label layoutY="28.0" text="Reservation Control">
@@ -395,7 +531,7 @@
                                     <ButtonBar layoutX="513.0" layoutY="468.0" prefHeight="40.0" prefWidth="275.0" AnchorPane.bottomAnchor="188.0" AnchorPane.rightAnchor="268.0">
                                        <buttons>
                                           <Button layoutX="30.0" layoutY="14.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="81.0" text="Search" />
-                                          <Button layoutX="635.0" layoutY="14.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="81.0" text="Add" />
+                                          <Button layoutX="635.0" layoutY="14.0" mnemonicParsing="false" onAction="#insertReservation" prefHeight="32.0" prefWidth="81.0" text="Add" />
                                           <Button alignment="TOP_CENTER" mnemonicParsing="false" text="Edit" />
                                           <Button layoutX="550.0" layoutY="14.0" mnemonicParsing="false" text="Delete" />
                                        </buttons>
@@ -470,7 +606,7 @@
                                     <ButtonBar layoutX="513.0" layoutY="468.0" prefHeight="40.0" prefWidth="275.0" AnchorPane.bottomAnchor="188.0" AnchorPane.rightAnchor="268.0">
                                        <buttons>
                                           <Button mnemonicParsing="false" prefHeight="32.0" prefWidth="81.0" text="Search" />
-                                          <Button layoutX="635.0" layoutY="14.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="81.0" text="Add" />
+                                          <Button layoutX="635.0" layoutY="14.0" mnemonicParsing="false" onAction="#insertBill" prefHeight="32.0" prefWidth="81.0" text="Add" />
                                           <Button alignment="TOP_CENTER" mnemonicParsing="false" text="Edit" />
                                           <Button layoutX="550.0" layoutY="14.0" mnemonicParsing="false" text="Delete" />
                                        </buttons>
@@ -528,142 +664,6 @@
                                        </children>
                                     </GridPane>
                                     <Text layoutX="14.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Use this page to add, edit and delete Bills. You can also search with Bill ID.">
-                                       <font>
-                                          <Font size="22.0" />
-                                       </font>
-                                    </Text>
-                                 </children>
-                              </AnchorPane>
-                           </content>
-                        </TitledPane>
-                     </children>
-                  </AnchorPane>
-                  <AnchorPane fx:id="apServiceControl" layoutX="10.0" layoutY="10.0" prefHeight="810.0" prefWidth="1068.0" styleClass="background" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                     <children>
-                        <Label layoutY="28.0" text="Service Control">
-                           <font>
-                              <Font size="40.0" />
-                           </font>
-                        </Label>
-                        <TitledPane layoutY="76.0" prefHeight="800.0" prefWidth="1058.0" styleClass="background" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="76.0">
-                           <content>
-                              <AnchorPane prefHeight="200.0" prefWidth="200.0">
-                                 <children>
-                                    <ButtonBar layoutX="513.0" layoutY="468.0" prefHeight="40.0" prefWidth="275.0" AnchorPane.bottomAnchor="188.0" AnchorPane.rightAnchor="268.0">
-                                       <buttons>
-                                          <Button mnemonicParsing="false" prefHeight="32.0" prefWidth="81.0" text="Search" />
-                                          <Button layoutX="635.0" layoutY="14.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="81.0" text="Add" />
-                                          <Button alignment="TOP_CENTER" mnemonicParsing="false" text="Edit" />
-                                          <Button layoutX="550.0" layoutY="14.0" mnemonicParsing="false" text="Delete" />
-                                       </buttons>
-                                    </ButtonBar>
-                                    <GridPane alignment="CENTER" layoutX="277.6" layoutY="234.6" prefHeight="229.0" prefWidth="520.0" AnchorPane.bottomAnchor="242.0" AnchorPane.leftAnchor="268.0" AnchorPane.rightAnchor="268.0" AnchorPane.topAnchor="225.0">
-                                       <columnConstraints>
-                                          <ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" minWidth="10.0" prefWidth="20.0" />
-                                          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                       </columnConstraints>
-                                       <rowConstraints>
-                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                       </rowConstraints>
-                                       <children>
-                                          <Label alignment="CENTER_RIGHT" prefHeight="15.0" prefWidth="400.0" text="Service ID">
-                                             <GridPane.margin>
-                                                <Insets right="10.0" />
-                                             </GridPane.margin>
-                                          </Label>
-                                          <Label alignment="CENTER_RIGHT" prefHeight="15.0" prefWidth="400.0" text="Office ID" GridPane.rowIndex="1">
-                                             <GridPane.margin>
-                                                <Insets right="10.0" />
-                                             </GridPane.margin>
-                                          </Label>
-                                          <Label alignment="CENTER_RIGHT" prefHeight="15.0" prefWidth="400.0" text="Name" GridPane.rowIndex="2">
-                                             <GridPane.margin>
-                                                <Insets right="10.0" />
-                                             </GridPane.margin>
-                                          </Label>
-                                          <Label alignment="CENTER_RIGHT" prefHeight="15.0" prefWidth="400.0" text="Price" GridPane.rowIndex="3">
-                                             <GridPane.margin>
-                                                <Insets right="10.0" />
-                                             </GridPane.margin>
-                                          </Label>
-                                          <TextField fx:id="tfServiceID" prefHeight="35.0" GridPane.columnIndex="1" />
-                                          <TextField fx:id="tfServiceName" prefHeight="35.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                                          <TextField fx:id="tfServicePrice" prefHeight="35.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                                          <ChoiceBox fx:id="cbS_OfficeID" prefHeight="35.0" prefWidth="181.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                       </children>
-                                    </GridPane>
-                                    <Text layoutX="14.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Use this page to add, edit and delete services. You can also search with Service ID." wrappingWidth="446.3955078125">
-                                       <font>
-                                          <Font size="22.0" />
-                                       </font>
-                                    </Text>
-                                 </children>
-                              </AnchorPane>
-                           </content>
-                        </TitledPane>
-                     </children>
-                  </AnchorPane>
-                  <AnchorPane fx:id="apAccommodationControl" layoutX="10.0" layoutY="10.0" prefHeight="820.0" prefWidth="1078.0" styleClass="background" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                     <children>
-                        <Label layoutY="28.0" text="Accommodation Control">
-                           <font>
-                              <Font size="40.0" />
-                           </font>
-                        </Label>
-                        <TitledPane layoutY="76.0" prefHeight="800.0" prefWidth="1058.0" styleClass="background" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="76.0">
-                           <content>
-                              <AnchorPane prefHeight="200.0" prefWidth="200.0">
-                                 <children>
-                                    <ButtonBar layoutX="513.0" layoutY="468.0" prefHeight="40.0" prefWidth="275.0" AnchorPane.bottomAnchor="188.0" AnchorPane.rightAnchor="268.0">
-                                       <buttons>
-                                          <Button mnemonicParsing="false" prefHeight="32.0" prefWidth="81.0" text="Search" />
-                                          <Button layoutX="635.0" layoutY="14.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="81.0" text="Add" />
-                                          <Button alignment="TOP_CENTER" mnemonicParsing="false" text="Edit" />
-                                          <Button layoutX="550.0" layoutY="14.0" mnemonicParsing="false" text="Delete" />
-                                       </buttons>
-                                    </ButtonBar>
-                                    <GridPane alignment="CENTER" layoutX="277.6" layoutY="232.0" prefHeight="222.0" prefWidth="520.0" AnchorPane.bottomAnchor="242.0" AnchorPane.leftAnchor="268.0" AnchorPane.rightAnchor="268.0" AnchorPane.topAnchor="232.0">
-                                       <columnConstraints>
-                                          <ColumnConstraints hgrow="SOMETIMES" maxWidth="150.0" minWidth="10.0" prefWidth="20.0" />
-                                          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                       </columnConstraints>
-                                       <rowConstraints>
-                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                       </rowConstraints>
-                                       <children>
-                                          <Label alignment="CENTER_RIGHT" prefHeight="15.0" prefWidth="400.0" text="Room ID">
-                                             <GridPane.margin>
-                                                <Insets right="10.0" />
-                                             </GridPane.margin>
-                                          </Label>
-                                          <Label alignment="CENTER_RIGHT" prefHeight="15.0" prefWidth="400.0" text="Office ID" GridPane.rowIndex="1">
-                                             <GridPane.margin>
-                                                <Insets right="10.0" />
-                                             </GridPane.margin>
-                                          </Label>
-                                          <Label alignment="CENTER_RIGHT" prefHeight="15.0" prefWidth="400.0" text="Day price" GridPane.rowIndex="2">
-                                             <GridPane.margin>
-                                                <Insets right="10.0" />
-                                             </GridPane.margin>
-                                          </Label>
-                                          <Label alignment="CENTER_RIGHT" prefHeight="15.0" prefWidth="400.0" text="Number of the room" GridPane.rowIndex="3">
-                                             <GridPane.margin>
-                                                <Insets right="10.0" />
-                                             </GridPane.margin>
-                                          </Label>
-                                          <TextField fx:id="tfRoomID" prefHeight="35.0" GridPane.columnIndex="1" />
-                                          <TextField fx:id="tfRoomDayPrice" prefHeight="35.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                                          <TextField fx:id="tfRoomNumber" prefHeight="35.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                                          <ChoiceBox fx:id="cbA_officeID" prefHeight="35.0" prefWidth="181.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                       </children>
-                                    </GridPane>
-                                    <Text layoutX="14.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Use this page to add, edit and delete Accommodations. You can also search with Room ID.">
                                        <font>
                                           <Font size="22.0" />
                                        </font>
