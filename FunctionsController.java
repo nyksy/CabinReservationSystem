@@ -263,7 +263,7 @@ public class FunctionsController {
         cbCustomerList.addAll();
         cbRoomList.addAll();
 
-        apOfficeControl.toFront();
+        changeTabReports();
     }
 
     /**

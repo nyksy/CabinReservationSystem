@@ -1549,7 +1549,7 @@ Text {
 .table-view .column-header .label{
     -fx-text-fill: text_color;
     -fx-font-family: "Open Sans";
-    -fx-font-size: 15px;  /* 12 */
+    -fx-font-size: 14px;  /* 12 */
     -fx-alignment: center-left;
 }
 
