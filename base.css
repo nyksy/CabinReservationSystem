@@ -89,6 +89,7 @@
 Text {
     -fx-font-family: "Segoe UI", "Open Sans";
     -fx-fill: text_color;
+    -fx-font-size: 20px;
 }
 
 /*=================== Other styles ======================*/
