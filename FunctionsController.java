@@ -15,6 +15,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
+import java.io.IOException;
 import java.util.Arrays;
 
 /**
@@ -28,8 +29,13 @@ import java.util.Arrays;
 
 public class FunctionsController {
 
-    //TODO Get ROLE in the company
     String role = LoginController.role;
+
+    //SQL haku-Stringit
+    private final String sqlAsiakas = "SELECT Asiakas_ID FROM Asiakas";
+    private final String sqlToimipiste = "SELECT Toimipiste_ID FROM Toimipiste";
+    private final String sqlHuone = "SELECT Huone_ID FROM Huone";
+    private final String sqlVaraus = "SELECT Varaus_ID FROM Varaus";
 
     //Buttons
     @FXML
@@ -255,10 +261,12 @@ public class FunctionsController {
             btnOffice.setManaged(false);
         }
 
-        //TODO get data
-        cbOfficeList.addAll();
-        cbCustomerList.addAll();
-        cbRoomList.addAll();
+        //Buildataan data Choiceboxeihin
+        buildData(cbR_customerID, sqlAsiakas, cbCustomerList);
+        buildData(cbA_officeID, sqlToimipiste, cbOfficeList);
+        cbS_OfficeID.setItems(cbOfficeList);
+        buildData(cbR_roomID, sqlHuone, cbRoomList);
+        buildData(cbB_reservationID, sqlVaraus, cbReservationList);
 
         changeTabReports();
     }
@@ -339,8 +347,8 @@ public class FunctionsController {
             target.getColumns().add(column);
         }
 
-        for (int i = 0 ; i < numRows ; i++) {
-            target.getItems().add(source[i]);
+        for (String[] strings : source) {
+            target.getItems().add(strings);
         }
     }
 
@@ -362,6 +370,26 @@ public class FunctionsController {
 
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+    /**
+     * Metodi jolla saadaan täytettyä Choiceboxit datalla palvelimelta.
+     *
+     * @param cb   Choicebox-attribuutti
+     * @param sql  String, joka sisältää sql-hakusanat
+     * @param list Observablelist, johon kaikki tulokset lisätään
+     */
+    public void buildData(ChoiceBox<String> cb, String sql, ObservableList<String> list) {
+        String[][] data;
+        httpController hc = new httpController();
+        try {
+            data = hc.runSQL(sql);
+            for (String[] datum : data) {
+                list.add(datum[0]);
+            }
+            cb.setItems(list);
+        } catch (IOException ie) {
+            System.out.println("TempleOS is malfunctioning.");
         }
     }
 }
