@@ -27,7 +27,7 @@ public class httpController {
      * @throws IOException Virhe HTTP yhteydessä
      */
     public String[][] getValues(String query, String table) throws IOException {
-
+        //testi
         String sql = String.format("query=%s&table=%s",
                 URLEncoder.encode(query, charset),
                 URLEncoder.encode(table, charset));
