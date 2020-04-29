@@ -626,6 +626,19 @@ public class FunctionsController {
         }
     }
 
+    @FXML
+    private void deleteBill() {
+        String billID = tfBillID.getText();
+        try {
+            http.deleteValues("Palvelu", billID, "");
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Deletion aborted",
+                    "Check Bill ID.",
+                    Alert.AlertType.INFORMATION);
+        }
+    }
+
     /**
      * Metodi monitor osion TableView taulun tietojen asettamiselle
      *
