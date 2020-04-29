@@ -14,28 +14,23 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import org.json.JSONException;
 
 import java.io.IOException;
 import java.util.Arrays;
 
 /**
- * Controller of the Functions.fxml
+ * Functions.fxml controller
  *
  * @author Juho Nykänen
  * @author Taneli Gröhn
- *
  * @version 0.1
  */
 
 public class FunctionsController {
 
     String role = LoginController.role;
-
-    //SQL haku-Stringit
-    private final String sqlAsiakas = "SELECT Asiakas_ID FROM Asiakas";
-    private final String sqlToimipiste = "SELECT Toimipiste_ID FROM Toimipiste";
-    private final String sqlHuone = "SELECT Huone_ID FROM Huone";
-    private final String sqlVaraus = "SELECT Varaus_ID FROM Varaus";
+    static httpController http = new httpController();
 
     //Buttons
     @FXML
@@ -180,6 +175,14 @@ public class FunctionsController {
     private TextField searchOffices;
     @FXML
     private TextField searchServices;
+    @FXML
+    private TextField searchRooms;
+    @FXML
+    private TextField searchReservations;
+    @FXML
+    private TextField searchCustomers;
+    @FXML
+    private TextField searchBills;
 
     @FXML
     public void controlOffices() {
@@ -188,27 +191,16 @@ public class FunctionsController {
 
     @FXML
     public void controlAccommodations() {
-        cbA_officeID.setItems(cbOfficeList);
-        //cbA_officeID.setValue(cbOfficeList.get(0));
         apAccommodationControl.toFront();
     }
 
     @FXML
     public void controlServices() {
-        cbS_OfficeID.setItems(cbOfficeList);
-        //cbS_OfficeID.setValue(cbOfficeList.get(0));
-
         apServiceControl.toFront();
     }
 
     @FXML
     public void controlReservations() {
-        cbR_customerID.setItems(cbCustomerList);
-        //cbR_customerID.setValue(cbCustomerList.get(0));
-
-        cbR_roomID.setItems(cbRoomList);
-        //cbR_roomID.setValue(cbRoomList.get(0));
-
         apReservationControl.toFront();
     }
 
@@ -219,9 +211,6 @@ public class FunctionsController {
 
     @FXML
     public void controlBills() {
-        cbB_reservationID.setItems(cbReservationList);
-        //cbB_reservationID.setValue(cbReservationList.get(0));
-
         apBillControl.toFront();
     }
 
@@ -248,16 +237,19 @@ public class FunctionsController {
         setMonitorTableview("Asiakas", tbwCustomer);
         apMonitorCustomers.toFront();
     }
+
     @FXML
     public void changeTabAccommodations() {
         setMonitorTableview("Huone", tbwRoom);
         apMonitorAccommodations.toFront();
     }
+
     @FXML
     public void changeTabBills() {
         setMonitorTableview("Lasku", tbwBill);
         apMonitorBills.toFront();
     }
+
     @FXML
     public void changeTabReports() {
         apReports.toFront();
@@ -276,6 +268,12 @@ public class FunctionsController {
         }
 
         //Buildataan data Choiceboxeihin
+        //SQL haku-Stringit
+        String sqlAsiakas = "SELECT Asiakas_ID FROM Asiakas ORDER BY Asiakas_ID";
+        String sqlToimipiste = "SELECT Toimipiste_ID FROM Toimipiste ORDER BY Toimipiste_ID";
+        String sqlHuone = "SELECT Huone_ID FROM Huone ORDER BY Huone_ID";
+        String sqlVaraus = "SELECT Varaus_ID FROM Varaus ORDER BY Varaus_ID";
+
         buildData(cbR_customerID, sqlAsiakas, cbCustomerList);
         buildData(cbA_officeID, sqlToimipiste, cbOfficeList);
         cbS_OfficeID.setItems(cbOfficeList);
@@ -303,7 +301,9 @@ public class FunctionsController {
             httpController http = new httpController();
             http.setValues("Toimipiste", values);
         } catch (Exception e) {
-            e.printStackTrace();
+            showAlert("Insert failed",
+                    "You may not insert empty fields.",
+                    Alert.AlertType.INFORMATION);
         }
     }
 
@@ -326,7 +326,9 @@ public class FunctionsController {
             httpController http = new httpController();
             http.setValues("Asiakas", values);
         } catch (Exception e) {
-            e.printStackTrace();
+            showAlert("Insert failed",
+                    "You may not insert empty fields.",
+                    Alert.AlertType.INFORMATION);
         }
     }
 
@@ -342,10 +344,11 @@ public class FunctionsController {
             String values = String.format("\"%s\", \"%s\", \"%s\"",
                     price, rnum, officeID);
             System.out.println(values);
-            httpController http = new httpController();
             http.setValues("Huone", values);
         } catch (Exception e) {
-            e.printStackTrace();
+            showAlert("Insert failed",
+                    "You may not insert empty fields.",
+                    Alert.AlertType.INFORMATION);
         }
     }
 
@@ -362,10 +365,12 @@ public class FunctionsController {
             String values = String.format("\"%s\", \"%s\", \"%s\", \"%s\"",
                     arriving, leaving, customerID, roomID);
             System.out.println(values);
-            httpController http = new httpController();
             http.setValues("Varaus", values);
         } catch (Exception e) {
             e.printStackTrace();
+            showAlert("Insert failed",
+                    "Check if there are overlapping reservations. Also you may not insert empty fields.",
+                    Alert.AlertType.INFORMATION);
         }
     }
 
@@ -381,10 +386,11 @@ public class FunctionsController {
             String values = String.format("\"%s\", \"%s\", \"%s\"",
                     name, price, officeID);
             System.out.println(values);
-            httpController http = new httpController();
             http.setValues("Palvelu", values);
         } catch (Exception e) {
-            e.printStackTrace();
+            showAlert("Insert failed",
+                    "You may not insert empty fields.",
+                    Alert.AlertType.INFORMATION);
         }
     }
 
@@ -403,18 +409,19 @@ public class FunctionsController {
         } else {
             paid = "FALSE";
         }
-
         try {
             String values = String.format("\"%s\", \"%s\", \"%s\", \"%s\", \"%s\"",
                     reservationID, sum, due, sentDate, paid);
             System.out.println(values);
-            httpController http = new httpController();
             http.setValues("Lasku", values);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    /**
+     * Metodi, jolla päivitetään olemassaolevan toimiston tietoja
+     */
     @FXML
     private void updateOffice() {
         String officeID = tfOfficeID.getText();
@@ -428,13 +435,17 @@ public class FunctionsController {
             String values = String.format("Nimi=\'%s\', Katuosoite=\'%s\', Postinumero=\'%s\', Postitoimipaikka=\'%s\'",
                     name, address, pcode, pcity);
             System.out.println(values);
-            httpController http = new httpController();
             http.updateValues("Toimipiste", values, officeID);
         } catch (Exception e) {
-            e.printStackTrace();
+            showAlert("Update failed",
+                    "Check Office ID. You may not insert empty fields.",
+                    Alert.AlertType.INFORMATION);
         }
     }
 
+    /**
+     * Metodi, jolla päivitetään olemassaolevan asiakkaan tietoja
+     */
     @FXML
     private void updateCustomer() {
         String customerID = tfCustomerID.getText();
@@ -450,13 +461,17 @@ public class FunctionsController {
                             "Sahkoposti=\"%s\", Katuosoite=\"%s\", Postinumero=\"%s\", Postitoimipaikka=\"%s\"",
                     firstName, lastName, pnum, email, address, pcode, city);
             System.out.println(values);
-            httpController http = new httpController();
             http.updateValues("Asiakas", values, customerID);
         } catch (Exception e) {
-            e.printStackTrace();
+            showAlert("Update failed",
+                    "Check Customer ID. You may not insert empty fields.",
+                    Alert.AlertType.INFORMATION);
         }
     }
 
+    /**
+     * Metodi, jolla päivitetään olemassaolevan huoneen tietoja
+     */
     @FXML
     private void updateAccommodation() {
         String roomID = tfRoomID.getText();
@@ -467,14 +482,19 @@ public class FunctionsController {
             String values = String.format("Paivahinta=\"%s\", Huonenumero=\"%s\", Toimipiste_ID=\"%s\"",
                     price, rnum, officeID);
             System.out.println(values);
-            httpController http = new httpController();
             http.updateValues("Huone", values, roomID);
         } catch (Exception e) {
-            e.printStackTrace();
+            showAlert("Update failed",
+                    "Check Room ID. You may not insert empty fields.",
+                    Alert.AlertType.INFORMATION);
         }
     }
 
-    @FXML private void updateReservation() {
+    /**
+     * Metodi, jolla päivitetään olemassaolevan varauksen tietoja
+     */
+    @FXML
+    private void updateReservation() {
         String reservationID = tfReservationID.getText();
         String arriving = dpArriving.getValue().toString();
         String leaving = dpLeaving.getValue().toString();
@@ -484,13 +504,17 @@ public class FunctionsController {
             String values = String.format("Alkupvm=\"%s\", Loppupvm=\"%s\", Asiakas_ID=\"%s\", Huone_ID=\"%s\"",
                     arriving, leaving, customerID, roomID);
             System.out.println(values);
-            httpController http = new httpController();
             http.updateValues("Varaus", values, reservationID);
         } catch (Exception e) {
-            e.printStackTrace();
+            showAlert("Update failed",
+                    "Check Reservation ID. You may not insert empty fields.",
+                    Alert.AlertType.INFORMATION);
         }
     }
 
+    /**
+     * Metodi, jolla päivitetään olemassaolevan palvelun tietoja
+     */
     @FXML
     private void updateService() {
         String serviceID = tfServiceID.getText();
@@ -501,13 +525,17 @@ public class FunctionsController {
             String values = String.format("Nimi=\"%s\", Hinta=\"%s\", Toimipiste_ID=\"%s\"",
                     name, price, officeID);
             System.out.println(values);
-            httpController http = new httpController();
             http.updateValues("Palvelu", values, serviceID);
         } catch (Exception e) {
-            e.printStackTrace();
+            showAlert("Update failed",
+                    "Check Service ID. You may not insert empty fields.",
+                    Alert.AlertType.INFORMATION);
         }
     }
 
+    /**
+     * Metodi, jolla päivitetään olemassaolevan laskun tietoja
+     */
     @FXML
     private void updateBill() {
         String billID = tfBillID.getText();
@@ -527,10 +555,73 @@ public class FunctionsController {
                             "Maksu_suoritettu=\"%s\"",
                     reservationID, sum, due, sentDate, paid);
             System.out.println(values);
-            httpController http = new httpController();
             http.updateValues("Lasku", values, billID);
         } catch (Exception e) {
+            showAlert("Update failed",
+                    "Check Bill ID. You may not insert empty fields.",
+                    Alert.AlertType.INFORMATION);
+        }
+    }
+
+    @FXML
+    private void deleteOffice() {
+        String officeID = tfOfficeID.getText();
+        try {
+            http.deleteValues("Toimipiste", officeID, "");
+        } catch (Exception e) {
+            showAlert("Deletion aborted",
+                    "Check Office ID. The office may not have any services or accommodations assigned.",
+                    Alert.AlertType.INFORMATION);
+        }
+    }
+
+    @FXML
+    private void deleteCustomer() {
+        String customerID = tfCustomerID.getText();
+        try {
+            http.deleteValues("Asiakas", customerID, "");
+        } catch (Exception e) {
+            showAlert("Deletion aborted",
+                    "Check Customer ID. The Customer may not have any active reservations.",
+                    Alert.AlertType.INFORMATION);
+        }
+    }
+
+    @FXML
+    private void deleteAccommodation() {
+        String roomID = tfRoomID.getText();
+        try {
+            http.deleteValues("Huone", roomID, "");
+        } catch (Exception e) {
+            showAlert("Deletion aborted",
+                    "Check Room ID. The Room may not have any active reservations.",
+                    Alert.AlertType.INFORMATION);
+        }
+    }
+
+    @FXML
+    private void deleteReservation() {
+        String reservationID = tfReservationID.getText();
+        try {
+            http.deleteValues("Varaus", reservationID, "");
+        } catch (Exception e) {
             e.printStackTrace();
+            showAlert("Deletion aborted",
+                    "Check Reservation ID. The Reservation may not have any active services.",
+                    Alert.AlertType.INFORMATION);
+        }
+    }
+
+    @FXML
+    private void deleteService() {
+        String serviceID = tfServiceID.getText();
+        try {
+            http.deleteValues("Palvelu", serviceID, "");
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Deletion aborted",
+                    "Check Service ID. The Service may not have any active reservations.",
+                    Alert.AlertType.INFORMATION);
         }
     }
 
@@ -581,11 +672,7 @@ public class FunctionsController {
             });
 
             //Kolumnien leveys
-            column.setPrefWidth(130);
-
-            //Fixed value
-            //target.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
-
+            column.setPrefWidth(150);
             target.getColumns().add(column);
         }
 
@@ -639,50 +726,64 @@ public class FunctionsController {
 
     @FXML
     public void searchOffice() {
-        String sql = "SELECT * FROM Toimipiste WHERE Toimipiste_ID = ";
+        String value = searchOffices.getText();
+        String sql = String.format("SELECT * FROM Toimipiste WHERE Toimipiste_ID LIKE \"%s\" OR Nimi LIKE \"%s\" " +
+                        "OR Katuosoite LIKE \"%s\" OR Postinumero LIKE \"%s\" OR " + "Postitoimipaikka lIKE \"%s\"",
+                value, value, value, value, value);
         search(tbwOffice, "Toimipiste", sql, searchOffices);
     }
 
     @FXML
     public void searchService() {
-        String sql = "SELECT * FROM Palvelu WHERE Palvelu_ID = ";
+        String value = searchServices.getText();
+        String sql = String.format("SELECT * FROM Palvelu WHERE Palvelu_ID LIKE \"%s\" OR Nimi LIKE \"%s\" " +
+                        "OR Hinta LIKE \"%s\" OR Toimipiste_ID LIKE \"%s\"", value, value, value, value);
         search(tbwService, "Palvelu", sql, searchServices);
     }
 
-    //TODO tästä eteenpäin
     @FXML
     public void searchRoom() {
-        String sql;
-        //search()
-
+        String value = searchRooms.getText();
+        String sql = String.format("SELECT * FROM Huone WHERE Huone_ID LIKE \"%s\" OR Paivahinta LIKE \"%s\" " +
+                "OR Huonenumero LIKE \"%s\" OR Toimipiste_ID LIKE \"%s\"", value, value, value, value);
+        search(tbwRoom, "Huone", sql, searchRooms);
     }
 
     @FXML
     public void searchReservation() {
-        String sql;
-        //search()
-
+        String value = searchReservations.getText();
+        String sql = String.format("SELECT * FROM Varaus WHERE Varaus_ID LIKE \"%s\" OR Alkupvm LIKE \"%s\" " +
+                "OR Loppupvm LIKE \"%s\" OR Asiakas_ID LIKE \"%s\" OR Huone_ID LIKE \"%s\"",
+                value, value, value, value, value);
+        search(tbwReservation, "Varaus", sql, searchReservations);
     }
 
     @FXML
     public void searchCustomer() {
-        String sql;
-        //search()
+        String value = searchCustomers.getText();
+        String sql = String.format("SELECT * FROM Asiakas WHERE Asiakas_ID LIKE \"%s\" OR Etunimi LIKE \"%s\" " +
+                "OR Sukunimi LIKE \"%s\" OR Puhelinnumero LIKE \"%s\" OR Sahkoposti LIKE \"%s\" " +
+                "OR Katuosoite LIKE \"%s\" OR Postinumero LIKE \"%s\" OR Postitoimipaikka LIKE \"%s\"",
+                value, value, value, value, value, value, value, value);
+        search(tbwCustomer, "Asiakas", sql, searchCustomers);
     }
 
     @FXML
     public void searchBill() {
-        String sql;
-        //search()
+        String value = searchBills.getText();
+        String sql = String.format("SELECT * FROM Lasku WHERE Lasku_ID LIKE \"%s\" OR Varaus_ID LIKE \"%s\" " +
+                "OR Loppusumma LIKE \"%s\" OR Erapaiva LIKE \"%s\" OR Lahetyspvm LIKE \"%s\"",
+                value, value, value, value, value);
+        search(tbwBill, "Lasku", sql, searchBills);
     }
-
 
     /**
      * Metodi tietojen hakemiselle ja näyttämiselle TableView-nökymässä
-     * @param tbw Tableview johon tiedot syötetään
+     *
+     * @param tbw   Tableview johon tiedot syötetään
      * @param table Taulukon nimi
-     * @param haku Hakusanat (sql)
-     * @param tf TextField, josta haetaan hakuarvo
+     * @param haku  Hakusanat (sql)
+     * @param tf    TextField, josta haetaan hakusana
      */
     public void search(TableView tbw, String table, String haku, TextField tf) {
         String[][] data = null;
@@ -690,25 +791,30 @@ public class FunctionsController {
         httpController hc = new httpController();
 
         if (!tf.getText().isEmpty()) {
-            String sql = haku + tf.getText();
-
             try {
-                data = hc.runSQL(sql);
+                data = hc.runSQL(haku);
                 headers = hc.getHeaders(table);
             } catch (IOException io) {
                 System.out.println("Error");
             }
-            printMatrix(tbw, data, headers);
-
+            try {
+                assert data != null;
+                if (data[0][0] != null) {
+                    printMatrix(tbw, data, headers);
+                }
+            } catch (JSONException jsonException) {
+                System.out.println("Error");
+            }
         } else {
             setMonitorTableview(table, tbw);
-            String sql = "SELECT * FROM Toimipiste WHERE Toimipiste_ID = " + searchOffices.getText();
-            try {
-                data = hc.runSQL(sql);
-                headers = hc.getHeaders(table);
-            } catch (IOException io) {
-                System.out.println("Error");
-            }
         }
+    }
+
+    private void showAlert(String header, String text, Alert.AlertType type) {
+        Alert alert = new Alert(type);
+        alert.setTitle(header);
+        alert.setHeaderText(null);
+        alert.setContentText(text);
+        alert.showAndWait();
     }
 }
