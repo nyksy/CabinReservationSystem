@@ -145,6 +145,8 @@ public class FunctionsController {
     @FXML
     private TableView tbwService;
     @FXML
+    private TableView tbwService2;
+    @FXML
     private TableView tbwReservation;
     @FXML
     private TableView tbwRoom;
@@ -152,6 +154,8 @@ public class FunctionsController {
     private TableView tbwBill;
     @FXML
     private TableView tbwSoldService;
+    @FXML
+    private TableView tbwSoldService2;
 
     //FXML
     //Tabs
@@ -211,6 +215,8 @@ public class FunctionsController {
 
     @FXML
     public void controlServices() {
+        setMonitorTableview("Palvelu", tbwService2);
+        setMonitorTableview("Palveluvaraus", tbwSoldService2);
         apServiceControl.toFront();
     }
 
