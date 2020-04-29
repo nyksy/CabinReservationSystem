@@ -14,22 +14,28 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Callback;
-import org.json.JSONException;
 
 import java.io.IOException;
 import java.util.Arrays;
 
 /**
- * Functions.fxml controller
+ * Controller of the Functions.fxml
  *
  * @author Juho Nykänen
  * @author Taneli Gröhn
+ *
  * @version 0.1
  */
 
 public class FunctionsController {
 
     String role = LoginController.role;
+
+    //SQL haku-Stringit
+    private final String sqlAsiakas = "SELECT Asiakas_ID FROM Asiakas";
+    private final String sqlToimipiste = "SELECT Toimipiste_ID FROM Toimipiste";
+    private final String sqlHuone = "SELECT Huone_ID FROM Huone";
+    private final String sqlVaraus = "SELECT Varaus_ID FROM Varaus";
 
     //Buttons
     @FXML
@@ -174,14 +180,6 @@ public class FunctionsController {
     private TextField searchOffices;
     @FXML
     private TextField searchServices;
-    @FXML
-    private TextField searchRooms;
-    @FXML
-    private TextField searchReservations;
-    @FXML
-    private TextField searchCustomers;
-    @FXML
-    private TextField searchBills;
 
     @FXML
     public void controlOffices() {
@@ -190,16 +188,27 @@ public class FunctionsController {
 
     @FXML
     public void controlAccommodations() {
+        cbA_officeID.setItems(cbOfficeList);
+        //cbA_officeID.setValue(cbOfficeList.get(0));
         apAccommodationControl.toFront();
     }
 
     @FXML
     public void controlServices() {
+        cbS_OfficeID.setItems(cbOfficeList);
+        //cbS_OfficeID.setValue(cbOfficeList.get(0));
+
         apServiceControl.toFront();
     }
 
     @FXML
     public void controlReservations() {
+        cbR_customerID.setItems(cbCustomerList);
+        //cbR_customerID.setValue(cbCustomerList.get(0));
+
+        cbR_roomID.setItems(cbRoomList);
+        //cbR_roomID.setValue(cbRoomList.get(0));
+
         apReservationControl.toFront();
     }
 
@@ -210,6 +219,9 @@ public class FunctionsController {
 
     @FXML
     public void controlBills() {
+        cbB_reservationID.setItems(cbReservationList);
+        //cbB_reservationID.setValue(cbReservationList.get(0));
+
         apBillControl.toFront();
     }
 
@@ -236,19 +248,16 @@ public class FunctionsController {
         setMonitorTableview("Asiakas", tbwCustomer);
         apMonitorCustomers.toFront();
     }
-
     @FXML
     public void changeTabAccommodations() {
         setMonitorTableview("Huone", tbwRoom);
         apMonitorAccommodations.toFront();
     }
-
     @FXML
     public void changeTabBills() {
         setMonitorTableview("Lasku", tbwBill);
         apMonitorBills.toFront();
     }
-
     @FXML
     public void changeTabReports() {
         apReports.toFront();
@@ -267,12 +276,6 @@ public class FunctionsController {
         }
 
         //Buildataan data Choiceboxeihin
-        //SQL haku-Stringit
-        String sqlAsiakas = "SELECT Asiakas_ID FROM Asiakas ORDER BY Asiakas_ID";
-        String sqlToimipiste = "SELECT Toimipiste_ID FROM Toimipiste ORDER BY Toimipiste_ID";
-        String sqlHuone = "SELECT Huone_ID FROM Huone ORDER BY Huone_ID";
-        String sqlVaraus = "SELECT Varaus_ID FROM Varaus ORDER BY Varaus_ID";
-
         buildData(cbR_customerID, sqlAsiakas, cbCustomerList);
         buildData(cbA_officeID, sqlToimipiste, cbOfficeList);
         cbS_OfficeID.setItems(cbOfficeList);
@@ -471,8 +474,7 @@ public class FunctionsController {
         }
     }
 
-    @FXML
-    private void updateReservation() {
+    @FXML private void updateReservation() {
         String reservationID = tfReservationID.getText();
         String arriving = dpArriving.getValue().toString();
         String leaving = dpLeaving.getValue().toString();
@@ -579,7 +581,11 @@ public class FunctionsController {
             });
 
             //Kolumnien leveys
-            column.setPrefWidth(150);
+            column.setPrefWidth(130);
+
+            //Fixed value
+            //target.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
+
             target.getColumns().add(column);
         }
 
@@ -633,64 +639,50 @@ public class FunctionsController {
 
     @FXML
     public void searchOffice() {
-        String value = searchOffices.getText();
-        String sql = String.format("SELECT * FROM Toimipiste WHERE Toimipiste_ID LIKE \"%s\" OR Nimi LIKE \"%s\" " +
-                        "OR Katuosoite LIKE \"%s\" OR Postinumero LIKE \"%s\" OR " + "Postitoimipaikka lIKE \"%s\"",
-                value, value, value, value, value);
+        String sql = "SELECT * FROM Toimipiste WHERE Toimipiste_ID = ";
         search(tbwOffice, "Toimipiste", sql, searchOffices);
     }
 
     @FXML
     public void searchService() {
-        String value = searchServices.getText();
-        String sql = String.format("SELECT * FROM Palvelu WHERE Palvelu_ID LIKE \"%s\" OR Nimi LIKE \"%s\" " +
-                        "OR Hinta LIKE \"%s\" OR Toimipiste_ID LIKE \"%s\"", value, value, value, value);
+        String sql = "SELECT * FROM Palvelu WHERE Palvelu_ID = ";
         search(tbwService, "Palvelu", sql, searchServices);
     }
 
+    //TODO tästä eteenpäin
     @FXML
     public void searchRoom() {
-        String value = searchRooms.getText();
-        String sql = String.format("SELECT * FROM Huone WHERE Huone_ID LIKE \"%s\" OR Paivahinta LIKE \"%s\" " +
-                "OR Huonenumero LIKE \"%s\" OR Toimipiste_ID LIKE \"%s\"", value, value, value, value);
-        search(tbwRoom, "Huone", sql, searchRooms);
+        String sql;
+        //search()
+
     }
 
     @FXML
     public void searchReservation() {
-        String value = searchReservations.getText();
-        String sql = String.format("SELECT * FROM Varaus WHERE Varaus_ID LIKE \"%s\" OR Alkupvm LIKE \"%s\" " +
-                "OR Loppupvm LIKE \"%s\" OR Asiakas_ID LIKE \"%s\" OR Huone_ID LIKE \"%s\"",
-                value, value, value, value, value);
-        search(tbwReservation, "Varaus", sql, searchReservations);
+        String sql;
+        //search()
+
     }
 
     @FXML
     public void searchCustomer() {
-        String value = searchCustomers.getText();
-        String sql = String.format("SELECT * FROM Asiakas WHERE Asiakas_ID LIKE \"%s\" OR Etunimi LIKE \"%s\" " +
-                "OR Sukunimi LIKE \"%s\" OR Puhelinnumero LIKE \"%s\" OR Sahkoposti LIKE \"%s\" " +
-                "OR Katuosoite LIKE \"%s\" OR Postinumero LIKE \"%s\" OR Postitoimipaikka LIKE \"%s\"",
-                value, value, value, value, value, value, value, value);
-        search(tbwCustomer, "Asiakas", sql, searchCustomers);
+        String sql;
+        //search()
     }
 
     @FXML
     public void searchBill() {
-        String value = searchBills.getText();
-        String sql = String.format("SELECT * FROM Lasku WHERE Lasku_ID LIKE \"%s\" OR Varaus_ID LIKE \"%s\" " +
-                "OR Loppusumma LIKE \"%s\" OR Erapaiva LIKE \"%s\" OR Lahetyspvm LIKE \"%s\"",
-                value, value, value, value, value);
-        search(tbwBill, "Lasku", sql, searchBills);
+        String sql;
+        //search()
     }
+
 
     /**
      * Metodi tietojen hakemiselle ja näyttämiselle TableView-nökymässä
-     *
-     * @param tbw   Tableview johon tiedot syötetään
+     * @param tbw Tableview johon tiedot syötetään
      * @param table Taulukon nimi
-     * @param haku  Hakusanat (sql)
-     * @param tf    TextField, josta haetaan hakusana
+     * @param haku Hakusanat (sql)
+     * @param tf TextField, josta haetaan hakuarvo
      */
     public void search(TableView tbw, String table, String haku, TextField tf) {
         String[][] data = null;
@@ -698,22 +690,25 @@ public class FunctionsController {
         httpController hc = new httpController();
 
         if (!tf.getText().isEmpty()) {
+            String sql = haku + tf.getText();
+
             try {
-                data = hc.runSQL(haku);
+                data = hc.runSQL(sql);
                 headers = hc.getHeaders(table);
             } catch (IOException io) {
                 System.out.println("Error");
             }
-            try {
-                assert data != null;
-                if (data[0][0] != null) {
-                    printMatrix(tbw, data, headers);
-                }
-            } catch (JSONException jsonException) {
-                System.out.println("Error");
-            }
+            printMatrix(tbw, data, headers);
+
         } else {
             setMonitorTableview(table, tbw);
+            String sql = "SELECT * FROM Toimipiste WHERE Toimipiste_ID = " + searchOffices.getText();
+            try {
+                data = hc.runSQL(sql);
+                headers = hc.getHeaders(table);
+            } catch (IOException io) {
+                System.out.println("Error");
+            }
         }
     }
 }
