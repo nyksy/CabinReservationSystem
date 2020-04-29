@@ -1,12 +1,9 @@
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.Scanner;
-
-import org.json.*;
 
 /**
  * Luokka HTTP - Tietokantayhteyttä varten
@@ -24,7 +21,7 @@ public class httpController {
      * @param table  HTTP table= parametri. Tarkentaa mistä taulusta halutaan tietoa
      * @return Palauttaa 2d array:n, joka sisältää tietokantakyselyn tulokset. Arrayn yksi rivi
      * kuvastaa tietokannan riviä
-     * @throws IOException Virhe HTTP yhteydessä
+     * @throws IOException Yhteys/tietokantavirhe
      */
     public String[][] getValues(String query, String table) throws IOException {
         //testi
@@ -35,6 +32,13 @@ public class httpController {
         return dec.decompile2dArray(callCGI(sql));
     }
 
+    /**
+     * Talleta tietokantaan tietoa cgi-rajapintaa hyödyntäen
+     *
+     * @param table Kohteena oleva taulu
+     * @param values Talletettavat arvot
+     * @throws IOException Yhteys/tietokantavirhe
+     */
     public void setValues(String table, String values) throws IOException {
         String sql = String.format("query=insert&table=%s&values=%s",
                 URLEncoder.encode(table, charset),
@@ -43,8 +47,33 @@ public class httpController {
         System.out.println(responseBody);
     }
 
+    /**
+     * Päivitä tietokantaan talletettuja tietoja cgi-rajapintaa hyödyntäen
+     *
+     * @param table Kohteena oleva taulu
+     * @param values Päivitettävät arvot
+     * @param identifier Kohteena oleva tietue
+     * @throws IOException Yhteys/tietokantavirhe
+     */
     public void updateValues(String table, String values, String identifier) throws IOException {
         String sql = String.format("query=update&table=%s&values=%s&identifier=%s",
+                URLEncoder.encode(table, charset),
+                URLEncoder.encode(values, charset),
+                URLEncoder.encode(identifier, charset));
+        String responseBody = callCGI(sql);
+        System.out.println(responseBody);
+    }
+
+    /**
+     * Poista tietokantaan talletettuja tietoja cgi-rajapintaa hyödyntäen
+     *
+     * @param table Kohteena oleva taulu
+     * @param values Poistettavan tietueen Primary Key
+     * @param identifier Lisäarvo palveluvarausta poistettaessa (Palvelu_ID)
+     * @throws IOException Yhteys/tietokantavirhe
+     */
+    public void deleteValues(String table, String values, String identifier) throws IOException {
+        String sql = String.format("query=delete&table=%s&values=%s&identifier=%s",
                 URLEncoder.encode(table, charset),
                 URLEncoder.encode(values, charset),
                 URLEncoder.encode(identifier, charset));
