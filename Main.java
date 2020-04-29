@@ -30,7 +30,7 @@ public class Main extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("Login.fxml"));
         primaryStage.setTitle("Login");
         primaryStage.setScene(new Scene(root));
-        primaryStage.getIcons().add(new Image("file:kuvake1.png"));
+        primaryStage.getIcons().add(new Image("file:valkoinentaustakuvkae.png"));
         primaryStage.show();
     }
 }

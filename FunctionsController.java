@@ -36,8 +36,6 @@ public class FunctionsController {
     //Buttons
     @FXML
     private Button btnOffice;
-    @FXML
-    private Button btnChangeUser;
 
     //OFFICE CONTROL
     @FXML
@@ -60,6 +58,10 @@ public class FunctionsController {
     private TextField tfServiceName;
     @FXML
     private TextField tfServicePrice;
+    @FXML
+    private ChoiceBox<String> cbSellService;
+    @FXML
+    private ChoiceBox<String> cbSellReservation;
 
     //ACCOMMODATION CONTROL
     @FXML
@@ -128,11 +130,16 @@ public class FunctionsController {
     //Lista kaikista varauksista
     ObservableList<String> cbReservationList = FXCollections.observableArrayList();
 
+    //Lista kaikista palveluista
+    ObservableList<String> cbServiceList = FXCollections.observableArrayList();
+
     //TABLEVIEWIT MONITOROINTI-tabeissa
     @FXML
     private TableView tbwCustomer;
     @FXML
     private TableView tbwOffice;
+    @FXML
+    private TableView tbwOffice2;
     @FXML
     private TableView tbwService;
     @FXML
@@ -141,8 +148,9 @@ public class FunctionsController {
     private TableView tbwRoom;
     @FXML
     private TableView tbwBill;
+    @FXML
+    private TableView tbwSoldService;
 
-    //Testi
     //FXML
     //Tabs
     @FXML
@@ -171,6 +179,8 @@ public class FunctionsController {
     private AnchorPane apMonitorBills;
     @FXML
     private AnchorPane apReports;
+    @FXML
+    private AnchorPane apSoldServices;
 
     //Hakukentät
     @FXML
@@ -188,6 +198,7 @@ public class FunctionsController {
 
     @FXML
     public void controlOffices() {
+        setMonitorTableview("Toimipiste", tbwOffice2);
         apOfficeControl.toFront();
     }
 
@@ -253,6 +264,12 @@ public class FunctionsController {
     }
 
     @FXML
+    public void changeTabSoldServices() {
+        setMonitorTableview("Palveluvaraus", tbwSoldService);
+        apSoldServices.toFront();
+    }
+
+    @FXML
     public void changeTabReports() {
         apReports.toFront();
     }
@@ -275,13 +292,15 @@ public class FunctionsController {
         String sqlToimipiste = "SELECT Toimipiste_ID FROM Toimipiste ORDER BY Toimipiste_ID";
         String sqlHuone = "SELECT Huone_ID FROM Huone ORDER BY Huone_ID";
         String sqlVaraus = "SELECT Varaus_ID FROM Varaus ORDER BY Varaus_ID";
+        String sqlPalvelu = "SELECT Palvelu_ID FROM Palvelu ORDER BY Palvelu_ID";
 
         buildData(cbR_customerID, sqlAsiakas, cbCustomerList);
         buildData(cbA_officeID, sqlToimipiste, cbOfficeList);
         cbS_OfficeID.setItems(cbOfficeList);
         buildData(cbR_roomID, sqlHuone, cbRoomList);
         buildData(cbB_reservationID, sqlVaraus, cbReservationList);
-
+        cbSellReservation.setItems(cbReservationList);
+        buildData(cbSellService, sqlPalvelu, cbServiceList);
         changeTabReports();
     }
 
@@ -697,7 +716,7 @@ public class FunctionsController {
             Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
             window.setScene(scene);
             window.setTitle("Login");
-            window.getIcons().add(new Image("file:kuvake1.png"));
+            window.getIcons().add(new Image("file:valkoinentaustakuvkae.png"));
             window.centerOnScreen();
             window.show();
 
