@@ -17,6 +17,8 @@ import javafx.util.Callback;
 import org.json.JSONException;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 
 /**
@@ -564,6 +566,9 @@ public class FunctionsController {
         }
     }
 
+    /**
+     * Metodi toimiston tietokannasta poistamiselle
+     */
     @FXML
     private void deleteOffice() {
         String officeID = tfOfficeID.getText();
@@ -576,6 +581,9 @@ public class FunctionsController {
         }
     }
 
+    /**
+     * Metodi asiakkaan tietokannasta poistamiselle
+     */
     @FXML
     private void deleteCustomer() {
         String customerID = tfCustomerID.getText();
@@ -588,6 +596,9 @@ public class FunctionsController {
         }
     }
 
+    /**
+     * Metodi huoneen tietokannasta poistamiselle
+     */
     @FXML
     private void deleteAccommodation() {
         String roomID = tfRoomID.getText();
@@ -600,6 +611,9 @@ public class FunctionsController {
         }
     }
 
+    /**
+     * Metodi varauksen tietokannasta poistamiselle
+     */
     @FXML
     private void deleteReservation() {
         String reservationID = tfReservationID.getText();
@@ -613,6 +627,9 @@ public class FunctionsController {
         }
     }
 
+    /**
+     * Metodi palvelun tietokannasta poistamiselle
+     */
     @FXML
     private void deleteService() {
         String serviceID = tfServiceID.getText();
@@ -626,6 +643,9 @@ public class FunctionsController {
         }
     }
 
+    /**
+     * Metodi laskun tietokannasta poistamiselle
+     */
     @FXML
     private void deleteBill() {
         String billID = tfBillID.getText();
@@ -636,6 +656,157 @@ public class FunctionsController {
             showAlert("Deletion aborted",
                     "Check Bill ID.",
                     Alert.AlertType.INFORMATION);
+        }
+    }
+
+    /**
+     * Aseta Office control sarakkeen textfield-kenttiin arvot OfficeID-kentän arvon perusteella
+     */
+    @FXML
+    private void setOfficeText() {
+        String[][] data = null;
+        String officeID = tfOfficeID.getText();
+        String sql = String.format("SELECT * FROM Toimipiste WHERE Toimipiste_ID=%s",
+                officeID);
+        try {
+            data = http.runSQL(sql);
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Search aborted",
+                    "Check Office ID.",
+                    Alert.AlertType.INFORMATION);
+        }
+        tfOfficeName.setText(data[0][1]);
+        tfOfficeStreet.setText(data[0][2]);
+        tfOfficePostal.setText(data[0][3]);
+        tfOfficeCity.setText(data[0][4]);
+    }
+
+    /**
+     * Aseta Service control sarakkeen textfield-kenttiin arvot ServiceID-kentän arvon perusteella
+     */
+    @FXML
+    private void setServiceText() {
+        String[][]data = null;
+        String serviceID = tfServiceID.getText();
+        String sql = String.format("SELECT * FROM Palvelu WHERE Palvelu_ID=%s",
+                serviceID);
+        try {
+            data = http.runSQL(sql);
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Search aborted",
+                    "Check Service ID.",
+                    Alert.AlertType.INFORMATION);
+        }
+        cbS_OfficeID.setValue(data[0][3]);
+        tfServiceName.setText(data[0][1]);
+        tfServicePrice.setText(data[0][2]);
+    }
+
+    /**
+     * Aseta Accommodation control sarakkeen textfield-kenttiin arvot RoomID-kentän arvon perusteella
+     */
+    @FXML
+    private void setAccommodationText() {
+        String[][] data = null;
+        String roomID = tfRoomID.getText();
+        String sql = String.format("SELECT * FROM Huone WHERE Huone_ID=%s",
+                roomID);
+        try {
+            data = http.runSQL(sql);
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Search aborted",
+                    "Check Room ID.",
+                    Alert.AlertType.INFORMATION);
+        }
+        cbA_officeID.setValue(data[0][3]);
+        tfRoomDayPrice.setText(data[0][1]);
+        tfRoomNumber.setText(data[0][2]);
+    }
+
+    /**
+     * Aseta Reservation control sarakkeen textfield-kenttiin arvot ReservationID-kentän arvon perusteella
+     */
+    @FXML
+    private void setReservationText() {
+        String[][] data = null;
+        String reservationID = tfReservationID.getText();
+        String sql = String.format("SELECT * FROM Varaus WHERE Varaus_ID=%s",
+                reservationID);
+        try {
+            data = http.runSQL(sql);
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Search aborted",
+                    "Check Reservation ID.",
+                    Alert.AlertType.INFORMATION);
+        }
+        cbR_customerID.setValue(data[0][3]);
+        cbR_roomID.setValue(data[0][4]);
+        DateTimeFormatter dt = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate arrDate = LocalDate.parse(data[0][0], dt);
+        LocalDate depDate = LocalDate.parse(data[0][1], dt);
+        dpArriving.setValue(arrDate);
+        dpLeaving.setValue(depDate);
+    }
+
+    /**
+     * Aseta Customer control sarakkeen textfield-kenttiin arvot CustomerID-kentän arvon perusteella
+     */
+    @FXML
+    private void setCustomerText() {
+        String[][]data = null;
+        String customerID = tfCustomerID.getText();
+        String sql = String.format("SELECT * FROM Asiakas WHERE Asiakas_ID=%s",
+                customerID);
+        try {
+            data = http.runSQL(sql);
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Search aborted",
+                    "Check Customer ID.",
+                    Alert.AlertType.INFORMATION);
+        }
+        tfFirstName.setText(data[0][1]);
+        tfLastName.setText(data[0][2]);
+        tfPhone.setText(data[0][3]);
+        tfEmail.setText(data[0][4]);
+        tfAddress.setText(data[0][5]);
+        tfPostal.setText(data[0][6]);
+        tfCity.setText(data[0][7]);
+    }
+
+    /**
+     * Aseta Bill control sarakkeen textfield-kenttiin arvot BillID-kentän arvon perusteella
+     */
+    @FXML
+    private void setBillText() {
+        String[][]data = null;
+        String billID = tfBillID.getText();
+        String sql = String.format("SELECT * FROM Lasku WHERE Lasku_ID=%s",
+                billID);
+        try {
+            data = http.runSQL(sql);
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Search aborted",
+                    "Check Bill ID.",
+                    Alert.AlertType.INFORMATION);
+        }
+        System.out.println(Arrays.deepToString(data));
+        tfSumTotal.setText(data[0][2]);
+        DateTimeFormatter dt = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate dueDate = LocalDate.parse(data[0][3], dt);
+        LocalDate sentDate = LocalDate.parse(data[0][4], dt);
+        dpDueDate.setValue(dueDate);
+        dpSent.setValue(sentDate);
+        cbB_reservationID.setValue(data[0][1]);
+        if (data[0][5].equals("1")) {
+            checkPaid.setSelected(true);
+        } else {
+            checkPaid.setSelected(false);
         }
     }
 
