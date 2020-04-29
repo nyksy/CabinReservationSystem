@@ -30,6 +30,7 @@ import java.util.Arrays;
 public class FunctionsController {
 
     String role = LoginController.role;
+    static httpController http = new httpController();
 
     //Buttons
     @FXML
@@ -300,7 +301,9 @@ public class FunctionsController {
             httpController http = new httpController();
             http.setValues("Toimipiste", values);
         } catch (Exception e) {
-            e.printStackTrace();
+            showAlert("Insert failed",
+                    "You may not insert empty fields.",
+                    Alert.AlertType.INFORMATION);
         }
     }
 
@@ -323,7 +326,9 @@ public class FunctionsController {
             httpController http = new httpController();
             http.setValues("Asiakas", values);
         } catch (Exception e) {
-            e.printStackTrace();
+            showAlert("Insert failed",
+                    "You may not insert empty fields.",
+                    Alert.AlertType.INFORMATION);
         }
     }
 
@@ -339,10 +344,11 @@ public class FunctionsController {
             String values = String.format("\"%s\", \"%s\", \"%s\"",
                     price, rnum, officeID);
             System.out.println(values);
-            httpController http = new httpController();
             http.setValues("Huone", values);
         } catch (Exception e) {
-            e.printStackTrace();
+            showAlert("Insert failed",
+                    "You may not insert empty fields.",
+                    Alert.AlertType.INFORMATION);
         }
     }
 
@@ -359,10 +365,12 @@ public class FunctionsController {
             String values = String.format("\"%s\", \"%s\", \"%s\", \"%s\"",
                     arriving, leaving, customerID, roomID);
             System.out.println(values);
-            httpController http = new httpController();
             http.setValues("Varaus", values);
         } catch (Exception e) {
             e.printStackTrace();
+            showAlert("Update failed",
+                    "Check if there are overlapping reservations. Also you may not insert empty fields.",
+                    Alert.AlertType.INFORMATION);
         }
     }
 
@@ -378,10 +386,11 @@ public class FunctionsController {
             String values = String.format("\"%s\", \"%s\", \"%s\"",
                     name, price, officeID);
             System.out.println(values);
-            httpController http = new httpController();
             http.setValues("Palvelu", values);
         } catch (Exception e) {
-            e.printStackTrace();
+            showAlert("Insert failed",
+                    "You may not insert empty fields.",
+                    Alert.AlertType.INFORMATION);
         }
     }
 
@@ -400,18 +409,19 @@ public class FunctionsController {
         } else {
             paid = "FALSE";
         }
-
         try {
             String values = String.format("\"%s\", \"%s\", \"%s\", \"%s\", \"%s\"",
                     reservationID, sum, due, sentDate, paid);
             System.out.println(values);
-            httpController http = new httpController();
             http.setValues("Lasku", values);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    /**
+     * Metodi, jolla päivitetään olemassaolevan toimiston tietoja
+     */
     @FXML
     private void updateOffice() {
         String officeID = tfOfficeID.getText();
@@ -425,13 +435,17 @@ public class FunctionsController {
             String values = String.format("Nimi=\'%s\', Katuosoite=\'%s\', Postinumero=\'%s\', Postitoimipaikka=\'%s\'",
                     name, address, pcode, pcity);
             System.out.println(values);
-            httpController http = new httpController();
             http.updateValues("Toimipiste", values, officeID);
         } catch (Exception e) {
-            e.printStackTrace();
+            showAlert("Update failed",
+                    "Check Office ID. You may not insert empty fields.",
+                    Alert.AlertType.INFORMATION);
         }
     }
 
+    /**
+     * Metodi, jolla päivitetään olemassaolevan asiakkaan tietoja
+     */
     @FXML
     private void updateCustomer() {
         String customerID = tfCustomerID.getText();
@@ -447,13 +461,17 @@ public class FunctionsController {
                             "Sahkoposti=\"%s\", Katuosoite=\"%s\", Postinumero=\"%s\", Postitoimipaikka=\"%s\"",
                     firstName, lastName, pnum, email, address, pcode, city);
             System.out.println(values);
-            httpController http = new httpController();
             http.updateValues("Asiakas", values, customerID);
         } catch (Exception e) {
-            e.printStackTrace();
+            showAlert("Update failed",
+                    "Check Customer ID. You may not insert empty fields.",
+                    Alert.AlertType.INFORMATION);
         }
     }
 
+    /**
+     * Metodi, jolla päivitetään olemassaolevan huoneen tietoja
+     */
     @FXML
     private void updateAccommodation() {
         String roomID = tfRoomID.getText();
@@ -464,13 +482,17 @@ public class FunctionsController {
             String values = String.format("Paivahinta=\"%s\", Huonenumero=\"%s\", Toimipiste_ID=\"%s\"",
                     price, rnum, officeID);
             System.out.println(values);
-            httpController http = new httpController();
             http.updateValues("Huone", values, roomID);
         } catch (Exception e) {
-            e.printStackTrace();
+            showAlert("Update failed",
+                    "Check Room ID. You may not insert empty fields.",
+                    Alert.AlertType.INFORMATION);
         }
     }
 
+    /**
+     * Metodi, jolla päivitetään olemassaolevan varauksen tietoja
+     */
     @FXML
     private void updateReservation() {
         String reservationID = tfReservationID.getText();
@@ -482,13 +504,17 @@ public class FunctionsController {
             String values = String.format("Alkupvm=\"%s\", Loppupvm=\"%s\", Asiakas_ID=\"%s\", Huone_ID=\"%s\"",
                     arriving, leaving, customerID, roomID);
             System.out.println(values);
-            httpController http = new httpController();
             http.updateValues("Varaus", values, reservationID);
         } catch (Exception e) {
-            e.printStackTrace();
+            showAlert("Update failed",
+                    "Check Reservation ID. You may not insert empty fields.",
+                    Alert.AlertType.INFORMATION);
         }
     }
 
+    /**
+     * Metodi, jolla päivitetään olemassaolevan palvelun tietoja
+     */
     @FXML
     private void updateService() {
         String serviceID = tfServiceID.getText();
@@ -499,13 +525,17 @@ public class FunctionsController {
             String values = String.format("Nimi=\"%s\", Hinta=\"%s\", Toimipiste_ID=\"%s\"",
                     name, price, officeID);
             System.out.println(values);
-            httpController http = new httpController();
             http.updateValues("Palvelu", values, serviceID);
         } catch (Exception e) {
-            e.printStackTrace();
+            showAlert("Update failed",
+                    "Check Service ID. You may not insert empty fields.",
+                    Alert.AlertType.INFORMATION);
         }
     }
 
+    /**
+     * Metodi, jolla päivitetään olemassaolevan laskun tietoja
+     */
     @FXML
     private void updateBill() {
         String billID = tfBillID.getText();
@@ -525,10 +555,73 @@ public class FunctionsController {
                             "Maksu_suoritettu=\"%s\"",
                     reservationID, sum, due, sentDate, paid);
             System.out.println(values);
-            httpController http = new httpController();
             http.updateValues("Lasku", values, billID);
         } catch (Exception e) {
+            showAlert("Update failed",
+                    "Check Bill ID. You may not insert empty fields.",
+                    Alert.AlertType.INFORMATION);
+        }
+    }
+
+    @FXML
+    private void deleteOffice() {
+        String officeID = tfOfficeID.getText();
+        try {
+            http.deleteValues("Toimipiste", officeID, "");
+        } catch (Exception e) {
+            showAlert("Deletion aborted",
+                    "Check Office ID. The office may not have any services or accommodations assigned.",
+                    Alert.AlertType.INFORMATION);
+        }
+    }
+
+    @FXML
+    private void deleteCustomer() {
+        String customerID = tfCustomerID.getText();
+        try {
+            http.deleteValues("Asiakas", customerID, "");
+        } catch (Exception e) {
+            showAlert("Deletion aborted",
+                    "Check Customer ID. The Customer may not have any active reservations.",
+                    Alert.AlertType.INFORMATION);
+        }
+    }
+
+    @FXML
+    private void deleteAccommodation() {
+        String roomID = tfRoomID.getText();
+        try {
+            http.deleteValues("Huone", roomID, "");
+        } catch (Exception e) {
+            showAlert("Deletion aborted",
+                    "Check Room ID. The Room may not have any active reservations.",
+                    Alert.AlertType.INFORMATION);
+        }
+    }
+
+    @FXML
+    private void deleteReservation() {
+        String reservationID = tfReservationID.getText();
+        try {
+            http.deleteValues("Varaus", reservationID, "");
+        } catch (Exception e) {
             e.printStackTrace();
+            showAlert("Deletion aborted",
+                    "Check Reservation ID. The Reservation may not have any active services.",
+                    Alert.AlertType.INFORMATION);
+        }
+    }
+
+    @FXML
+    private void deleteService() {
+        String serviceID = tfServiceID.getText();
+        try {
+            http.deleteValues("Palvelu", serviceID, "");
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Deletion aborted",
+                    "Check Service ID. The Service may not have any active reservations.",
+                    Alert.AlertType.INFORMATION);
         }
     }
 
@@ -715,5 +808,13 @@ public class FunctionsController {
         } else {
             setMonitorTableview(table, tbw);
         }
+    }
+
+    private void showAlert(String header, String text, Alert.AlertType type) {
+        Alert alert = new Alert(type);
+        alert.setTitle(header);
+        alert.setHeaderText(null);
+        alert.setContentText(text);
+        alert.showAndWait();
     }
 }
