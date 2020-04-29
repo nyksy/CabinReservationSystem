@@ -368,7 +368,7 @@ public class FunctionsController {
             http.setValues("Varaus", values);
         } catch (Exception e) {
             e.printStackTrace();
-            showAlert("Update failed",
+            showAlert("Insert failed",
                     "Check if there are overlapping reservations. Also you may not insert empty fields.",
                     Alert.AlertType.INFORMATION);
         }
