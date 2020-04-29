@@ -141,6 +141,7 @@ public class FunctionsController {
     @FXML
     private TableView tbwBill;
 
+    //Testi
     //FXML
     //Tabs
     @FXML
