@@ -451,6 +451,24 @@ public class FunctionsController {
         }
     }
 
+    //TODO aseta Service control paneelissa Add näppäimelle. Taulun päivitys poiston/talletuksen jälkeen.
+    @FXML
+    private void insertSoldService() {
+        String serviceID = cbSellService.getValue();
+        String reservationID = cbSellReservation.getValue();
+        try {
+            String values = String.format("\"%s\", \"%s\"",
+                    reservationID, serviceID);
+            System.out.println(values);
+            http.setValues("Palveluvaraus", values);
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Insert failed",
+                    "You may not insert empty fields.",
+                    Alert.AlertType.INFORMATION);
+        }
+    }
+
     /**
      * Metodi, jolla lisätään lasku tietokantaan
      */
@@ -706,9 +724,28 @@ public class FunctionsController {
         }
     }
 
+    //TODO Aseta metodiService control ikkunan delete napille. Taulukon päivitys poiston jälkeen.
+    /**
+     * Metodi palvelumyynnin tietokannasta poistamiselle
+     */
+    @FXML
+    private void deleteSoldService() {
+        String serviceID = cbSellService.getValue();
+        String reservationID = cbSellReservation.getValue();
+        try {
+            http.deleteValues("Palveluvaraus", reservationID, serviceID);
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Deletion aborted",
+                    "Check Service/reservation ID.",
+                    Alert.AlertType.INFORMATION);
+        }
+    }
+
     /**
      * Metodi laskun tietokannasta poistamiselle
      */
+    //TODO aseta Bill osion delete napille
     @FXML
     private void deleteBill() {
         String billID = tfBillID.getText();
@@ -880,7 +917,6 @@ public class FunctionsController {
      * @param tbw   Kohteena oleva TableView fx:id
      */
     private void setMonitorTableview(String table, TableView tbw) {
-        httpController http = new httpController();
         String[][] values = null;
         String[] headers = null;
 
@@ -960,9 +996,8 @@ public class FunctionsController {
      */
     public void buildData(ChoiceBox<String> cb, String sql, ObservableList<String> list) {
         String[][] data;
-        httpController hc = new httpController();
         try {
-            data = hc.runSQL(sql);
+            data = http.runSQL(sql);
             for (String[] datum : data) {
                 list.add(datum[0]);
             }
