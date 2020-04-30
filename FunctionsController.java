@@ -20,7 +20,9 @@ import org.json.JSONException;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Functions.fxml controller
@@ -119,7 +121,6 @@ public class FunctionsController {
     @FXML
     private DatePicker dpSent;
 
-    //Listoja joilla täytetään ChoiceBoxit
     //Lista kaikista toimipisteistä
     ObservableList<String> cbOfficeList = FXCollections.observableArrayList();
 
@@ -135,9 +136,11 @@ public class FunctionsController {
     //Lista kaikista palveluista
     ObservableList<String> cbServiceList = FXCollections.observableArrayList();
 
-    //TABLEVIEWIT MONITOROINTI-tabeissa
+    //TableView FXML
     @FXML
     private TableView tbwCustomer;
+    @FXML
+    private TableView tbwCustomer2;
     @FXML
     private TableView tbwOffice;
     @FXML
@@ -149,9 +152,15 @@ public class FunctionsController {
     @FXML
     private TableView tbwReservation;
     @FXML
+    private TableView tbwReservation2;
+    @FXML
     private TableView tbwRoom;
     @FXML
+    private TableView tbwRoom2;
+    @FXML
     private TableView tbwBill;
+    @FXML
+    private TableView tbwBill2;
     @FXML
     private TableView tbwSoldService;
     @FXML
@@ -210,6 +219,7 @@ public class FunctionsController {
 
     @FXML
     public void controlAccommodations() {
+        setMonitorTableview("Huone", tbwRoom2);
         apAccommodationControl.toFront();
     }
 
@@ -222,16 +232,19 @@ public class FunctionsController {
 
     @FXML
     public void controlReservations() {
+        setMonitorTableview("Varaus", tbwReservation2);
         apReservationControl.toFront();
     }
 
     @FXML
     public void controlCustomers() {
+        setMonitorTableview("Asiakas", tbwCustomer2);
         apCustomerControl.toFront();
     }
 
     @FXML
     public void controlBills() {
+        setMonitorTableview("Lasku", tbwBill2);
         apBillControl.toFront();
     }
 
@@ -470,6 +483,7 @@ public class FunctionsController {
                     "Check Office ID. You may not insert empty fields.",
                     Alert.AlertType.INFORMATION);
         }
+        setMonitorTableview("Toimipiste", tbwOffice2);
     }
 
     /**
@@ -496,6 +510,7 @@ public class FunctionsController {
                     "Check Customer ID. You may not insert empty fields.",
                     Alert.AlertType.INFORMATION);
         }
+        setMonitorTableview("Asiakas", tbwCustomer2);
     }
 
     /**
@@ -517,6 +532,8 @@ public class FunctionsController {
                     "Check Room ID. You may not insert empty fields.",
                     Alert.AlertType.INFORMATION);
         }
+        setMonitorTableview("Huone", tbwRoom2);
+
     }
 
     /**
@@ -539,6 +556,7 @@ public class FunctionsController {
                     "Check Reservation ID. You may not insert empty fields.",
                     Alert.AlertType.INFORMATION);
         }
+        setMonitorTableview("Varaus", tbwReservation2);
     }
 
     /**
@@ -560,6 +578,8 @@ public class FunctionsController {
                     "Check Service ID. You may not insert empty fields.",
                     Alert.AlertType.INFORMATION);
         }
+        setMonitorTableview("Palvelu", tbwService2);
+
     }
 
     /**
@@ -590,6 +610,8 @@ public class FunctionsController {
                     "Check Bill ID. You may not insert empty fields.",
                     Alert.AlertType.INFORMATION);
         }
+        setMonitorTableview("Lasku", tbwBill2);
+
     }
 
     /**
@@ -882,7 +904,6 @@ public class FunctionsController {
                 return new SimpleStringProperty(row[columnIndex]);
             });
 
-            //Kolumnien leveys
             column.setPrefWidth(150);
             target.getColumns().add(column);
         }
