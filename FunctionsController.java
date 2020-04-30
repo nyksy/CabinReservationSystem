@@ -77,8 +77,6 @@ public class FunctionsController {
     @FXML
     private ChoiceBox<String> cbR_roomID;
     @FXML
-    private ChoiceBox<String> cbR_officeName;
-    @FXML
     private ChoiceBox<String> cbR_customerID;
     @FXML
     private TextField tfReservationID;
@@ -133,9 +131,6 @@ public class FunctionsController {
 
     //Lista kaikista palveluista
     ObservableList<String> cbServiceList = FXCollections.observableArrayList();
-
-    //Lista kaikista valitun toimipisteen huoneista
-    ObservableList<String> cbRoomNumbers = FXCollections.observableArrayList();
 
     //TableView FXML
     @FXML
@@ -329,7 +324,7 @@ public class FunctionsController {
         //Buildataan data Choiceboxeihin
         //SQL haku-Stringit
         String sqlAsiakas = "SELECT Asiakas_ID FROM Asiakas ORDER BY Asiakas_ID";
-        String sqlToimipiste = "SELECT Nimi FROM Toimipiste ORDER BY Nimi";
+        String sqlToimipiste = "SELECT Toimipiste_ID FROM Toimipiste ORDER BY Toimipiste_ID";
         String sqlHuone = "SELECT Huone_ID FROM Huone ORDER BY Huone_ID";
         String sqlVaraus = "SELECT Varaus_ID FROM Varaus ORDER BY Varaus_ID";
         String sqlPalvelu = "SELECT Palvelu_ID FROM Palvelu ORDER BY Palvelu_ID";
@@ -338,28 +333,11 @@ public class FunctionsController {
         buildData(cbA_officeID, sqlToimipiste, cbOfficeList);
         cbS_OfficeID.setItems(cbOfficeList);
         cbOffice.setItems(cbOfficeList);
-        cbR_officeName.setItems(cbOfficeList);
-        //buildData(cbR_roomID, sqlHuone, cbRoomList);
+        buildData(cbR_roomID, sqlHuone, cbRoomList);
         buildData(cbB_reservationID, sqlVaraus, cbReservationList);
         cbSellReservation.setItems(cbReservationList);
         buildData(cbSellService, sqlPalvelu, cbServiceList);
         changeTabReports();
-    }
-
-    @FXML
-    private void reservationFillRoomNumber() {
-        String officeName = cbR_officeName.getValue();
-
-        String sql = String.format("SELECT Huone.Huonenumero FROM Huone " +
-                "INNER JOIN Toimipiste " +
-                "ON Huone.Toimipiste_ID = Toimipiste.Toimipiste_ID " +
-                "WHERE Toimipiste.Nimi = \"%s\";",
-                officeName);
-        cbR_roomID.setItems(FXCollections.observableArrayList());
-        if (!cbRoomNumbers.isEmpty()) {
-            cbRoomNumbers.clear();
-        }
-        buildData(cbR_roomID, sql, cbRoomNumbers);
     }
 
     /**
@@ -460,18 +438,10 @@ public class FunctionsController {
     private void insertService() {
         String name = tfServiceName.getText();
         String price = tfServicePrice.getText();
-        String officeName = cbS_OfficeID.getValue();
-        String[][] officeID = null;
-        try {
-            String sql = String.format("SELECT Toimipiste_ID FROM Toimipiste " +
-                    "WHERE Nimi = \"%s\";", officeName);
-            officeID = http.runSQL(sql);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        String officeID = cbS_OfficeID.getValue();
         try {
             String values = String.format("\"%s\", \"%s\", \"%s\"",
-                    name, price, officeID[0][0]);
+                    name, price, officeID);
             System.out.println(values);
             http.setValues("Palvelu", values);
         } catch (Exception e) {
@@ -780,7 +750,7 @@ public class FunctionsController {
     private void deleteBill() {
         String billID = tfBillID.getText();
         try {
-            http.deleteValues("Lasku", billID, "");
+            http.deleteValues("Palvelu", billID, "");
         } catch (Exception e) {
             e.printStackTrace();
             showAlert("Deletion aborted",
@@ -819,10 +789,7 @@ public class FunctionsController {
     private void setServiceText() {
         String[][]data = null;
         String serviceID = tfServiceID.getText();
-        String sql = String.format("SELECT Palvelu.Nimi, Palvelu.Hinta, Toimipiste.Nimi FROM Palvelu " +
-                        "INNER JOIN Toimipiste " +
-                        "ON Palvelu.Toimipiste_ID = Toimipiste.Toimipiste_ID " +
-                        "WHERE Palvelu.Palvelu_ID = %s;",
+        String sql = String.format("SELECT * FROM Palvelu WHERE Palvelu_ID=%s",
                 serviceID);
         try {
             data = http.runSQL(sql);
@@ -832,9 +799,9 @@ public class FunctionsController {
                     "Check Service ID.",
                     Alert.AlertType.INFORMATION);
         }
-        cbS_OfficeID.setValue(data[0][2]);
-        tfServiceName.setText(data[0][0]);
-        tfServicePrice.setText(data[0][1]);
+        cbS_OfficeID.setValue(data[0][3]);
+        tfServiceName.setText(data[0][1]);
+        tfServicePrice.setText(data[0][2]);
     }
 
     /**
@@ -964,7 +931,7 @@ public class FunctionsController {
                 "ON Varaus.Huone_ID = Huone.Huone_ID " +
                 "INNER JOIN Toimipiste " +
                 "ON Huone.Toimipiste_ID = Toimipiste.Toimipiste_ID " +
-                "WHERE NOT (Alkupvm > \"%s\" OR Loppupvm < \"%s\") AND Toimipiste.Nimi = \"%s\";",
+                "WHERE NOT (Alkupvm > \"%s\" OR Loppupvm < \"%s\") AND Toimipiste.Toimipiste_ID = %s;",
                 depDate, arrDate, officeID);
         System.out.println(sql);
 
