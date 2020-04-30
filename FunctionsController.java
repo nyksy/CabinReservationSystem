@@ -1,5 +1,4 @@
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -8,21 +7,18 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.chart.AreaChart;
+import javafx.scene.chart.LineChart;
 import javafx.scene.control.*;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 import org.json.JSONException;
 
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * Functions.fxml controller
@@ -210,6 +206,24 @@ public class FunctionsController {
     private TextField searchCustomers;
     @FXML
     private TextField searchBills;
+    @FXML
+    private TextField searchSoldServices;
+
+    //Reports-tab fx:id
+    @FXML
+    private DatePicker dpFrom;
+    @FXML
+    private DatePicker dpTo;
+    @FXML
+    private ChoiceBox<String> cbOffice;
+    @FXML
+    private TableView tbwReportReservations;
+    @FXML
+    private TableView tbwReportServices;
+    @FXML
+    private AreaChart acReservations;
+    @FXML
+    private LineChart lcServices;
 
     @FXML
     public void controlOffices() {
@@ -318,6 +332,7 @@ public class FunctionsController {
         buildData(cbR_customerID, sqlAsiakas, cbCustomerList);
         buildData(cbA_officeID, sqlToimipiste, cbOfficeList);
         cbS_OfficeID.setItems(cbOfficeList);
+        cbOffice.setItems(cbOfficeList);
         buildData(cbR_roomID, sqlHuone, cbRoomList);
         buildData(cbB_reservationID, sqlVaraus, cbReservationList);
         cbSellReservation.setItems(cbReservationList);
@@ -1008,6 +1023,13 @@ public class FunctionsController {
                 "OR Loppusumma LIKE \"%s\" OR Erapaiva LIKE \"%s\" OR Lahetyspvm LIKE \"%s\"",
                 value, value, value, value, value);
         search(tbwBill, "Lasku", sql, searchBills);
+    }
+    @FXML
+    public void searchSoldService() {
+        String value = searchSoldServices.getText();
+        String sql = String.format("SELECT * FROM Palveluvaraus WHERE Palvelu_ID LIKE \"%s\" OR Varaus_ID LIKE \"%s\"",
+                value, value);
+        search(tbwSoldService, "Palveluvaraus", sql, searchSoldServices);
     }
 
     /**
