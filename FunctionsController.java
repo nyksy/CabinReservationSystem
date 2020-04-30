@@ -910,6 +910,39 @@ public class FunctionsController {
         }
     }
 
+    //TODO aseta toiminto 'Generate' näppäimelle
+    /**
+     * Hae valitun toimipisteen varaukset valitulta aikajaksolta ja aseta saadut tiedot tableview taulukkoon.
+     */
+    @FXML
+    private void searchOfficeReservations() {
+        LocalDate arrDate = dpFrom.getValue();
+        LocalDate depDate = dpTo.getValue();
+        String officeID = cbOffice.getValue();
+        String[][] values = null;
+        String[] headers = {"Reservation ID", "Date of Arrival", "Date of Departure", "Reservant"};
+
+        String sql = String.format(
+                "SELECT Varaus.Varaus_ID, Varaus.Alkupvm, Varaus.Loppupvm, " +
+                        "CONCAT(Asiakas.Etunimi, ' ', Asiakas.Sukunimi) FROM Varaus "+
+                "INNER JOIN Asiakas " +
+                "ON Asiakas.Asiakas_ID = Varaus.Asiakas_ID " +
+                "INNER JOIN Huone " +
+                "ON Varaus.Huone_ID = Huone.Huone_ID " +
+                "INNER JOIN Toimipiste " +
+                "ON Huone.Toimipiste_ID = Toimipiste.Toimipiste_ID " +
+                "WHERE NOT (Alkupvm > \"%s\" OR Loppupvm < \"%s\") AND Toimipiste.Toimipiste_ID = %s;",
+                depDate, arrDate, officeID);
+        System.out.println(sql);
+
+        try {
+            values = http.runSQL(sql);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        printMatrix(tbwReportReservations, values, headers);
+    }
+
     /**
      * Metodi monitor osion TableView taulun tietojen asettamiselle
      *
