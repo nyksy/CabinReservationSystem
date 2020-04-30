@@ -561,6 +561,61 @@
                         </TitledPane>
                      </children>
                   </AnchorPane>
+                  <AnchorPane fx:id="apSoldServices" layoutX="10.0" layoutY="10.0" prefHeight="810.0" prefWidth="1080.0" styleClass="background" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <Label layoutY="28.0" text="Monitor Sold Services">
+                           <font>
+                              <Font size="40.0" />
+                           </font>
+                        </Label>
+                        <TableView fx:id="tbwSoldService" layoutX="17.0" layoutY="76.0" prefHeight="724.0" prefWidth="1058.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="76.0" />
+                        <Button layoutX="583.0" layoutY="30.0" mnemonicParsing="false" onAction="#searchSoldService" text="Search" />
+                        <TextField fx:id="searchSoldServices" layoutX="418.0" layoutY="33.0" promptText="Search" />
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane fx:id="apReports" layoutX="10.0" layoutY="10.0" prefHeight="820.0" prefWidth="1078.0" styleClass="background" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <Label layoutY="28.0" text="Reports">
+                           <font>
+                              <Font size="40.0" />
+                           </font>
+                        </Label>
+                        <TitledPane animated="false" layoutY="81.0" prefHeight="800.0" prefWidth="1058.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="76.0">
+                          <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="882.0" styleClass="background" stylesheets="@light_theme.css">
+                                 <children>
+                                    <AreaChart fx:id="acReservations" layoutX="24.0" layoutY="84.0" prefHeight="300.0" prefWidth="500.0" title="Reservations" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="100.0">
+                                      <xAxis>
+                                        <CategoryAxis side="BOTTOM" />
+                                      </xAxis>
+                                      <yAxis>
+                                        <NumberAxis side="LEFT" />
+                                      </yAxis>
+                                    </AreaChart>
+                                    <LineChart fx:id="lcServices" layoutX="21.0" layoutY="371.0" prefHeight="300.0" prefWidth="500.0" title="Services" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="390.0">
+                                      <xAxis>
+                                        <CategoryAxis side="BOTTOM" />
+                                      </xAxis>
+                                      <yAxis>
+                                        <NumberAxis side="LEFT" />
+                                      </yAxis>
+                                    </LineChart>
+                                    <DatePicker fx:id="dpFrom" layoutX="62.0" layoutY="50.0" prefHeight="32.0" prefWidth="100.0" />
+                                    <DatePicker fx:id="dpTo" layoutX="168.0" layoutY="50.0" prefHeight="32.0" prefWidth="100.0" />
+                                    <Text layoutX="60.0" layoutY="47.0" nodeOrientation="LEFT_TO_RIGHT" strokeType="OUTSIDE" strokeWidth="0.0" text="From" wrappingWidth="184.2890625" />
+                                    <Text layoutX="168.0" layoutY="46.0" nodeOrientation="LEFT_TO_RIGHT" strokeType="OUTSIDE" strokeWidth="0.0" text="To" wrappingWidth="184.2890625" />
+                                    <Text layoutX="62.0" layoutY="21.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="header" text="Generate a report" />
+                                    <Button layoutX="443.0" layoutY="50.0" mnemonicParsing="false" onAction="#searchOfficeReservations" text="Generate" />
+                                    <TableView fx:id="tbwReportReservations" layoutX="579.6" layoutY="33.6" prefHeight="311.0" prefWidth="485.0" AnchorPane.leftAnchor="560.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="24.0" />
+                                    <TableView fx:id="tbwReportServices" layoutX="560.0" layoutY="348.0" prefHeight="328.0" prefWidth="494.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="560.4000000000001" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="344.4" />
+                                    <ChoiceBox fx:id="cbOffice" layoutX="277.0" layoutY="50.0" prefHeight="32.0" prefWidth="150.0" />
+                                    <Text layoutX="277.0" layoutY="46.0" nodeOrientation="LEFT_TO_RIGHT" strokeType="OUTSIDE" strokeWidth="0.0" text="Office" wrappingWidth="184.2890625" />
+                                 </children>
+                              </AnchorPane>
+                          </content>
+                        </TitledPane>
+                     </children>
+                  </AnchorPane>
                   <AnchorPane fx:id="apBillControl" layoutX="10.0" layoutY="10.0" prefHeight="800.0" prefWidth="1058.0" styleClass="background" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
                         <Label layoutY="28.0" text="Bill Control">
@@ -576,7 +631,7 @@
                                        <buttons>
                                           <Button mnemonicParsing="false" onAction="#setBillText" prefHeight="32.0" prefWidth="81.0" text="Search" />
                                           <Button alignment="TOP_CENTER" mnemonicParsing="false" onAction="#updateBill" text="Edit" />
-                                          <Button layoutX="550.0" layoutY="14.0" mnemonicParsing="false" onAction="#controlBills" text="Delete" />
+                                          <Button layoutX="550.0" layoutY="14.0" mnemonicParsing="false" onAction="#deleteBill" text="Delete" />
                                           <Button layoutX="635.0" layoutY="14.0" mnemonicParsing="false" onAction="#insertBill" prefHeight="32.0" prefWidth="81.0" text="Add" />
                                        </buttons>
                                     </ButtonBar>
@@ -707,13 +762,13 @@
                                           <ChoiceBox fx:id="cbR_customerID" prefHeight="35.0" prefWidth="181.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                           <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                                              <children>
-                                                <ChoiceBox fx:id="cbR_roomID1" layoutX="82.0" layoutY="15.0" prefHeight="35.0" prefWidth="150.0" />
+                                                <ChoiceBox fx:id="cbR_officeName" layoutX="82.0" layoutY="15.0" prefHeight="35.0" prefWidth="150.0" />
                                                 <Label alignment="CENTER_RIGHT" prefHeight="15.0" text="Room ID">
                                                    <HBox.margin>
                                                       <Insets left="15.0" right="10.0" />
                                                    </HBox.margin>
                                                 </Label>
-                                                <ChoiceBox fx:id="cbR_roomID" prefHeight="35.0" prefWidth="150.0" />
+                                                <ChoiceBox fx:id="cbR_roomID" onMouseEntered="#reservationFillRoomNumber" prefHeight="35.0" prefWidth="150.0" />
                                              </children>
                                           </HBox>
                                        </children>
@@ -727,61 +782,6 @@
                                  </children>
                               </AnchorPane>
                            </content>
-                        </TitledPane>
-                     </children>
-                  </AnchorPane>
-                  <AnchorPane fx:id="apSoldServices" layoutX="10.0" layoutY="10.0" prefHeight="810.0" prefWidth="1080.0" styleClass="background" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                     <children>
-                        <Label layoutY="28.0" text="Monitor Sold Services">
-                           <font>
-                              <Font size="40.0" />
-                           </font>
-                        </Label>
-                        <TableView fx:id="tbwSoldService" layoutX="17.0" layoutY="76.0" prefHeight="724.0" prefWidth="1058.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="76.0" />
-                        <Button layoutX="583.0" layoutY="30.0" mnemonicParsing="false" onAction="#searchSoldService" text="Search" />
-                        <TextField fx:id="searchSoldServices" layoutX="418.0" layoutY="33.0" promptText="Search" />
-                     </children>
-                  </AnchorPane>
-                  <AnchorPane fx:id="apReports" layoutX="10.0" layoutY="10.0" prefHeight="820.0" prefWidth="1078.0" styleClass="background" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                     <children>
-                        <Label layoutY="28.0" text="Reports">
-                           <font>
-                              <Font size="40.0" />
-                           </font>
-                        </Label>
-                        <TitledPane animated="false" layoutY="81.0" prefHeight="800.0" prefWidth="1058.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="76.0">
-                          <content>
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="882.0" styleClass="background" stylesheets="@light_theme.css">
-                                 <children>
-                                    <AreaChart fx:id="acReservations" layoutX="24.0" layoutY="84.0" prefHeight="300.0" prefWidth="500.0" title="Reservations" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="100.0">
-                                      <xAxis>
-                                        <CategoryAxis side="BOTTOM" />
-                                      </xAxis>
-                                      <yAxis>
-                                        <NumberAxis side="LEFT" />
-                                      </yAxis>
-                                    </AreaChart>
-                                    <LineChart fx:id="lcServices" layoutX="21.0" layoutY="371.0" prefHeight="300.0" prefWidth="500.0" title="Services" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="390.0">
-                                      <xAxis>
-                                        <CategoryAxis side="BOTTOM" />
-                                      </xAxis>
-                                      <yAxis>
-                                        <NumberAxis side="LEFT" />
-                                      </yAxis>
-                                    </LineChart>
-                                    <DatePicker fx:id="dpFrom" layoutX="62.0" layoutY="50.0" prefHeight="32.0" prefWidth="100.0" />
-                                    <DatePicker fx:id="dpTo" layoutX="168.0" layoutY="50.0" prefHeight="32.0" prefWidth="100.0" />
-                                    <Text layoutX="60.0" layoutY="47.0" nodeOrientation="LEFT_TO_RIGHT" strokeType="OUTSIDE" strokeWidth="0.0" text="From" wrappingWidth="184.2890625" />
-                                    <Text layoutX="168.0" layoutY="46.0" nodeOrientation="LEFT_TO_RIGHT" strokeType="OUTSIDE" strokeWidth="0.0" text="To" wrappingWidth="184.2890625" />
-                                    <Text layoutX="62.0" layoutY="21.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="header" text="Generate a report" />
-                                    <Button layoutX="443.0" layoutY="50.0" mnemonicParsing="false" text="Generate" />
-                                    <TableView fx:id="tbwReportReservations" layoutX="579.6" layoutY="33.6" prefHeight="311.0" prefWidth="485.0" AnchorPane.leftAnchor="560.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="24.0" />
-                                    <TableView fx:id="tbwReportServices" layoutX="560.0" layoutY="348.0" prefHeight="328.0" prefWidth="494.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="560.4000000000001" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="344.4" />
-                                    <ChoiceBox fx:id="cbOffice" layoutX="277.0" layoutY="50.0" prefHeight="32.0" prefWidth="150.0" />
-                                    <Text layoutX="277.0" layoutY="46.0" nodeOrientation="LEFT_TO_RIGHT" strokeType="OUTSIDE" strokeWidth="0.0" text="Office" wrappingWidth="184.2890625" />
-                                 </children>
-                              </AnchorPane>
-                          </content>
                         </TitledPane>
                      </children>
                   </AnchorPane>
