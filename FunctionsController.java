@@ -338,6 +338,7 @@ public class FunctionsController {
         buildData(cbA_officeID, sqlToimipiste, cbOfficeList);
         cbS_OfficeID.setItems(cbOfficeList);
         cbOffice.setItems(cbOfficeList);
+        //TODO aseta cbR_officeName fxid reservation control->Office choiceboxille
         cbR_officeName.setItems(cbOfficeList);
         //buildData(cbR_roomID, sqlHuone, cbRoomList);
         buildData(cbB_reservationID, sqlVaraus, cbReservationList);
