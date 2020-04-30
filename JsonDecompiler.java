@@ -17,10 +17,7 @@ public class JsonDecompiler {
      */
     public String[][] decompile2dArray(String json) {
         JSONArray mJsonArray = new JSONArray(json);
-        String[][] returnList = new String[][]{};
-        if (!mJsonArray.isEmpty()) {
-            returnList = new String[mJsonArray.length()][mJsonArray.getJSONArray(0).length()];
-        }
+        String[][] returnList = new String[mJsonArray.length()][mJsonArray.getJSONArray(0).length()];
         for (int x = 0; x < mJsonArray.length(); x++) {
             for (int y = 0; y < mJsonArray.getJSONArray(x).length(); y++) {
                 returnList[x][y] = mJsonArray.getJSONArray(x).get(y).toString();
