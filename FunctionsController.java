@@ -347,6 +347,7 @@ public class FunctionsController {
         changeTabReports();
     }
 
+    //TODO aseta metodi Reservation control -> cbR_officeName On Mouse Entered
     @FXML
     private void reservationFillRoomNumber() {
         String officeName = cbR_officeName.getValue();
@@ -419,10 +420,19 @@ public class FunctionsController {
     private void insertAccommodation() {
         String price = tfRoomDayPrice.getText();
         String rnum = tfRoomNumber.getText();
-        String officeID = cbA_officeID.getValue();
+        String officeName = cbA_officeID.getValue();
+
+        String[][] officeID = null;
+        try {
+            String sql = String.format("SELECT Toimipiste_ID FROM Toimipiste " +
+                    "WHERE Nimi = \"%s\";", officeName);
+            officeID = http.runSQL(sql);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         try {
             String values = String.format("\"%s\", \"%s\", \"%s\"",
-                    price, rnum, officeID);
+                    price, rnum, officeID[0][0]);
             System.out.println(values);
             http.setValues("Huone", values);
         } catch (Exception e) {
@@ -585,10 +595,19 @@ public class FunctionsController {
         String roomID = tfRoomID.getText();
         String price = tfRoomDayPrice.getText();
         String rnum = tfRoomNumber.getText();
-        String officeID = cbA_officeID.getValue();
+        String officeName = cbA_officeID.getValue();
+
+        String[][] officeID = null;
+        try {
+            String sql = String.format("SELECT Toimipiste_ID FROM Toimipiste " +
+                    "WHERE Nimi = \"%s\";", officeName);
+            officeID = http.runSQL(sql);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         try {
             String values = String.format("Paivahinta=\"%s\", Huonenumero=\"%s\", Toimipiste_ID=\"%s\"",
-                    price, rnum, officeID);
+                    price, rnum, officeID[0][0]);
             System.out.println(values);
             http.updateValues("Huone", values, roomID);
         } catch (Exception e) {
@@ -845,7 +864,10 @@ public class FunctionsController {
     private void setAccommodationText() {
         String[][] data = null;
         String roomID = tfRoomID.getText();
-        String sql = String.format("SELECT * FROM Huone WHERE Huone_ID=%s",
+        String sql = String.format("SELECT Huone.Paivahinta, Huone.Huonenumero, Toimipiste.Nimi FROM Huone " +
+                        "INNER JOIN Toimipiste " +
+                        "ON Huone.Toimipiste_ID = Toimipiste.Toimipiste_ID " +
+                        "WHERE Huone_ID = %s;",
                 roomID);
         try {
             data = http.runSQL(sql);
@@ -855,9 +877,9 @@ public class FunctionsController {
                     "Check Room ID.",
                     Alert.AlertType.INFORMATION);
         }
-        cbA_officeID.setValue(data[0][3]);
-        tfRoomDayPrice.setText(data[0][1]);
-        tfRoomNumber.setText(data[0][2]);
+        cbA_officeID.setValue(data[0][2]);
+        tfRoomDayPrice.setText(data[0][0]);
+        tfRoomNumber.setText(data[0][1]);
     }
 
     /**
