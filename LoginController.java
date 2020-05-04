@@ -49,6 +49,7 @@ public class LoginController {
             window.setScene(scene);
             window.setTitle("MÖKK1 software");
             window.centerOnScreen();
+            window.setMaximized(true);
             window.show();
 
         } catch (Exception e) {

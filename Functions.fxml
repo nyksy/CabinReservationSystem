@@ -213,112 +213,6 @@
                         <TextField fx:id="searchServices" layoutX="380.0" layoutY="34.0" promptText="Search" />
                      </children>
                   </AnchorPane>
-                  <AnchorPane fx:id="apServiceControl" layoutX="10.0" layoutY="10.0" prefHeight="810.0" prefWidth="1068.0" styleClass="background" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                     <children>
-                        <Label layoutY="28.0" text="Service Control">
-                           <font>
-                              <Font size="40.0" />
-                           </font>
-                        </Label>
-                        <TitledPane layoutY="76.0" prefHeight="800.0" prefWidth="1058.0" styleClass="background" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="76.0">
-                           <content>
-                              <AnchorPane prefHeight="200.0" prefWidth="200.0">
-                                 <children>
-                                    <ButtonBar layoutX="189.0" layoutY="256.0" prefHeight="40.0" prefWidth="275.0">
-                                       <buttons>
-                                          <Button mnemonicParsing="false" onAction="#setServiceText" prefHeight="32.0" prefWidth="81.0" text="Search" />
-                                          <Button alignment="TOP_CENTER" mnemonicParsing="false" onAction="#updateService" text="Edit" />
-                                          <Button layoutX="550.0" layoutY="14.0" mnemonicParsing="false" onAction="#deleteService" text="Delete" />
-                                          <Button layoutX="635.0" layoutY="14.0" mnemonicParsing="false" onAction="#insertService" prefHeight="32.0" prefWidth="81.0" text="Add" />
-                                       </buttons>
-                                       <padding>
-                                          <Insets top="10.0" />
-                                       </padding>
-                                    </ButtonBar>
-                                    <GridPane alignment="CENTER" layoutX="19.0" layoutY="94.0" prefHeight="161.0" prefWidth="520.0">
-                                       <columnConstraints>
-                                          <ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" minWidth="10.0" prefWidth="20.0" />
-                                          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                       </columnConstraints>
-                                       <rowConstraints>
-                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                       </rowConstraints>
-                                       <children>
-                                          <Label alignment="CENTER_RIGHT" prefHeight="15.0" prefWidth="400.0" text="Service ID">
-                                             <GridPane.margin>
-                                                <Insets right="10.0" />
-                                             </GridPane.margin>
-                                          </Label>
-                                          <Label alignment="CENTER_RIGHT" prefHeight="15.0" prefWidth="400.0" text="Office ID" GridPane.rowIndex="1">
-                                             <GridPane.margin>
-                                                <Insets right="10.0" />
-                                             </GridPane.margin>
-                                          </Label>
-                                          <Label alignment="CENTER_RIGHT" prefHeight="15.0" prefWidth="400.0" text="Name" GridPane.rowIndex="2">
-                                             <GridPane.margin>
-                                                <Insets right="10.0" />
-                                             </GridPane.margin>
-                                          </Label>
-                                          <Label alignment="CENTER_RIGHT" prefHeight="15.0" prefWidth="400.0" text="Price" GridPane.rowIndex="3">
-                                             <GridPane.margin>
-                                                <Insets right="10.0" />
-                                             </GridPane.margin>
-                                          </Label>
-                                          <TextField fx:id="tfServiceID" prefHeight="35.0" GridPane.columnIndex="1" />
-                                          <TextField fx:id="tfServiceName" prefHeight="35.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                                          <TextField fx:id="tfServicePrice" prefHeight="35.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                                          <ChoiceBox fx:id="cbS_OfficeID" prefHeight="35.0" prefWidth="181.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                       </children>
-                                    </GridPane>
-                                    <Text layoutX="19.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Use this page to add, edit, delete and sell services. You can also search with Service ID, which is auto-generated." wrappingWidth="542.3955078125">
-                                       <font>
-                                          <Font size="22.0" />
-                                       </font>
-                                    </Text>
-                                    <GridPane alignment="CENTER" layoutX="254.0" layoutY="348.0" prefHeight="87.0" prefWidth="285.0">
-                                       <columnConstraints>
-                                          <ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" minWidth="10.0" prefWidth="20.0" />
-                                          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                       </columnConstraints>
-                                       <rowConstraints>
-                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                       </rowConstraints>
-                                       <children>
-                                          <Label alignment="CENTER_RIGHT" prefHeight="15.0" prefWidth="400.0" text="Service ID">
-                                             <GridPane.margin>
-                                                <Insets right="10.0" />
-                                             </GridPane.margin>
-                                          </Label>
-                                          <Label alignment="CENTER_RIGHT" prefHeight="15.0" prefWidth="400.0" text="Reservation ID" GridPane.rowIndex="1">
-                                             <GridPane.margin>
-                                                <Insets right="10.0" />
-                                             </GridPane.margin>
-                                          </Label>
-                                          <ChoiceBox fx:id="cbSellReservation" prefHeight="35.0" prefWidth="181.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                          <ChoiceBox fx:id="cbSellService" layoutX="110.0" layoutY="58.0" prefHeight="35.0" prefWidth="181.0" GridPane.columnIndex="1" />
-                                       </children>
-                                    </GridPane>
-                                    <ButtonBar layoutX="335.0" layoutY="435.0" prefHeight="40.0" prefWidth="200.0">
-                                      <buttons>
-                                        <Button mnemonicParsing="false" text="Delete" />
-                                          <Button layoutX="135.0" layoutY="10.0" mnemonicParsing="false" text="Add" />
-                                      </buttons>
-                                       <padding>
-                                          <Insets top="10.0" />
-                                       </padding>
-                                    </ButtonBar>
-                                    <TableView fx:id="tbwService2" layoutX="560.0" layoutY="14.0" prefHeight="325.0" prefWidth="504.0" AnchorPane.leftAnchor="550.4000000000001" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0" />
-                                    <TableView fx:id="tbwSoldService2" layoutX="550.0" layoutY="357.0" prefHeight="318.0" prefWidth="504.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="550.0" AnchorPane.rightAnchor="14.0" />
-                                 </children>
-                              </AnchorPane>
-                           </content>
-                        </TitledPane>
-                     </children>
-                  </AnchorPane>
                   <AnchorPane fx:id="apOfficeControl" prefHeight="800.0" prefWidth="1058.0" styleClass="background" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
                         <Label layoutY="28.0" text="Office Control">
@@ -561,6 +455,167 @@
                         </TitledPane>
                      </children>
                   </AnchorPane>
+                  <AnchorPane fx:id="apSoldServices" layoutX="10.0" layoutY="10.0" prefHeight="810.0" prefWidth="1080.0" styleClass="background" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <Label layoutY="28.0" text="Monitor Sold Services">
+                           <font>
+                              <Font size="40.0" />
+                           </font>
+                        </Label>
+                        <TableView fx:id="tbwSoldService" layoutX="17.0" layoutY="76.0" prefHeight="724.0" prefWidth="1058.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="76.0" />
+                        <Button layoutX="583.0" layoutY="30.0" mnemonicParsing="false" onAction="#searchSoldService" text="Search" />
+                        <TextField fx:id="searchSoldServices" layoutX="418.0" layoutY="33.0" promptText="Search" />
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane fx:id="apReports" layoutX="10.0" layoutY="10.0" prefHeight="820.0" prefWidth="1078.0" styleClass="background" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <Label layoutY="28.0" text="Reports">
+                           <font>
+                              <Font size="40.0" />
+                           </font>
+                        </Label>
+                        <TitledPane animated="false" layoutY="81.0" prefHeight="800.0" prefWidth="1058.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="76.0">
+                          <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="882.0" styleClass="background" stylesheets="@light_theme.css">
+                                 <children>
+                                    <AreaChart fx:id="acReservations" layoutX="24.0" layoutY="84.0" prefHeight="300.0" prefWidth="500.0" title="Reservations" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="100.0">
+                                      <xAxis>
+                                        <CategoryAxis side="BOTTOM" />
+                                      </xAxis>
+                                      <yAxis>
+                                        <NumberAxis side="LEFT" />
+                                      </yAxis>
+                                    </AreaChart>
+                                    <LineChart fx:id="lcServices" layoutX="21.0" layoutY="371.0" prefHeight="300.0" prefWidth="500.0" title="Services" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="390.0">
+                                      <xAxis>
+                                        <CategoryAxis side="BOTTOM" />
+                                      </xAxis>
+                                      <yAxis>
+                                        <NumberAxis side="LEFT" />
+                                      </yAxis>
+                                    </LineChart>
+                                    <DatePicker fx:id="dpFrom" layoutX="62.0" layoutY="50.0" prefHeight="32.0" prefWidth="100.0" />
+                                    <DatePicker fx:id="dpTo" layoutX="168.0" layoutY="50.0" prefHeight="32.0" prefWidth="100.0" />
+                                    <Text layoutX="60.0" layoutY="47.0" nodeOrientation="LEFT_TO_RIGHT" strokeType="OUTSIDE" strokeWidth="0.0" text="From" wrappingWidth="184.2890625" />
+                                    <Text layoutX="168.0" layoutY="46.0" nodeOrientation="LEFT_TO_RIGHT" strokeType="OUTSIDE" strokeWidth="0.0" text="To" wrappingWidth="184.2890625" />
+                                    <Text layoutX="62.0" layoutY="21.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="header" text="Generate a report" />
+                                    <Button layoutX="443.0" layoutY="50.0" mnemonicParsing="false" onAction="#searchOfficeReservations" text="Generate" />
+                                    <TableView fx:id="tbwReportReservations" layoutX="579.6" layoutY="33.6" prefHeight="311.0" prefWidth="485.0" AnchorPane.leftAnchor="560.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="24.0" />
+                                    <TableView fx:id="tbwReportServices" layoutX="560.0" layoutY="348.0" prefHeight="328.0" prefWidth="494.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="560.4000000000001" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="344.4" />
+                                    <ChoiceBox fx:id="cbOffice" layoutX="277.0" layoutY="50.0" prefHeight="32.0" prefWidth="150.0" />
+                                    <Text layoutX="277.0" layoutY="46.0" nodeOrientation="LEFT_TO_RIGHT" strokeType="OUTSIDE" strokeWidth="0.0" text="Office" wrappingWidth="184.2890625" />
+                                 </children>
+                              </AnchorPane>
+                          </content>
+                        </TitledPane>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane fx:id="apServiceControl" layoutX="10.0" layoutY="10.0" prefHeight="810.0" prefWidth="1068.0" styleClass="background" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <Label layoutY="28.0" text="Service Control">
+                           <font>
+                              <Font size="40.0" />
+                           </font>
+                        </Label>
+                        <TitledPane layoutY="76.0" prefHeight="800.0" prefWidth="1058.0" styleClass="background" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="76.0">
+                           <content>
+                              <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                 <children>
+                                    <ButtonBar layoutX="189.0" layoutY="256.0" prefHeight="40.0" prefWidth="275.0">
+                                       <buttons>
+                                          <Button mnemonicParsing="false" onAction="#setServiceText" prefHeight="32.0" prefWidth="81.0" text="Search" />
+                                          <Button alignment="TOP_CENTER" mnemonicParsing="false" onAction="#updateService" text="Edit" />
+                                          <Button layoutX="550.0" layoutY="14.0" mnemonicParsing="false" onAction="#deleteService" text="Delete" />
+                                          <Button layoutX="635.0" layoutY="14.0" mnemonicParsing="false" onAction="#insertService" prefHeight="32.0" prefWidth="81.0" text="Add" />
+                                       </buttons>
+                                       <padding>
+                                          <Insets top="10.0" />
+                                       </padding>
+                                    </ButtonBar>
+                                    <GridPane alignment="CENTER" layoutX="19.0" layoutY="94.0" prefHeight="161.0" prefWidth="520.0">
+                                       <columnConstraints>
+                                          <ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" minWidth="10.0" prefWidth="20.0" />
+                                          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                       </columnConstraints>
+                                       <rowConstraints>
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                       </rowConstraints>
+                                       <children>
+                                          <Label alignment="CENTER_RIGHT" prefHeight="15.0" prefWidth="400.0" text="Service ID">
+                                             <GridPane.margin>
+                                                <Insets right="10.0" />
+                                             </GridPane.margin>
+                                          </Label>
+                                          <Label alignment="CENTER_RIGHT" prefHeight="15.0" prefWidth="400.0" text="Office ID" GridPane.rowIndex="1">
+                                             <GridPane.margin>
+                                                <Insets right="10.0" />
+                                             </GridPane.margin>
+                                          </Label>
+                                          <Label alignment="CENTER_RIGHT" prefHeight="15.0" prefWidth="400.0" text="Name" GridPane.rowIndex="2">
+                                             <GridPane.margin>
+                                                <Insets right="10.0" />
+                                             </GridPane.margin>
+                                          </Label>
+                                          <Label alignment="CENTER_RIGHT" prefHeight="15.0" prefWidth="400.0" text="Price" GridPane.rowIndex="3">
+                                             <GridPane.margin>
+                                                <Insets right="10.0" />
+                                             </GridPane.margin>
+                                          </Label>
+                                          <TextField fx:id="tfServiceID" prefHeight="35.0" GridPane.columnIndex="1" />
+                                          <TextField fx:id="tfServiceName" prefHeight="35.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                          <TextField fx:id="tfServicePrice" prefHeight="35.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                          <ChoiceBox fx:id="cbS_OfficeID" prefHeight="35.0" prefWidth="181.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                       </children>
+                                    </GridPane>
+                                    <Text layoutX="19.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Use this page to add, edit, delete and sell services. You can also search with Service ID, which is auto-generated." wrappingWidth="542.3955078125">
+                                       <font>
+                                          <Font size="22.0" />
+                                       </font>
+                                    </Text>
+                                    <GridPane alignment="CENTER" layoutX="254.0" layoutY="348.0" prefHeight="87.0" prefWidth="285.0">
+                                       <columnConstraints>
+                                          <ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" minWidth="10.0" prefWidth="20.0" />
+                                          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                       </columnConstraints>
+                                       <rowConstraints>
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                       </rowConstraints>
+                                       <children>
+                                          <Label alignment="CENTER_RIGHT" prefHeight="15.0" prefWidth="400.0" text="Service ID">
+                                             <GridPane.margin>
+                                                <Insets right="10.0" />
+                                             </GridPane.margin>
+                                          </Label>
+                                          <Label alignment="CENTER_RIGHT" prefHeight="15.0" prefWidth="400.0" text="Reservation ID" GridPane.rowIndex="1">
+                                             <GridPane.margin>
+                                                <Insets right="10.0" />
+                                             </GridPane.margin>
+                                          </Label>
+                                          <ChoiceBox fx:id="cbSellReservation" prefHeight="35.0" prefWidth="181.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                          <ChoiceBox fx:id="cbSellService" layoutX="110.0" layoutY="58.0" prefHeight="35.0" prefWidth="181.0" GridPane.columnIndex="1" />
+                                       </children>
+                                    </GridPane>
+                                    <ButtonBar layoutX="335.0" layoutY="435.0" prefHeight="40.0" prefWidth="200.0">
+                                      <buttons>
+                                        <Button mnemonicParsing="false" onAction="#deleteSoldService" text="Delete" />
+                                          <Button layoutX="135.0" layoutY="10.0" mnemonicParsing="false" onAction="#insertSoldService" text="Add" />
+                                      </buttons>
+                                       <padding>
+                                          <Insets top="10.0" />
+                                       </padding>
+                                    </ButtonBar>
+                                    <TableView fx:id="tbwService2" layoutX="560.0" layoutY="14.0" prefHeight="325.0" prefWidth="504.0" AnchorPane.leftAnchor="550.4000000000001" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0" />
+                                    <TableView fx:id="tbwSoldService2" layoutX="550.0" layoutY="357.0" prefHeight="318.0" prefWidth="504.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="550.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="354.4" />
+                                 </children>
+                              </AnchorPane>
+                           </content>
+                        </TitledPane>
+                     </children>
+                  </AnchorPane>
                   <AnchorPane fx:id="apBillControl" layoutX="10.0" layoutY="10.0" prefHeight="800.0" prefWidth="1058.0" styleClass="background" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
                         <Label layoutY="28.0" text="Bill Control">
@@ -576,7 +631,7 @@
                                        <buttons>
                                           <Button mnemonicParsing="false" onAction="#setBillText" prefHeight="32.0" prefWidth="81.0" text="Search" />
                                           <Button alignment="TOP_CENTER" mnemonicParsing="false" onAction="#updateBill" text="Edit" />
-                                          <Button layoutX="550.0" layoutY="14.0" mnemonicParsing="false" onAction="#controlBills" text="Delete" />
+                                          <Button layoutX="550.0" layoutY="14.0" mnemonicParsing="false" onAction="#deleteBill" text="Delete" />
                                           <Button layoutX="635.0" layoutY="14.0" mnemonicParsing="false" onAction="#insertBill" prefHeight="32.0" prefWidth="81.0" text="Add" />
                                        </buttons>
                                     </ButtonBar>
@@ -707,7 +762,7 @@
                                           <ChoiceBox fx:id="cbR_customerID" prefHeight="35.0" prefWidth="181.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                           <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                                              <children>
-                                                <ChoiceBox fx:id="cbR_roomID1" layoutX="82.0" layoutY="15.0" prefHeight="35.0" prefWidth="150.0" />
+                                                <ChoiceBox fx:id="cbR_officeName" layoutX="82.0" layoutY="15.0" onMouseClicked="#reservationFillRoomNumber" prefHeight="35.0" prefWidth="150.0" />
                                                 <Label alignment="CENTER_RIGHT" prefHeight="15.0" text="Room ID">
                                                    <HBox.margin>
                                                       <Insets left="15.0" right="10.0" />
@@ -727,61 +782,6 @@
                                  </children>
                               </AnchorPane>
                            </content>
-                        </TitledPane>
-                     </children>
-                  </AnchorPane>
-                  <AnchorPane fx:id="apSoldServices" layoutX="10.0" layoutY="10.0" prefHeight="810.0" prefWidth="1080.0" styleClass="background" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                     <children>
-                        <Label layoutY="28.0" text="Monitor Sold Services">
-                           <font>
-                              <Font size="40.0" />
-                           </font>
-                        </Label>
-                        <TableView fx:id="tbwSoldService" layoutX="17.0" layoutY="76.0" prefHeight="724.0" prefWidth="1058.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="76.0" />
-                        <Button layoutX="583.0" layoutY="30.0" mnemonicParsing="false" onAction="#searchSoldService" text="Search" />
-                        <TextField fx:id="searchSoldServices" layoutX="418.0" layoutY="33.0" promptText="Search" />
-                     </children>
-                  </AnchorPane>
-                  <AnchorPane fx:id="apReports" layoutX="10.0" layoutY="10.0" prefHeight="820.0" prefWidth="1078.0" styleClass="background" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                     <children>
-                        <Label layoutY="28.0" text="Reports">
-                           <font>
-                              <Font size="40.0" />
-                           </font>
-                        </Label>
-                        <TitledPane animated="false" layoutY="81.0" prefHeight="800.0" prefWidth="1058.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="76.0">
-                          <content>
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="882.0" styleClass="background" stylesheets="@light_theme.css">
-                                 <children>
-                                    <AreaChart fx:id="acReservations" layoutX="24.0" layoutY="84.0" prefHeight="300.0" prefWidth="500.0" title="Reservations" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="100.0">
-                                      <xAxis>
-                                        <CategoryAxis side="BOTTOM" />
-                                      </xAxis>
-                                      <yAxis>
-                                        <NumberAxis side="LEFT" />
-                                      </yAxis>
-                                    </AreaChart>
-                                    <LineChart fx:id="lcServices" layoutX="21.0" layoutY="371.0" prefHeight="300.0" prefWidth="500.0" title="Services" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="390.0">
-                                      <xAxis>
-                                        <CategoryAxis side="BOTTOM" />
-                                      </xAxis>
-                                      <yAxis>
-                                        <NumberAxis side="LEFT" />
-                                      </yAxis>
-                                    </LineChart>
-                                    <DatePicker fx:id="dpFrom" layoutX="62.0" layoutY="50.0" prefHeight="32.0" prefWidth="100.0" />
-                                    <DatePicker fx:id="dpTo" layoutX="168.0" layoutY="50.0" prefHeight="32.0" prefWidth="100.0" />
-                                    <Text layoutX="60.0" layoutY="47.0" nodeOrientation="LEFT_TO_RIGHT" strokeType="OUTSIDE" strokeWidth="0.0" text="From" wrappingWidth="184.2890625" />
-                                    <Text layoutX="168.0" layoutY="46.0" nodeOrientation="LEFT_TO_RIGHT" strokeType="OUTSIDE" strokeWidth="0.0" text="To" wrappingWidth="184.2890625" />
-                                    <Text layoutX="62.0" layoutY="21.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="header" text="Generate a report" />
-                                    <Button layoutX="443.0" layoutY="50.0" mnemonicParsing="false" text="Generate" />
-                                    <TableView fx:id="tbwReportReservations" layoutX="579.6" layoutY="33.6" prefHeight="311.0" prefWidth="485.0" AnchorPane.leftAnchor="560.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="24.0" />
-                                    <TableView fx:id="tbwReportServices" layoutX="560.0" layoutY="348.0" prefHeight="328.0" prefWidth="494.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="560.4000000000001" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="344.4" />
-                                    <ChoiceBox fx:id="cbOffice" layoutX="277.0" layoutY="50.0" prefHeight="32.0" prefWidth="150.0" />
-                                    <Text layoutX="277.0" layoutY="46.0" nodeOrientation="LEFT_TO_RIGHT" strokeType="OUTSIDE" strokeWidth="0.0" text="Office" wrappingWidth="184.2890625" />
-                                 </children>
-                              </AnchorPane>
-                          </content>
                         </TitledPane>
                      </children>
                   </AnchorPane>
