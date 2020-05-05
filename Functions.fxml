@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.chart.AreaChart?>
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
@@ -467,49 +466,6 @@
                         <TextField fx:id="searchSoldServices" layoutX="418.0" layoutY="33.0" promptText="Search" />
                      </children>
                   </AnchorPane>
-                  <AnchorPane fx:id="apReports" layoutX="10.0" layoutY="10.0" prefHeight="820.0" prefWidth="1078.0" styleClass="background" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                     <children>
-                        <Label layoutY="28.0" text="Reports">
-                           <font>
-                              <Font size="40.0" />
-                           </font>
-                        </Label>
-                        <TitledPane animated="false" layoutY="81.0" prefHeight="800.0" prefWidth="1058.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="76.0">
-                          <content>
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="882.0" styleClass="background" stylesheets="@light_theme.css">
-                                 <children>
-                                    <AreaChart fx:id="acReservations" layoutX="24.0" layoutY="84.0" prefHeight="300.0" prefWidth="500.0" title="Reservations" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="100.0">
-                                      <xAxis>
-                                        <CategoryAxis side="BOTTOM" />
-                                      </xAxis>
-                                      <yAxis>
-                                        <NumberAxis side="LEFT" />
-                                      </yAxis>
-                                    </AreaChart>
-                                    <LineChart fx:id="lcServices" layoutX="21.0" layoutY="371.0" prefHeight="300.0" prefWidth="500.0" title="Services" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="390.0">
-                                      <xAxis>
-                                        <CategoryAxis side="BOTTOM" />
-                                      </xAxis>
-                                      <yAxis>
-                                        <NumberAxis side="LEFT" />
-                                      </yAxis>
-                                    </LineChart>
-                                    <DatePicker fx:id="dpFrom" layoutX="62.0" layoutY="50.0" prefHeight="32.0" prefWidth="100.0" />
-                                    <DatePicker fx:id="dpTo" layoutX="168.0" layoutY="50.0" prefHeight="32.0" prefWidth="100.0" />
-                                    <Text layoutX="60.0" layoutY="47.0" nodeOrientation="LEFT_TO_RIGHT" strokeType="OUTSIDE" strokeWidth="0.0" text="From" wrappingWidth="184.2890625" />
-                                    <Text layoutX="168.0" layoutY="46.0" nodeOrientation="LEFT_TO_RIGHT" strokeType="OUTSIDE" strokeWidth="0.0" text="To" wrappingWidth="184.2890625" />
-                                    <Text layoutX="62.0" layoutY="21.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="header" text="Generate a report" />
-                                    <Button layoutX="443.0" layoutY="50.0" mnemonicParsing="false" onAction="#searchOfficeReservations" text="Generate" />
-                                    <TableView fx:id="tbwReportReservations" layoutX="579.6" layoutY="33.6" prefHeight="311.0" prefWidth="485.0" AnchorPane.leftAnchor="560.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="24.0" />
-                                    <TableView fx:id="tbwReportServices" layoutX="560.0" layoutY="348.0" prefHeight="328.0" prefWidth="494.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="560.4000000000001" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="344.4" />
-                                    <ChoiceBox fx:id="cbOffice" layoutX="277.0" layoutY="50.0" prefHeight="32.0" prefWidth="150.0" />
-                                    <Text layoutX="277.0" layoutY="46.0" nodeOrientation="LEFT_TO_RIGHT" strokeType="OUTSIDE" strokeWidth="0.0" text="Office" wrappingWidth="184.2890625" />
-                                 </children>
-                              </AnchorPane>
-                          </content>
-                        </TitledPane>
-                     </children>
-                  </AnchorPane>
                   <AnchorPane fx:id="apServiceControl" layoutX="10.0" layoutY="10.0" prefHeight="810.0" prefWidth="1068.0" styleClass="background" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
                         <Label layoutY="28.0" text="Service Control">
@@ -782,6 +738,41 @@
                                  </children>
                               </AnchorPane>
                            </content>
+                        </TitledPane>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane fx:id="apReports" layoutX="10.0" layoutY="10.0" prefHeight="820.0" prefWidth="1078.0" styleClass="background" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <Label layoutY="28.0" text="Reports">
+                           <font>
+                              <Font size="40.0" />
+                           </font>
+                        </Label>
+                        <TitledPane animated="false" layoutY="81.0" prefHeight="800.0" prefWidth="1058.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="76.0">
+                          <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="882.0" styleClass="background" stylesheets="@light_theme.css">
+                                 <children>
+                                    <LineChart fx:id="lcServices" layoutX="33.6" layoutY="99.6" prefHeight="581.0" prefWidth="500.0" title="Services and reservations" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="24.0" AnchorPane.topAnchor="90.0">
+                                      <xAxis>
+                                        <CategoryAxis side="BOTTOM" fx:id="xService" />
+                                      </xAxis>
+                                      <yAxis>
+                                        <NumberAxis fx:id="yService" minorTickCount="1" side="LEFT" />
+                                      </yAxis>
+                                    </LineChart>
+                                    <DatePicker fx:id="dpFrom" layoutX="62.0" layoutY="50.0" prefHeight="32.0" prefWidth="100.0" />
+                                    <DatePicker fx:id="dpTo" layoutX="168.0" layoutY="50.0" prefHeight="32.0" prefWidth="100.0" />
+                                    <Text layoutX="60.0" layoutY="47.0" nodeOrientation="LEFT_TO_RIGHT" strokeType="OUTSIDE" strokeWidth="0.0" text="From" wrappingWidth="184.2890625" />
+                                    <Text layoutX="168.0" layoutY="46.0" nodeOrientation="LEFT_TO_RIGHT" strokeType="OUTSIDE" strokeWidth="0.0" text="To" wrappingWidth="184.2890625" />
+                                    <Text layoutX="62.0" layoutY="21.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="header" text="Generate a report" />
+                                    <Button layoutX="443.0" layoutY="50.0" mnemonicParsing="false" onAction="#searchOfficeReservations" text="Generate" />
+                                    <TableView fx:id="tbwReportReservations" layoutX="579.6" layoutY="33.6" prefHeight="311.0" prefWidth="485.0" AnchorPane.leftAnchor="560.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="24.0" />
+                                    <TableView fx:id="tbwReportServices" layoutX="560.0" layoutY="348.0" prefHeight="328.0" prefWidth="494.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="560.4000000000001" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="344.4" />
+                                    <ChoiceBox fx:id="cbOffice" layoutX="277.0" layoutY="50.0" prefHeight="32.0" prefWidth="150.0" />
+                                    <Text layoutX="277.0" layoutY="46.0" nodeOrientation="LEFT_TO_RIGHT" strokeType="OUTSIDE" strokeWidth="0.0" text="Office" wrappingWidth="184.2890625" />
+                                 </children>
+                              </AnchorPane>
+                          </content>
                         </TitledPane>
                      </children>
                   </AnchorPane>

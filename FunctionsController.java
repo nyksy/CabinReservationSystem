@@ -7,8 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.chart.AreaChart;
-import javafx.scene.chart.LineChart;
+import javafx.scene.chart.*;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
@@ -212,9 +211,11 @@ public class FunctionsController {
     @FXML
     private TableView<String> tbwReportServices;
     @FXML
-    private AreaChart<Double, Double> acReservations;
+    private LineChart<String, Integer> lcServices;
     @FXML
-    private LineChart<Double, Double> lcServices;
+    private CategoryAxis xService;
+    @FXML
+    private NumberAxis yService;
 
     @FXML
     public void controlOffices() {
@@ -305,7 +306,9 @@ public class FunctionsController {
      */
     @FXML
     private void initialize() {
-
+        LocalDate ld1 = LocalDate.parse("2000-01-01");
+        LocalDate ld2 = LocalDate.parse("2010-01-01");
+        generateChart(ld1, ld2);
         //Päättää mitkä ominaisuudet ovat käytössä roolin mukaan
         if (role.equals("Customer Service")) {
             btnOffice.setDisable(true);
@@ -989,6 +992,58 @@ public class FunctionsController {
         }
         assert values != null;
         printMatrix(tbwReportReservations, values, headers);
+
+        generateChart(arrDate, depDate);
+    }
+
+    /**
+     * Metodi jolla saadaan data kaavioihin
+     * @param arrDate tulopäivä
+     * @param depDate lähtöpäivä
+     */
+    public void generateChart(LocalDate arrDate, LocalDate depDate) {
+        lcServices.getData().clear();
+
+        String[][] data = null;
+        String[][] data2 = null;
+
+        String xArvo = arrDate.toString();
+        String xArvo2 = depDate.toString();
+
+        int yArvo = 0;
+        int yArvo2 = 0;
+
+        //Hakukriteerit, laskee Varausten määrän kyseisenä päivänä
+        String arrSQL = String.format("SELECT COUNT(Varaus_ID) FROM Varaus WHERE Alkupvm = \"%s\"", arrDate);
+        String depSQL = String.format("SELECT COUNT(Varaus_ID) FROM Varaus WHERE Loppupvm = \"%s\"", depDate);
+
+        try {
+            //Haetaan tiedot tietokannasta
+            data = http.runSQL(arrSQL);
+            System.out.println((data[0][0]));
+            yArvo = Integer.parseInt(data[0][0]);
+            data2 = http.runSQL(depSQL);
+            System.out.println(data2[0][0]);
+            yArvo2 = Integer.parseInt(data2[0][0]);
+
+        } catch (IOException ie) {
+            System.out.println("TempleOS is malfunctioning.");
+        }
+
+        //Tilastot reports-välilehteen
+        XYChart.Series series = new XYChart.Series();
+        series.setName("Services");
+
+        assert data != null;
+        series.getData().add(new XYChart.Data(xArvo,yArvo));
+        assert data2 != null;
+        series.getData().add(new XYChart.Data(xArvo2,yArvo2));
+        lcServices.getData().addAll(series);
+        lcServices.getYAxis().setTickLabelsVisible(false);
+        //lcServices.getYAxis().setTickMarkVisible(false);
+
+        //TODO Palvelujen haku samaan kaavioon ja sql-lauseiden parantelu
+
     }
 
     /**
@@ -1062,6 +1117,7 @@ public class FunctionsController {
             window.setTitle("Login");
             window.getIcons().add(new Image("file:valkoinentaustakuvkae.png"));
             window.centerOnScreen();
+            window.setMaximized(false);
             window.show();
 
         } catch (Exception e) {
@@ -1183,6 +1239,11 @@ public class FunctionsController {
         }
     }
 
+    /**
+     * Alert-ilmoitus joka näkyy tietojenkäsittelyn eri vaiheissa
+     * @param header Otsikko
+     * @param text Teksti
+     */
     private void showAlert(String header, String text) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(header);
