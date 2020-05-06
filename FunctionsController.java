@@ -39,6 +39,8 @@ public class FunctionsController {
 
     static GUIUtils gui = new GUIUtils();
 
+    static Bill bill = new Bill();
+
     String role = LoginController.role;
     //Lista kaikista toimipisteistä
     ObservableList<String> cbOfficeList = FXCollections.observableArrayList();
@@ -398,6 +400,10 @@ public class FunctionsController {
         controlOffices();
     }
 
+    @FXML
+    public void generateBill() {
+        bill.CreatePDF(cbB_reservationID.getValue(), "Paperinen");
+    }
 
     @FXML
     private void reservationFillRoomNumber() {
@@ -1071,6 +1077,7 @@ public class FunctionsController {
 
     /**
      * Metodi jolla saadaan data kaavioihin
+     *
      * @param arrDate tulopäivä
      * @param depDate lähtöpäivä
      */
@@ -1086,8 +1093,10 @@ public class FunctionsController {
         int yArvo = 0;
         int yArvo2 = 0;
 
+        //TODO OSAAVALLE SQL MESTARILLE voisitteko joku parannella näitä hakulausekkeita että
+        // saadaan taulukosta mielekkäämpi
         //Hakukriteerit, laskee Varausten määrän kyseisenä päivänä
-        String arrSQL = String.format("SELECT COUNT(Varaus_ID) FROM Varaus WHERE Alkupvm = \"%s\" OR Loppupvm = \"%s\"", arrDate, depDate);
+        String arrSQL = String.format("SELECT COUNT(Varaus_ID) FROM Varaus WHERE Alkupvm = \"%s\"", arrDate);
         String depSQL = String.format("SELECT COUNT(Varaus_ID) FROM Varaus WHERE Loppupvm = \"%s\"", depDate);
 
         try {
@@ -1108,9 +1117,9 @@ public class FunctionsController {
         series.setName("Reservations");
 
         assert data != null;
-        series.getData().add(new XYChart.Data(xArvo,yArvo));
+        series.getData().add(new XYChart.Data(xArvo, yArvo));
         assert data2 != null;
-        series.getData().add(new XYChart.Data(xArvo2,yArvo2));
+        series.getData().add(new XYChart.Data(xArvo2, yArvo2));
         lcServices.getData().addAll(series);
         lcServices.getYAxis().setTickLabelsVisible(false);
         //lcServices.getYAxis().setTickMarkVisible(false);
@@ -1139,9 +1148,9 @@ public class FunctionsController {
         series2.setName("Services");
 
         assert data != null;
-        series2.getData().add(new XYChart.Data(xArvo,yArvo));
+        series2.getData().add(new XYChart.Data(xArvo, yArvo));
         assert data2 != null;
-        series2.getData().add(new XYChart.Data(xArvo2,yArvo2));
+        series2.getData().add(new XYChart.Data(xArvo2, yArvo2));
         lcServices.getData().addAll(series2);
 
     }
@@ -1183,7 +1192,7 @@ public class FunctionsController {
         if (numRows == 0) return;
 
         int numCols = source[0].length;
-        Double width =  1.0 / numCols;
+        Double width = 1.0 / numCols;
 
         for (int i = 0; i < numCols; i++) {
             TableColumn<String[], String> column = new TableColumn<>(headers[i]);
@@ -1202,27 +1211,6 @@ public class FunctionsController {
         for (String[] strings : source) {
             target.getItems().add(strings);
         }
-
-        /*
-        //Muutetaan tableviewin solujen kokoa automaattisesti
-        if (target.hasProperties()) {
-            TableViewSkin<?> skin = (TableViewSkin<?>) target.getSkin();
-            TableHeaderRow headerRow = skin.getTableHeaderRow();
-            NestedTableColumnHeader rootHeader = headerRow.getRootHeader();
-            for (TableColumnHeader columnHeader : rootHeader.getColumnHeaders()) {
-                try {
-                    TableColumn<?, ?> column = (TableColumn<?, ?>) columnHeader.getTableColumn();
-                    if (column != null) {
-                        Method method = skin.getClass().getDeclaredMethod("resizeColumnToFitContent", TableColumn.class, int.class);
-                        method.setAccessible(true);
-                        method.invoke(skin, column, 0);
-                    }
-                } catch (Throwable e) {
-                    e = e.getCause();
-                    e.printStackTrace(System.err);
-                }
-            }
-        }*/
     }
 
     /**
@@ -1365,8 +1353,9 @@ public class FunctionsController {
 
     /**
      * Alert-ilmoitus joka näkyy tietojenkäsittelyn eri vaiheissa
+     *
      * @param header Otsikko
-     * @param text Teksti
+     * @param text   Teksti
      */
     private void showAlert(String header, String text) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
