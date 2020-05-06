@@ -1,3 +1,7 @@
+import com.sun.javafx.scene.control.skin.NestedTableColumnHeader;
+import com.sun.javafx.scene.control.skin.TableColumnHeader;
+import com.sun.javafx.scene.control.skin.TableHeaderRow;
+import com.sun.javafx.scene.control.skin.TableViewSkin;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -11,10 +15,12 @@ import javafx.scene.chart.*;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.transform.Scale;
 import javafx.stage.Stage;
 import org.json.JSONException;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
@@ -24,12 +30,15 @@ import java.util.Arrays;
  *
  * @author Juho Nykänen
  * @author Taneli Gröhn
- * @version 0.1
+ * @version 1.0
  */
 
 public class FunctionsController {
 
     static httpController http = new httpController();
+
+    static GUIUtils gui = new GUIUtils();
+
     String role = LoginController.role;
     //Lista kaikista toimipisteistä
     ObservableList<String> cbOfficeList = FXCollections.observableArrayList();
@@ -41,9 +50,21 @@ public class FunctionsController {
     ObservableList<String> cbServiceList = FXCollections.observableArrayList();
     //Lista kaikista valitun toimipisteen huoneista
     ObservableList<String> cbRoomNumbers = FXCollections.observableArrayList();
+
     //Buttons
     @FXML
     private Button btnOffice;
+    @FXML
+    private Button btnService;
+    @FXML
+    private Button btnRoom;
+    @FXML
+    private Button btnReservation;
+    @FXML
+    private Button btnCustomer;
+    @FXML
+    private Button btnBill;
+
     //OFFICE CONTROL
     @FXML
     private TextField tfOfficeID;
@@ -55,6 +76,12 @@ public class FunctionsController {
     private TextField tfOfficePostal;
     @FXML
     private TextField tfOfficeCity;
+    @FXML
+    private Button btnSearchOffice;
+    @FXML
+    private Button btnEditOffice;
+    @FXML
+    private Button btnDeleteOffice;
     //SERVICE CONTROL
     @FXML
     private ChoiceBox<String> cbS_OfficeID;
@@ -68,6 +95,13 @@ public class FunctionsController {
     private ChoiceBox<String> cbSellService;
     @FXML
     private ChoiceBox<String> cbSellReservation;
+    @FXML
+    private Button btnSearchService;
+    @FXML
+    private Button btnDeleteService;
+    @FXML
+    private Button btnEditService;
+
     //ACCOMMODATION CONTROL
     @FXML
     private ChoiceBox<String> cbA_officeID;
@@ -77,6 +111,12 @@ public class FunctionsController {
     private TextField tfRoomDayPrice;
     @FXML
     private TextField tfRoomNumber;
+    @FXML
+    private Button btnSearchRoom;
+    @FXML
+    private Button btnEditRoom;
+    @FXML
+    private Button btnDeleteRoom;
     //RESERVATION CONTROL
     @FXML
     private ChoiceBox<String> cbR_roomID;
@@ -90,6 +130,12 @@ public class FunctionsController {
     private DatePicker dpArriving;
     @FXML
     private DatePicker dpLeaving;
+    @FXML
+    private Button btnSearchRes;
+    @FXML
+    private Button btnEditRes;
+    @FXML
+    private Button btnDeleteRes;
     //CUSTOMER CONTROL
     @FXML
     private TextField tfCustomerID;
@@ -107,6 +153,13 @@ public class FunctionsController {
     private TextField tfPostal;
     @FXML
     private TextField tfCity;
+    @FXML
+    private Button btnSearchCust;
+    @FXML
+    private Button btnEditCust;
+    @FXML
+    private Button btnDeleteCust;
+
     //BILL CONTROL
     @FXML
     private ChoiceBox<String> cbB_reservationID;
@@ -120,6 +173,12 @@ public class FunctionsController {
     private DatePicker dpDueDate;
     @FXML
     private DatePicker dpSent;
+    @FXML
+    private Button btnSearchBill;
+    @FXML
+    private Button btnEditBill;
+    @FXML
+    private Button btnDeleteBill;
     //TableView FXML
     @FXML
     private TableView<String> tbwCustomer;
@@ -308,11 +367,17 @@ public class FunctionsController {
     private void initialize() {
         LocalDate ld1 = LocalDate.parse("2000-01-01");
         LocalDate ld2 = LocalDate.parse("2010-01-01");
+
+        //Disabloidaan tietyt editointi-napit ym.
+        btnDeleteOffice.setDisable(true);
+        btnEditOffice.setDisable(true);
+
         generateChart(ld1, ld2);
         //Päättää mitkä ominaisuudet ovat käytössä roolin mukaan
         if (role.equals("Customer Service")) {
-            btnOffice.setDisable(true);
-            btnOffice.setManaged(false);
+
+            //btnOffice.setDisable(true);
+            //btnOffice.setManaged(false);
         }
 
         //SQL haku-Stringit
@@ -329,8 +394,10 @@ public class FunctionsController {
         buildData(cbB_reservationID, sqlVaraus, cbReservationList);
         cbSellReservation.setItems(cbReservationList);
         buildData(cbSellService, sqlPalvelu, cbServiceList);
-        changeTabReports();
+
+        controlOffices();
     }
+
 
     @FXML
     private void reservationFillRoomNumber() {
@@ -544,6 +611,8 @@ public class FunctionsController {
                     name, address, pcode, pcity);
             System.out.println(values);
             http.updateValues("Toimipiste", values, officeID);
+            btnEditOffice.setDisable(true);
+            btnDeleteOffice.setDisable(true);
         } catch (Exception e) {
             showAlert("Update failed",
                     "Check Office ID. You may not insert empty fields."
@@ -693,6 +762,8 @@ public class FunctionsController {
         String officeID = tfOfficeID.getText();
         try {
             http.deleteValues("Toimipiste", officeID, "");
+            btnDeleteOffice.setDisable(true);
+            btnEditOffice.setDisable(true);
         } catch (Exception e) {
             showAlert("Deletion aborted",
                     "Check Office ID. The office may not have any services or accommodations assigned."
@@ -824,6 +895,8 @@ public class FunctionsController {
         tfOfficeStreet.setText(data[0][2]);
         tfOfficePostal.setText(data[0][3]);
         tfOfficeCity.setText(data[0][4]);
+        btnEditOffice.setDisable(false);
+        btnDeleteOffice.setDisable(false);
     }
 
     /**
@@ -1014,7 +1087,7 @@ public class FunctionsController {
         int yArvo2 = 0;
 
         //Hakukriteerit, laskee Varausten määrän kyseisenä päivänä
-        String arrSQL = String.format("SELECT COUNT(Varaus_ID) FROM Varaus WHERE Alkupvm = \"%s\"", arrDate);
+        String arrSQL = String.format("SELECT COUNT(Varaus_ID) FROM Varaus WHERE Alkupvm = \"%s\" OR Loppupvm = \"%s\"", arrDate, depDate);
         String depSQL = String.format("SELECT COUNT(Varaus_ID) FROM Varaus WHERE Loppupvm = \"%s\"", depDate);
 
         try {
@@ -1032,7 +1105,7 @@ public class FunctionsController {
 
         //Tilastot reports-välilehteen
         XYChart.Series series = new XYChart.Series();
-        series.setName("Services");
+        series.setName("Reservations");
 
         assert data != null;
         series.getData().add(new XYChart.Data(xArvo,yArvo));
@@ -1043,6 +1116,33 @@ public class FunctionsController {
         //lcServices.getYAxis().setTickMarkVisible(false);
 
         //TODO Palvelujen haku samaan kaavioon ja sql-lauseiden parantelu
+        String palveluSQL = String.format("");
+
+        data = null;
+        data2 = null;
+
+        try {
+            //Haetaan tiedot tietokannasta
+            data = http.runSQL(palveluSQL);
+            System.out.println((data[0][0]));
+            yArvo = Integer.parseInt(data[0][0]);
+
+            data2 = http.runSQL(depSQL);
+            System.out.println(data2[0][0]);
+            yArvo2 = Integer.parseInt(data2[0][0]);
+
+        } catch (IOException ie) {
+            System.out.println("TempleOS is malfunctioning.");
+        }
+
+        XYChart.Series series2 = new XYChart.Series();
+        series2.setName("Services");
+
+        assert data != null;
+        series2.getData().add(new XYChart.Data(xArvo,yArvo));
+        assert data2 != null;
+        series2.getData().add(new XYChart.Data(xArvo2,yArvo2));
+        lcServices.getData().addAll(series2);
 
     }
 
@@ -1083,6 +1183,7 @@ public class FunctionsController {
         if (numRows == 0) return;
 
         int numCols = source[0].length;
+        Double width =  1.0 / numCols;
 
         for (int i = 0; i < numCols; i++) {
             TableColumn<String[], String> column = new TableColumn<>(headers[i]);
@@ -1092,13 +1193,36 @@ public class FunctionsController {
                 return new SimpleStringProperty(row[columnIndex]);
             });
 
-            column.setPrefWidth(150);
+            column.setMinWidth(220);
             target.getColumns().add(column);
+            //column.prefWidthProperty().bind(target.widthProperty().multiply(width));
+            //column.setResizable(false);
         }
 
         for (String[] strings : source) {
             target.getItems().add(strings);
         }
+
+        /*
+        //Muutetaan tableviewin solujen kokoa automaattisesti
+        if (target.hasProperties()) {
+            TableViewSkin<?> skin = (TableViewSkin<?>) target.getSkin();
+            TableHeaderRow headerRow = skin.getTableHeaderRow();
+            NestedTableColumnHeader rootHeader = headerRow.getRootHeader();
+            for (TableColumnHeader columnHeader : rootHeader.getColumnHeaders()) {
+                try {
+                    TableColumn<?, ?> column = (TableColumn<?, ?>) columnHeader.getTableColumn();
+                    if (column != null) {
+                        Method method = skin.getClass().getDeclaredMethod("resizeColumnToFitContent", TableColumn.class, int.class);
+                        method.setAccessible(true);
+                        method.invoke(skin, column, 0);
+                    }
+                } catch (Throwable e) {
+                    e = e.getCause();
+                    e.printStackTrace(System.err);
+                }
+            }
+        }*/
     }
 
     /**
