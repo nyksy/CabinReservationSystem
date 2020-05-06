@@ -181,6 +181,13 @@ public class FunctionsController {
     private Button btnEditBill;
     @FXML
     private Button btnDeleteBill;
+    @FXML
+    private ChoiceBox<String> cbBillReservationID;
+    @FXML
+    private RadioButton rbPaper;
+    @FXML
+    private RadioButton rbEmail;
+
     //TableView FXML
     @FXML
     private TableView<String> tbwCustomer;
@@ -369,17 +376,36 @@ public class FunctionsController {
     private void initialize() {
         LocalDate ld1 = LocalDate.parse("2000-01-01");
         LocalDate ld2 = LocalDate.parse("2010-01-01");
+        ToggleGroup tgRadiobutton = new ToggleGroup();
+
+        rbEmail.setToggleGroup(tgRadiobutton);
+        rbPaper.setToggleGroup(tgRadiobutton);
 
         //Disabloidaan tietyt editointi-napit ym.
         btnDeleteOffice.setDisable(true);
         btnEditOffice.setDisable(true);
 
+        btnDeleteBill.setDisable(true);
+        btnEditBill.setDisable(true);
+
+        btnDeleteCust.setDisable(true);
+        btnEditCust.setDisable(true);
+
+        btnDeleteRes.setDisable(true);
+        btnEditRes.setDisable(true);
+
+        btnDeleteRoom.setDisable(true);
+        btnEditRoom.setDisable(true);
+
+        btnDeleteService.setDisable(true);
+        btnEditService.setDisable(true);
+
+
         generateChart(ld1, ld2);
         //Päättää mitkä ominaisuudet ovat käytössä roolin mukaan
         if (role.equals("Customer Service")) {
-
-            //btnOffice.setDisable(true);
-            //btnOffice.setManaged(false);
+            btnOffice.setDisable(true);
+            btnOffice.setManaged(false);
         }
 
         //SQL haku-Stringit
@@ -395,6 +421,7 @@ public class FunctionsController {
         cbR_officeName.setItems(cbOfficeList);
         buildData(cbB_reservationID, sqlVaraus, cbReservationList);
         cbSellReservation.setItems(cbReservationList);
+        cbBillReservationID.setItems(cbReservationList);
         buildData(cbSellService, sqlPalvelu, cbServiceList);
 
         controlOffices();
@@ -402,13 +429,20 @@ public class FunctionsController {
 
     @FXML
     public void generateBill() {
-        bill.CreatePDF(cbB_reservationID.getValue(), "Paperinen");
+        String format = "";
+        if (rbPaper.isSelected()) {
+            format = "Paper";
+        } else if (rbEmail.isSelected()) {
+            format = "Email";
+        }
+        bill.CreatePDF(cbBillReservationID.getValue(), format);
     }
 
     @FXML
     private void reservationFillRoomNumber() {
         String officeName = cbR_officeName.getValue();
 
+        //TODO jotain häikkää choicebox -> choicebox yhteydessä
         String sql = String.format("SELECT Huone.Huonenumero FROM Huone " +
                         "INNER JOIN Toimipiste " +
                         "ON Huone.Toimipiste_ID = Toimipiste.Toimipiste_ID " +
@@ -418,6 +452,7 @@ public class FunctionsController {
         if (!cbRoomNumbers.isEmpty()) {
             cbRoomNumbers.clear();
         }
+
         buildData(cbR_roomID, sql, cbRoomNumbers);
     }
 
@@ -511,13 +546,19 @@ public class FunctionsController {
         String arriving = dpArriving.getValue().toString();
         String leaving = dpLeaving.getValue().toString();
         String customerID = cbR_customerID.getValue();
-        String roomID = cbR_roomID.getValue();
+        String roomNumber = cbR_roomID.getValue();
+        String OfficeName = cbR_officeName.getValue();
+        String roomID;
+        String[][] data;
+        String sql = String.format("SELECT Huone.Huone_ID FROM Huone " +
+                " INNER JOIN Toimipiste ON Huone.Toimipiste_ID = Toimipiste.Toimipiste_ID " +
+                " WHERE Huone.Huonenumero = \"%s\" AND Toimipiste.Nimi = \"%s\"", roomNumber, OfficeName);
         try {
+            data = http.runSQL(sql);
+            roomID = data[0][0];
             String values = String.format("\"%s\", \"%s\", \"%s\", \"%s\"",
                     arriving, leaving, customerID, roomID);
             System.out.println(values);
-
-            //TODO varausten lisäys heittää tietokantavirhettä, pitää ehkä korjata
             http.setValues("Varaus", values);
         } catch (Exception e) {
             e.printStackTrace();
@@ -696,7 +737,21 @@ public class FunctionsController {
         String arriving = dpArriving.getValue().toString();
         String leaving = dpLeaving.getValue().toString();
         String customerID = cbR_customerID.getValue();
-        String roomID = cbR_roomID.getValue();
+        String OfficeName = cbR_officeName.getValue();
+        String roomNumber = cbR_roomID.getValue();
+
+        String roomID = null;
+        String[][] data = null;
+        String sql = String.format("SELECT Huone.Huone_ID FROM Huone " +
+                " INNER JOIN Toimipiste ON Huone.Toimipiste_ID = Toimipiste.Toimipiste_ID " +
+                " WHERE Huone.Huonenumero = \"%s\" AND Toimipiste.Nimi = \"%s\"", roomNumber, OfficeName);
+        try {
+            data = http.runSQL(sql);
+            roomID = data[0][0];
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
+        }
+        assert data != null;
         try {
             String values = String.format("Alkupvm=\"%s\", Loppupvm=\"%s\", Asiakas_ID=\"%s\", Huone_ID=\"%s\"",
                     arriving, leaving, customerID, roomID);
@@ -818,6 +873,8 @@ public class FunctionsController {
         String reservationID = tfReservationID.getText();
         try {
             http.deleteValues("Varaus", reservationID, "");
+            btnDeleteRes.setDisable(true);
+            btnEditRes.setDisable(true);
         } catch (Exception e) {
             e.printStackTrace();
             showAlert("Deletion aborted",
@@ -968,6 +1025,8 @@ public class FunctionsController {
                 reservationID);
         try {
             data = http.runSQL(sql);
+            btnEditRes.setDisable(false);
+            btnDeleteRes.setDisable(false);
         } catch (Exception e) {
             e.printStackTrace();
             showAlert("Search aborted",
@@ -1093,11 +1152,19 @@ public class FunctionsController {
         int yArvo = 0;
         int yArvo2 = 0;
 
-        //TODO OSAAVALLE SQL MESTARILLE voisitteko joku parannella näitä hakulausekkeita että
+        //TODO OSAAVALLE SQL MESTARILLE voisitko joku parannella näitä hakulausekkeita että
         // saadaan taulukosta mielekkäämpi
         //Hakukriteerit, laskee Varausten määrän kyseisenä päivänä
         String arrSQL = String.format("SELECT COUNT(Varaus_ID) FROM Varaus WHERE Alkupvm = \"%s\"", arrDate);
         String depSQL = String.format("SELECT COUNT(Varaus_ID) FROM Varaus WHERE Loppupvm = \"%s\"", depDate);
+        int loppupvm = 0;
+        int alkupvm = 0;
+        int pvm = loppupvm - alkupvm;
+
+        for (int i = 0; i< pvm; i++) {
+            String sql = String.format("SELECT COUNT(Varaus_ID) FROM Varaus WHERE Alkupvm = \"%s\" " +
+                    "OR Loppupvm = \"%s\"", alkupvm + 1);
+        }
 
         try {
             //Haetaan tiedot tietokannasta
@@ -1117,6 +1184,7 @@ public class FunctionsController {
         series.setName("Reservations");
 
         assert data != null;
+        series.getData().add(new XYChart.Data("2020-01-01", 0));
         series.getData().add(new XYChart.Data(xArvo, yArvo));
         assert data2 != null;
         series.getData().add(new XYChart.Data(xArvo2, yArvo2));
@@ -1125,7 +1193,8 @@ public class FunctionsController {
         //lcServices.getYAxis().setTickMarkVisible(false);
 
         //TODO Palvelujen haku samaan kaavioon ja sql-lauseiden parantelu
-        String palveluSQL = String.format("");
+        String palveluSQL = String.format("SELECT COUNT(Palveluvaraus.Palvelu_ID) FROM Palveluvaraus " +
+                "INNER JOIN Varaus ON Palveluvaraus.Varaus_ID = Varaus.Varaus_ID WHERE Varaus.Alkupvm = \"%s\"", arrDate);
 
         data = null;
         data2 = null;
@@ -1146,7 +1215,7 @@ public class FunctionsController {
 
         XYChart.Series series2 = new XYChart.Series();
         series2.setName("Services");
-
+        series2.getData().add(new XYChart.Data("2020-01-01", 0));
         assert data != null;
         series2.getData().add(new XYChart.Data(xArvo, yArvo));
         assert data2 != null;

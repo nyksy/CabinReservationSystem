@@ -8,8 +8,6 @@ import com.itextpdf.text.pdf.PdfWriter;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author Ville Kärkkänen
@@ -17,21 +15,10 @@ import java.util.List;
 
 public class Bill {
 
-
-    public static int MvaiP(String palvelu, int kesto) {
-        int palautus = 1;
-        if (palvelu.toLowerCase().equals("mokki")) {
-            palautus = kesto;
-        }
-        return palautus;
-    }
-
-    public static void updateInfo(int BILL_ID) {
-        //Hae tietokannasta lasku_id:n avulla tiedot ja lisää ne muuttujiin
-    }
-
-    /*
-     * Tämä luo PDF-solun halutulla tekstillä ja rajalla
+    /**
+     * Luo halutun solun tekstillä
+     * @param text Stringi
+     * @return solu
      */
     private static PdfPCell createCellB(String text) {
         PdfPCell cell = new PdfPCell(new Paragraph(text));
@@ -42,8 +29,10 @@ public class Bill {
         return cell;
     }
 
-    /*
-     *luo PDF-solun halutulla tekstillä ilman rajaa
+    /**
+     * luo PDF-solun halutulla tekstillä ilman rajaa
+     * @param text Stringi
+     * @return cell
      */
     private static PdfPCell createCellNB(String text) {
         PdfPCell cell = new PdfPCell(new Paragraph(text));
@@ -60,6 +49,7 @@ public class Bill {
      * @param toimitustapa paperinen vai sähköinen toimitustapa (String)
      */
     public void CreatePDF(String varaus_ID, String toimitustapa) {
+        //TODO TÄHÄN KAMAA TIETOKANNASTA VITUSTI
 
         //Laskuttajan tiedot
         String bill_company = "Village People Oy";
@@ -67,6 +57,7 @@ public class Bill {
         String bill_adress_citycode = "80200";
         String bill_adress_city = "Joensuu";
 
+        //TODO get maksajan tiedot
         //Maksajan tiedot
         String m_etunimi = "Gekko";
         String m_sukunimi = "gangsteri";
@@ -106,7 +97,7 @@ public class Bill {
 
         Document document1 = new Document();
         try {
-            PdfWriter writer = PdfWriter.getInstance(document1, new FileOutputStream("PDF-Folder/lasku.pdf"));
+            PdfWriter writer = PdfWriter.getInstance(document1, new FileOutputStream("PDF/lasku.pdf"));
             document1.open();
             document1.add(new Paragraph(bill_company));
             //document1 on "pdf" buttonille
@@ -302,14 +293,5 @@ public class Bill {
         } catch (DocumentException | FileNotFoundException e) {
             e.printStackTrace();
         }
-
     }
-
-    public List getAllBills() {
-        //Hae kaikkien laskujen tunnistukset ja palauta
-        List allBills = new ArrayList();
-        return allBills;
-    }
-
-
 }
