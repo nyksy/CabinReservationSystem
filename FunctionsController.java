@@ -3,6 +3,7 @@ import com.sun.javafx.scene.control.skin.TableColumnHeader;
 import com.sun.javafx.scene.control.skin.TableHeaderRow;
 import com.sun.javafx.scene.control.skin.TableViewSkin;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -23,7 +24,11 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * Functions.fxml controller
@@ -52,6 +57,15 @@ public class FunctionsController {
     ObservableList<String> cbServiceList = FXCollections.observableArrayList();
     //Lista kaikista valitun toimipisteen huoneista
     ObservableList<String> cbRoomNumbers = FXCollections.observableArrayList();
+    //Lista kaikista varauksista joilla on lasku
+    ObservableList<String> VarauksenLaskut = FXCollections.observableArrayList();
+
+    //SQL haku-Stringit
+    public String sqlAsiakas = "SELECT Asiakas_ID FROM Asiakas ORDER BY Asiakas_ID";
+    public String sqlToimipiste = "SELECT Nimi FROM Toimipiste ORDER BY Nimi";
+    public String sqlVaraus = "SELECT Varaus_ID FROM Varaus ORDER BY Varaus_ID";
+    public String sqlPalvelu = "SELECT Palvelu_ID FROM Palvelu ORDER BY Palvelu_ID";
+    public String sqlVarauksenLasku = "SELECT Varaus_ID FROM Lasku";
 
     //Buttons
     @FXML
@@ -275,15 +289,10 @@ public class FunctionsController {
     @FXML
     private TableView<String[]> tbwReportReservations;
 
-    //TODO lisätään data raportointi-välilehteen
     @FXML
     private TableView<String> tbwReportServices;
     @FXML
     private LineChart<String, Integer> lcServices;
-    @FXML
-    private CategoryAxis xService;
-    @FXML
-    private NumberAxis yService;
 
     @FXML
     public void controlOffices() {
@@ -294,6 +303,7 @@ public class FunctionsController {
     @FXML
     public void controlAccommodations() {
         setMonitorTableview("Huone", tbwRoom2);
+        buildData(cbA_officeID, sqlToimipiste, cbOfficeList);
         apAccommodationControl.toFront();
     }
 
@@ -301,12 +311,15 @@ public class FunctionsController {
     public void controlServices() {
         setMonitorTableview("Palvelu", tbwService2);
         setMonitorTableview("Palveluvaraus", tbwSoldService2);
+        buildData(cbS_OfficeID, sqlToimipiste, cbOfficeList);
         apServiceControl.toFront();
     }
 
     @FXML
     public void controlReservations() {
         setMonitorTableview("Varaus", tbwReservation2);
+        buildData(cbR_officeName, sqlToimipiste, cbOfficeList);
+        buildData(cbR_customerID, sqlAsiakas, cbCustomerList);
         apReservationControl.toFront();
     }
 
@@ -319,7 +332,10 @@ public class FunctionsController {
     @FXML
     public void controlBills() {
         setMonitorTableview("Lasku", tbwBill2);
+        buildData(cbB_reservationID, sqlVaraus, cbReservationList);
+        buildData(cbBillReservationID, sqlVarauksenLasku, VarauksenLaskut);
         apBillControl.toFront();
+
     }
 
     @FXML
@@ -374,8 +390,8 @@ public class FunctionsController {
      */
     @FXML
     private void initialize() {
-        LocalDate ld1 = LocalDate.parse("2000-01-01");
-        LocalDate ld2 = LocalDate.parse("2010-01-01");
+        LocalDate ld1 = LocalDate.parse("2020-01-01");
+        LocalDate ld2 = LocalDate.parse("2020-01-02");
         ToggleGroup tgRadiobutton = new ToggleGroup();
 
         rbEmail.setToggleGroup(tgRadiobutton);
@@ -400,6 +416,10 @@ public class FunctionsController {
         btnDeleteService.setDisable(true);
         btnEditService.setDisable(true);
 
+        rbPaper.setDisable(true);
+        rbEmail.setDisable(true);
+
+        btnGenerate.setDisable(true);
 
         generateChart(ld1, ld2);
         //Päättää mitkä ominaisuudet ovat käytössä roolin mukaan
@@ -408,11 +428,7 @@ public class FunctionsController {
             btnOffice.setManaged(false);
         }
 
-        //SQL haku-Stringit
-        String sqlAsiakas = "SELECT Asiakas_ID FROM Asiakas ORDER BY Asiakas_ID";
-        String sqlToimipiste = "SELECT Nimi FROM Toimipiste ORDER BY Nimi";
-        String sqlVaraus = "SELECT Varaus_ID FROM Varaus ORDER BY Varaus_ID";
-        String sqlPalvelu = "SELECT Palvelu_ID FROM Palvelu ORDER BY Palvelu_ID";
+
 
         buildData(cbR_customerID, sqlAsiakas, cbCustomerList);
         buildData(cbA_officeID, sqlToimipiste, cbOfficeList);
@@ -421,19 +437,39 @@ public class FunctionsController {
         cbR_officeName.setItems(cbOfficeList);
         buildData(cbB_reservationID, sqlVaraus, cbReservationList);
         cbSellReservation.setItems(cbReservationList);
-        cbBillReservationID.setItems(cbReservationList);
+        buildData(cbBillReservationID, sqlVarauksenLasku, VarauksenLaskut);
         buildData(cbSellService, sqlPalvelu, cbServiceList);
 
-        controlOffices();
+        //Metodit nappien aktivoimiselle Lasku-välilehdessä
+        cbBillReservationID.getSelectionModel().selectedItemProperty().addListener( (v, oldValue, newValue)
+                -> activateButtons());
+        rbPaper.selectedProperty().addListener( (v, old, newValue) -> activateGeneration());
+        rbEmail.selectedProperty().addListener( (v, old, newValue) -> activateGeneration());
+
+        cbR_officeName.getSelectionModel().selectedItemProperty().addListener( (v, oldValue, newValue)
+                -> reservationFillRoomNumber());
+
+        controlBills();
     }
+
+    private void activateButtons () {
+        rbEmail.setDisable(false);
+        rbPaper.setDisable(false);
+    }
+    private void activateGeneration() {
+        btnGenerate.setDisable(false);
+    }
+
+    @FXML
+    private Button btnGenerate;
 
     @FXML
     public void generateBill() {
         String format = "";
         if (rbPaper.isSelected()) {
-            format = "Paper";
+            format = "Kirje";
         } else if (rbEmail.isSelected()) {
-            format = "Email";
+            format = "Sähköposti";
         }
         bill.CreatePDF(cbBillReservationID.getValue(), format);
     }
@@ -442,17 +478,14 @@ public class FunctionsController {
     private void reservationFillRoomNumber() {
         String officeName = cbR_officeName.getValue();
 
-        //TODO jotain häikkää choicebox -> choicebox yhteydessä
         String sql = String.format("SELECT Huone.Huonenumero FROM Huone " +
                         "INNER JOIN Toimipiste " +
                         "ON Huone.Toimipiste_ID = Toimipiste.Toimipiste_ID " +
                         "WHERE Toimipiste.Nimi = \"%s\";",
                 officeName);
-        cbR_roomID.setItems(FXCollections.observableArrayList());
         if (!cbRoomNumbers.isEmpty()) {
             cbRoomNumbers.clear();
         }
-
         buildData(cbR_roomID, sql, cbRoomNumbers);
     }
 
@@ -687,6 +720,8 @@ public class FunctionsController {
                     firstName, lastName, pnum, email, address, pcode, city);
             System.out.println(values);
             http.updateValues("Asiakas", values, customerID);
+            btnEditCust.setDisable(true);
+            btnDeleteCust.setDisable(true);
         } catch (Exception e) {
             showAlert("Update failed",
                     "Check Customer ID. You may not insert empty fields."
@@ -710,6 +745,8 @@ public class FunctionsController {
             String sql = String.format("SELECT Toimipiste_ID FROM Toimipiste " +
                     "WHERE Nimi = \"%s\";", officeName);
             officeID = http.runSQL(sql);
+            btnEditRoom.setDisable(true);
+            btnDeleteRoom.setDisable(true);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -748,6 +785,8 @@ public class FunctionsController {
         try {
             data = http.runSQL(sql);
             roomID = data[0][0];
+            btnEditRes.setDisable(true);
+            btnDeleteRes.setDisable(true);
         } catch (IOException ioException) {
             ioException.printStackTrace();
         }
@@ -774,11 +813,15 @@ public class FunctionsController {
         String name = tfServiceName.getText();
         String price = tfServicePrice.getText();
         String officeID = cbS_OfficeID.getValue();
+
+        //TODO pitää saada toimipisteen nimestä Office_ID
         try {
             String values = String.format("Nimi=\"%s\", Hinta=\"%s\", Toimipiste_ID=\"%s\"",
                     name, price, officeID);
             System.out.println(values);
             http.updateValues("Palvelu", values, serviceID);
+            btnEditService.setDisable(true);
+            btnDeleteService.setDisable(true);
         } catch (Exception e) {
             showAlert("Update failed",
                     "Check Service ID. You may not insert empty fields."
@@ -806,6 +849,8 @@ public class FunctionsController {
                     reservationID, sum, due, sentDate, paid);
             System.out.println(values);
             http.updateValues("Lasku", values, billID);
+            btnEditBill.setDisable(true);
+            btnDeleteBill.setDisable(true);
         } catch (Exception e) {
             showAlert("Update failed",
                     "Check Bill ID. You may not insert empty fields."
@@ -841,6 +886,8 @@ public class FunctionsController {
         String customerID = tfCustomerID.getText();
         try {
             http.deleteValues("Asiakas", customerID, "");
+            btnDeleteCust.setDisable(true);
+            btnEditCust.setDisable(true);
         } catch (Exception e) {
             showAlert("Deletion aborted",
                     "Check Customer ID. The Customer may not have any active reservations."
@@ -857,6 +904,8 @@ public class FunctionsController {
         String roomID = tfRoomID.getText();
         try {
             http.deleteValues("Huone", roomID, "");
+            btnDeleteRoom.setDisable(true);
+            btnEditRoom.setDisable(true);
         } catch (Exception e) {
             showAlert("Deletion aborted",
                     "Check Room ID. The Room may not have any active reservations."
@@ -892,6 +941,8 @@ public class FunctionsController {
         String serviceID = tfServiceID.getText();
         try {
             http.deleteValues("Palvelu", serviceID, "");
+            btnDeleteService.setDisable(true);
+            btnEditService.setDisable(true);
         } catch (Exception e) {
             e.printStackTrace();
             showAlert("Deletion aborted",
@@ -927,6 +978,8 @@ public class FunctionsController {
         String billID = tfBillID.getText();
         try {
             http.deleteValues("Lasku", billID, "");
+            btnDeleteBill.setDisable(true);
+            btnEditBill.setDisable(true);
         } catch (Exception e) {
             e.printStackTrace();
             showAlert("Deletion aborted",
@@ -986,6 +1039,8 @@ public class FunctionsController {
         cbS_OfficeID.setValue(data[0][2]);
         tfServiceName.setText(data[0][0]);
         tfServicePrice.setText(data[0][1]);
+        btnEditService.setDisable(false);
+        btnDeleteService.setDisable(false);
     }
 
     /**
@@ -1012,6 +1067,8 @@ public class FunctionsController {
         cbA_officeID.setValue(data[0][2]);
         tfRoomDayPrice.setText(data[0][0]);
         tfRoomNumber.setText(data[0][1]);
+        btnEditRoom.setDisable(false);
+        btnDeleteRoom.setDisable(false);
     }
 
     /**
@@ -1041,6 +1098,8 @@ public class FunctionsController {
         LocalDate depDate = LocalDate.parse(data[0][1], dt);
         dpArriving.setValue(arrDate);
         dpLeaving.setValue(depDate);
+        btnEditRes.setDisable(false);
+        btnDeleteRes.setDisable(false);
     }
 
     /**
@@ -1068,6 +1127,8 @@ public class FunctionsController {
         tfAddress.setText(data[0][5]);
         tfPostal.setText(data[0][6]);
         tfCity.setText(data[0][7]);
+        btnEditCust.setDisable(false);
+        btnDeleteCust.setDisable(false);
     }
 
     /**
@@ -1097,6 +1158,8 @@ public class FunctionsController {
         dpSent.setValue(sentDate);
         cbB_reservationID.setValue(data[0][1]);
         checkPaid.setSelected(data[0][5].equals("1"));
+        btnEditBill.setDisable(false);
+        btnDeleteBill.setDisable(false);
     }
 
     /**
@@ -1152,45 +1215,35 @@ public class FunctionsController {
         int yArvo = 0;
         int yArvo2 = 0;
 
-        //TODO OSAAVALLE SQL MESTARILLE voisitko joku parannella näitä hakulausekkeita että
-        // saadaan taulukosta mielekkäämpi
-        //Hakukriteerit, laskee Varausten määrän kyseisenä päivänä
-        String arrSQL = String.format("SELECT COUNT(Varaus_ID) FROM Varaus WHERE Alkupvm = \"%s\"", arrDate);
-        String depSQL = String.format("SELECT COUNT(Varaus_ID) FROM Varaus WHERE Loppupvm = \"%s\"", depDate);
-        int loppupvm = 0;
-        int alkupvm = 0;
-        int pvm = loppupvm - alkupvm;
-
-        for (int i = 0; i< pvm; i++) {
-            String sql = String.format("SELECT COUNT(Varaus_ID) FROM Varaus WHERE Alkupvm = \"%s\" " +
-                    "OR Loppupvm = \"%s\"", alkupvm + 1);
-        }
-
-        try {
-            //Haetaan tiedot tietokannasta
-            data = http.runSQL(arrSQL);
-            System.out.println((data[0][0]));
-            yArvo = Integer.parseInt(data[0][0]);
-            data2 = http.runSQL(depSQL);
-            System.out.println(data2[0][0]);
-            yArvo2 = Integer.parseInt(data2[0][0]);
-
-        } catch (IOException ie) {
-            System.out.println("TempleOS is malfunctioning.");
-        }
-
         //Tilastot reports-välilehteen
         XYChart.Series series = new XYChart.Series();
         series.setName("Reservations");
 
-        assert data != null;
         series.getData().add(new XYChart.Data("2020-01-01", 0));
-        series.getData().add(new XYChart.Data(xArvo, yArvo));
-        assert data2 != null;
-        series.getData().add(new XYChart.Data(xArvo2, yArvo2));
-        lcServices.getData().addAll(series);
         lcServices.getYAxis().setTickLabelsVisible(false);
-        //lcServices.getYAxis().setTickMarkVisible(false);
+        lcServices.getXAxis().setTickLabelsVisible(false);
+
+        //Hakukriteerit, laskee Varausten määrän kyseisenä päivänä
+        String arrSQL = String.format("SELECT COUNT(Varaus_ID) FROM Varaus WHERE Alkupvm = \"%s\"", arrDate);
+        String depSQL = String.format("SELECT COUNT(Varaus_ID) FROM Varaus WHERE Loppupvm = \"%s\"", depDate);
+        List<LocalDate> dates = getDatesBetween(arrDate, depDate);
+
+        try {
+            for (Object date : dates) {
+                yArvo = 0;
+                xArvo = "";
+                data = null;
+                String sql = String.format("SELECT COUNT(Varaus_ID) FROM Varaus WHERE Alkupvm = \"%s\"", date);
+                data = http.runSQL(sql);
+                System.out.print((data[0][0]));
+                yArvo = Integer.parseInt(data[0][0]);
+                xArvo = date.toString();
+                series.getData().add(new XYChart.Data(xArvo, yArvo));
+            }
+            lcServices.getData().addAll(series);
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
+        }
 
         //TODO Palvelujen haku samaan kaavioon ja sql-lauseiden parantelu
         String palveluSQL = String.format("SELECT COUNT(Palveluvaraus.Palvelu_ID) FROM Palveluvaraus " +
@@ -1202,12 +1255,9 @@ public class FunctionsController {
         try {
             //Haetaan tiedot tietokannasta
             data = http.runSQL(palveluSQL);
-            System.out.println((data[0][0]));
+            System.out.print((data[0][0]));
             yArvo = Integer.parseInt(data[0][0]);
 
-            data2 = http.runSQL(depSQL);
-            System.out.println(data2[0][0]);
-            yArvo2 = Integer.parseInt(data2[0][0]);
 
         } catch (IOException ie) {
             System.out.println("TempleOS is malfunctioning.");
@@ -1314,6 +1364,8 @@ public class FunctionsController {
      * @param list Observablelist, johon kaikki tulokset lisätään
      */
     public void buildData(ChoiceBox<String> cb, String sql, ObservableList<String> list) {
+        cb.getItems().clear();
+        list.clear();
         String[][] data;
         try {
             data = http.runSQL(sql);
@@ -1422,7 +1474,6 @@ public class FunctionsController {
 
     /**
      * Alert-ilmoitus joka näkyy tietojenkäsittelyn eri vaiheissa
-     *
      * @param header Otsikko
      * @param text   Teksti
      */
@@ -1432,5 +1483,19 @@ public class FunctionsController {
         alert.setHeaderText(null);
         alert.setContentText(text);
         alert.showAndWait();
+    }
+
+    /**
+     * Haetaan kaikki päivät kahden päivänmäärän väliltä listana
+     * @param startDate localDate
+     * @param endDate localDate
+     * @return lista päivämääristä
+     */
+    public static List<LocalDate> getDatesBetween(LocalDate startDate, LocalDate endDate) {
+        long numOfDaysBetween = ChronoUnit.DAYS.between(startDate, endDate);
+        return IntStream.iterate(0, i -> i + 1)
+                .limit(numOfDaysBetween)
+                .mapToObj(startDate::plusDays)
+                .collect(Collectors.toList());
     }
 }
