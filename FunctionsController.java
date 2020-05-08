@@ -7,7 +7,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.chart.*;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
@@ -25,6 +28,7 @@ import java.util.stream.IntStream;
 
 /**
  * Functions.fxml controller
+ *
  * @author Juho Nykänen
  * @author Taneli Gröhn
  * @version 1.0
@@ -35,7 +39,12 @@ public class FunctionsController {
     static httpController http = new httpController();
 
     static Bill bill = new Bill();
-
+    //SQL haku-Stringit
+    public String sqlAsiakas = "SELECT Asiakas_ID FROM Asiakas ORDER BY Asiakas_ID";
+    public String sqlToimipiste = "SELECT Nimi FROM Toimipiste ORDER BY Nimi";
+    public String sqlVaraus = "SELECT Varaus_ID FROM Varaus ORDER BY Varaus_ID";
+    public String sqlPalvelu = "SELECT Palvelu_ID FROM Palvelu ORDER BY Palvelu_ID";
+    public String sqlVarauksenLasku = "SELECT Varaus_ID FROM Lasku";
     String role = LoginController.role;
     //Lista kaikista toimipisteistä
     ObservableList<String> cbOfficeList = FXCollections.observableArrayList();
@@ -49,14 +58,6 @@ public class FunctionsController {
     ObservableList<String> cbRoomNumbers = FXCollections.observableArrayList();
     //Lista kaikista varauksista joilla on lasku
     ObservableList<String> VarauksenLaskut = FXCollections.observableArrayList();
-
-    //SQL haku-Stringit
-    public String sqlAsiakas = "SELECT Asiakas_ID FROM Asiakas ORDER BY Asiakas_ID";
-    public String sqlToimipiste = "SELECT Nimi FROM Toimipiste ORDER BY Nimi";
-    public String sqlVaraus = "SELECT Varaus_ID FROM Varaus ORDER BY Varaus_ID";
-    public String sqlPalvelu = "SELECT Palvelu_ID FROM Palvelu ORDER BY Palvelu_ID";
-    public String sqlVarauksenLasku = "SELECT Varaus_ID FROM Lasku";
-
     //Buttons
     @FXML
     private Button btnOffice;
@@ -286,6 +287,23 @@ public class FunctionsController {
     private CategoryAxis xService;
     @FXML
     private NumberAxis yService;
+    @FXML
+    private Button btnGenerate;
+
+    /**
+     * Haetaan kaikki päivät kahden päivänmäärän väliltä listana
+     *
+     * @param startDate localDate
+     * @param endDate   localDate
+     * @return lista päivämääristä
+     */
+    public static List<LocalDate> getDatesBetween(LocalDate startDate, LocalDate endDate) {
+        long numOfDaysBetween = ChronoUnit.DAYS.between(startDate, endDate);
+        return IntStream.iterate(0, i -> i + 1)
+                .limit(numOfDaysBetween)
+                .mapToObj(startDate::plusDays)
+                .collect(Collectors.toList());
+    }
 
     @FXML
     public void controlOffices() {
@@ -377,6 +395,7 @@ public class FunctionsController {
 
     @FXML
     public void changeTabReports() {
+        buildData(cbOffice, sqlToimipiste, cbOfficeList);
         apReports.toFront();
     }
 
@@ -422,9 +441,9 @@ public class FunctionsController {
         if (role.equals("Customer Service")) {
             btnOffice.setDisable(true);
             btnOffice.setManaged(false);
+            btnRoom.setDisable(true);
+            btnRoom.setManaged(false);
         }
-
-
 
         buildData(cbR_customerID, sqlAsiakas, cbCustomerList);
         buildData(cbA_officeID, sqlToimipiste, cbOfficeList);
@@ -437,27 +456,25 @@ public class FunctionsController {
         buildData(cbSellService, sqlPalvelu, cbServiceList);
 
         //Metodit nappien aktivoimiselle Lasku-välilehdessä
-        cbBillReservationID.getSelectionModel().selectedItemProperty().addListener( (v, oldValue, newValue)
+        cbBillReservationID.getSelectionModel().selectedItemProperty().addListener((v, oldValue, newValue)
                 -> activateButtons());
-        rbPaper.selectedProperty().addListener( (v, old, newValue) -> activateGeneration());
-        rbEmail.selectedProperty().addListener( (v, old, newValue) -> activateGeneration());
+        rbPaper.selectedProperty().addListener((v, old, newValue) -> activateGeneration());
+        rbEmail.selectedProperty().addListener((v, old, newValue) -> activateGeneration());
 
-        cbR_officeName.getSelectionModel().selectedItemProperty().addListener( (v, oldValue, newValue)
+        cbR_officeName.getSelectionModel().selectedItemProperty().addListener((v, oldValue, newValue)
                 -> reservationFillRoomNumber());
 
-        controlBills();
+        changeTabReports();
     }
 
-    private void activateButtons () {
+    private void activateButtons() {
         rbEmail.setDisable(false);
         rbPaper.setDisable(false);
     }
+
     private void activateGeneration() {
         btnGenerate.setDisable(false);
     }
-
-    @FXML
-    private Button btnGenerate;
 
     @FXML
     public void generateBill() {
@@ -658,7 +675,7 @@ public class FunctionsController {
         String sentDate = dpSent.getValue().toString();
         String paid = "0";
 
-        if (checkPaid.isSelected()){
+        if (checkPaid.isSelected()) {
             paid = "1";
         }
         try {
@@ -849,7 +866,7 @@ public class FunctionsController {
         String due = dpDueDate.getValue().toString();
         String sentDate = dpSent.getValue().toString();
         String paid = "0";
-        if (checkPaid.isSelected()){
+        if (checkPaid.isSelected()) {
             paid = "1";
         }
 
@@ -1262,6 +1279,7 @@ public class FunctionsController {
 
         generateChart(arrDate, depDate);
     }
+
     /**
      * Metodi jolla saadaan data kaavioihin
      *
@@ -1382,6 +1400,7 @@ public class FunctionsController {
 
     /**
      * Method which changes the scene to the same window
+     *
      * @param event ActionEvent
      */
     @FXML
@@ -1405,6 +1424,7 @@ public class FunctionsController {
 
     /**
      * Metodi jolla saadaan täytettyä Choiceboxit datalla palvelimelta.
+     *
      * @param cb   Choicebox-attribuutti
      * @param sql  String, joka sisältää sql-hakusanat
      * @param list Observablelist, johon kaikki tulokset lisätään
@@ -1487,6 +1507,7 @@ public class FunctionsController {
 
     /**
      * Metodi tietojen hakemiselle ja näyttämiselle TableView-nökymässä
+     *
      * @param tbw   Tableview johon tiedot syötetään
      * @param table Taulukon nimi
      * @param haku  Hakusanat (sql)
@@ -1519,6 +1540,7 @@ public class FunctionsController {
 
     /**
      * Alert-ilmoitus joka näkyy tietojenkäsittelyn eri vaiheissa
+     *
      * @param header Otsikko
      * @param text   Teksti
      */
@@ -1528,19 +1550,5 @@ public class FunctionsController {
         alert.setHeaderText(null);
         alert.setContentText(text);
         alert.showAndWait();
-    }
-
-    /**
-     * Haetaan kaikki päivät kahden päivänmäärän väliltä listana
-     * @param startDate localDate
-     * @param endDate localDate
-     * @return lista päivämääristä
-     */
-    public static List<LocalDate> getDatesBetween(LocalDate startDate, LocalDate endDate) {
-        long numOfDaysBetween = ChronoUnit.DAYS.between(startDate, endDate);
-        return IntStream.iterate(0, i -> i + 1)
-                .limit(numOfDaysBetween)
-                .mapToObj(startDate::plusDays)
-                .collect(Collectors.toList());
     }
 }
