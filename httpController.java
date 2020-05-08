@@ -9,10 +9,8 @@ import java.util.Scanner;
  * Luokka HTTP - Tietokantayhteyttä varten
  */
 public class httpController {
-    //Tietokannan cgi-rajapinnan URL
-    private static String url = "http://cs.uef.fi/tagrohn-bin/cgi_db.py";
     //Koodauksessa käytettävä charset
-    private static String charset = java.nio.charset.StandardCharsets.UTF_8.name();
+    private static final String charset = java.nio.charset.StandardCharsets.UTF_8.name();
 
     /**
      * Hae tietokannasta tietoa kutsumalla cgi-rajapintaa callCGI metodilla
@@ -123,6 +121,8 @@ public class httpController {
      */
     private String callCGI(String sql) throws IOException {
         //Hae HTTP yhteydellä parametrien määrittelemän kyselyn tulokset JSON muodossa
+        //Tietokannan cgi-rajapinnan URL
+        String url = "http://cs.uef.fi/tagrohn-bin/cgi_db.py";
         URLConnection connection = new URL(url + "?" + sql).openConnection();
         connection.setRequestProperty("Accept-Charset", charset);
         InputStream response = connection.getInputStream();

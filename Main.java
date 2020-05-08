@@ -11,7 +11,7 @@ import javafx.stage.Stage;
  * @author Armas Ahlholm
  * @author Heikki Vainio
  * @author Ville Kärkkänen
- * @version 0.1
+ * @version 1.0
  */
 public class Main extends Application {
 
