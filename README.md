@@ -1,5 +1,9 @@
 # MÖKK1 software
 
+ -Java
+ -JavaFX
+ -MySQL
+
 ## Näkymiä
 
 ![Screenshot](https://github.com/nyksy/CabinReservationSystem/blob/master/Login.png?raw=true)
