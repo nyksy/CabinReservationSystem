@@ -1,8 +1,8 @@
 # MÖKK1 software
 
- -Java
- -JavaFX
- -MySQL
+ * Java
+ * JavaFX
+ * MySQL
 
 ## Näkymiä
 
